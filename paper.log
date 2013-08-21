@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.3-1.40.12 (TeX Live 2011) (format=pdflatex 2011.7.3)  21 AUG 2013 12:18
+This is pdfTeX, Version 3.1415926-2.3-1.40.12 (TeX Live 2011) (format=pdflatex 2011.7.3)  21 AUG 2013 12:31
 entering extended mode
  \write18 enabled.
  file:line:error style messages enabled.
@@ -715,26 +715,27 @@ LaTeX Font Info:    Try loading font information for U+msb on input line 112.
 File: umsb.fd 2009/06/22 v3.00 AMS symbols B
 )
 \@address@1=\toks59
+Missing character: There is no Õ in font ptmr7t!
  [1{/usr/local/texlive/2011/texmf-var/fonts/map/pdftex/updmap/pdftex.map}
 
 ]
-LaTeX Font Info:    Try loading font information for OMS+ptm on input line 213.
+LaTeX Font Info:    Try loading font information for OMS+ptm on input line 227.
 
 
 (/usr/local/texlive/2011/texmf-dist/tex/latex/psnfss/omsptm.fd
 File: omsptm.fd 
 )
 LaTeX Font Info:    Font shape `OMS/ptm/m/n' in size <10.95> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 213.
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 227.
  [2]
 <Figures/LegendExamplePlot.pdf, id=13, 1084.05pt x 144.54pt>
 File: Figures/LegendExamplePlot.pdf Graphic file (type pdf)
 
 <use Figures/LegendExamplePlot.pdf>
-Package pdftex.def Info: Figures/LegendExamplePlot.pdf used on input line 231.
+Package pdftex.def Info: Figures/LegendExamplePlot.pdf used on input line 245.
 (pdftex.def)             Requested size: 430.00462pt x 57.33417pt.
 
-Overfull \hbox (1.71002pt too wide) in paragraph at lines 231--233
+Overfull \hbox (1.71002pt too wide) in paragraph at lines 245--247
  []|  [] 
  []
 
@@ -742,18 +743,18 @@ Overfull \hbox (1.71002pt too wide) in paragraph at lines 231--233
 File: Figures/ExamplePlot1.pdf Graphic file (type pdf)
 
 <use Figures/ExamplePlot1.pdf>
-Package pdftex.def Info: Figures/ExamplePlot1.pdf used on input line 238.
+Package pdftex.def Info: Figures/ExamplePlot1.pdf used on input line 252.
 (pdftex.def)             Requested size: 210.70462pt x 210.70244pt.
 
 <Figures/ExamplePlot2.pdf, id=15, 361.35pt x 361.35pt>
 File: Figures/ExamplePlot2.pdf Graphic file (type pdf)
 
 <use Figures/ExamplePlot2.pdf>
-Package pdftex.def Info: Figures/ExamplePlot2.pdf used on input line 242.
+Package pdftex.def Info: Figures/ExamplePlot2.pdf used on input line 256.
 (pdftex.def)             Requested size: 210.70462pt x 210.70244pt.
  [3] [4 <./Figures/LegendExamplePlot.pdf> <./Figures/ExamplePlot1.pdf> <./Figur
 es/ExamplePlot2.pdf>] [5] [6] [7] [8]
-LaTeX Font Info:    Try loading font information for U+bbm on input line 400.
+LaTeX Font Info:    Try loading font information for U+bbm on input line 414.
 
 (/usr/local/texlive/2011/texmf-dist/tex/latex/bbm-macros/ubbm.fd
 File: ubbm.fd 1999/03/15 V 1.2 Font definition for bbm font - TH
@@ -762,10 +763,10 @@ File: ubbm.fd 1999/03/15 V 1.2 Font definition for bbm font - TH
 File: Figures/LegendSynthetic.pdf Graphic file (type pdf)
 
 <use Figures/LegendSynthetic.pdf>
-Package pdftex.def Info: Figures/LegendSynthetic.pdf used on input line 411.
+Package pdftex.def Info: Figures/LegendSynthetic.pdf used on input line 425.
 (pdftex.def)             Requested size: 430.00462pt x 23.88885pt.
 
-Overfull \hbox (19.71002pt too wide) in paragraph at lines 411--413
+Overfull \hbox (19.71002pt too wide) in paragraph at lines 425--427
  []|  [] 
  []
 
@@ -773,28 +774,28 @@ Overfull \hbox (19.71002pt too wide) in paragraph at lines 411--413
 File: Figures/SyntheticSigma2.pdf Graphic file (type pdf)
 
 <use Figures/SyntheticSigma2.pdf>
-Package pdftex.def Info: Figures/SyntheticSigma2.pdf used on input line 417.
+Package pdftex.def Info: Figures/SyntheticSigma2.pdf used on input line 431.
 (pdftex.def)             Requested size: 141.9023pt x 141.90186pt.
 
 <Figures/SyntheticBeta.pdf, id=71, 361.35pt x 361.35pt>
 File: Figures/SyntheticBeta.pdf Graphic file (type pdf)
 
 <use Figures/SyntheticBeta.pdf>
-Package pdftex.def Info: Figures/SyntheticBeta.pdf used on input line 421.
+Package pdftex.def Info: Figures/SyntheticBeta.pdf used on input line 435.
 (pdftex.def)             Requested size: 141.9023pt x 141.90186pt.
 
 <Figures/SyntheticK.pdf, id=72, 361.35pt x 361.35pt>
 File: Figures/SyntheticK.pdf Graphic file (type pdf)
 
 <use Figures/SyntheticK.pdf>
-Package pdftex.def Info: Figures/SyntheticK.pdf used on input line 425.
+Package pdftex.def Info: Figures/SyntheticK.pdf used on input line 439.
 (pdftex.def)             Requested size: 141.9023pt x 141.90186pt.
 
 <Figures/SyntheticSigma2bias.pdf, id=73, 361.35pt x 361.35pt>
 File: Figures/SyntheticSigma2bias.pdf Graphic file (type pdf)
 
 <use Figures/SyntheticSigma2bias.pdf>
-Package pdftex.def Info: Figures/SyntheticSigma2bias.pdf used on input line 431
+Package pdftex.def Info: Figures/SyntheticSigma2bias.pdf used on input line 445
 .
 (pdftex.def)             Requested size: 141.9023pt x 141.90186pt.
 
@@ -802,67 +803,67 @@ Package pdftex.def Info: Figures/SyntheticSigma2bias.pdf used on input line 431
 File: Figures/SyntheticBetabias.pdf Graphic file (type pdf)
 
 <use Figures/SyntheticBetabias.pdf>
-Package pdftex.def Info: Figures/SyntheticBetabias.pdf used on input line 435.
+Package pdftex.def Info: Figures/SyntheticBetabias.pdf used on input line 449.
 (pdftex.def)             Requested size: 141.9023pt x 141.90186pt.
 
 <Figures/SyntheticKbias.pdf, id=75, 361.35pt x 361.35pt>
 File: Figures/SyntheticKbias.pdf Graphic file (type pdf)
 
 <use Figures/SyntheticKbias.pdf>
-Package pdftex.def Info: Figures/SyntheticKbias.pdf used on input line 439.
+Package pdftex.def Info: Figures/SyntheticKbias.pdf used on input line 453.
 (pdftex.def)             Requested size: 141.9023pt x 141.90186pt.
  [10 <./Figures/LegendSynthetic.pdf> <./Figures/SyntheticSigma2.pdf> <./Figures
 /SyntheticBeta.pdf> <./Figures/SyntheticK.pdf> <./Figures/SyntheticSigma2bias.p
 df> <./Figures/SyntheticBetabias.pdf> <./Figures/SyntheticKbias.pdf>] [11] [12]
  [13]
-Overfull \hbox (1.45427pt too wide) in paragraph at lines 532--533
+Overfull \hbox (1.45427pt too wide) in paragraph at lines 546--547
 \OT1/ptm/m/n/10.95 ver-sion of the Beta-transformed (lin-ear) ag-gre-ga-tor was
  in-tro-duced in Ran-jan and Gneit-
  []
 
 [14]
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <9> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 557.
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 571.
  [15] <Figures/CalibrationNONE10.pdf, id=136, 361.35pt x 361.35pt>
 File: Figures/CalibrationNONE10.pdf Graphic file (type pdf)
 
 <use Figures/CalibrationNONE10.pdf>
-Package pdftex.def Info: Figures/CalibrationNONE10.pdf used on input line 599.
+Package pdftex.def Info: Figures/CalibrationNONE10.pdf used on input line 613.
 (pdftex.def)             Requested size: 120.40076pt x 120.39824pt.
 
 <Figures/CalibrationLOG10.pdf, id=137, 361.35pt x 361.35pt>
 File: Figures/CalibrationLOG10.pdf Graphic file (type pdf)
 
 <use Figures/CalibrationLOG10.pdf>
-Package pdftex.def Info: Figures/CalibrationLOG10.pdf used on input line 603.
+Package pdftex.def Info: Figures/CalibrationLOG10.pdf used on input line 617.
 (pdftex.def)             Requested size: 120.40076pt x 120.39824pt.
 
 <Figures/CalibrationBRI10.pdf, id=138, 361.35pt x 361.35pt>
 File: Figures/CalibrationBRI10.pdf Graphic file (type pdf)
 
 <use Figures/CalibrationBRI10.pdf>
-Package pdftex.def Info: Figures/CalibrationBRI10.pdf used on input line 607.
+Package pdftex.def Info: Figures/CalibrationBRI10.pdf used on input line 621.
 (pdftex.def)             Requested size: 120.40076pt x 120.39824pt.
 
 <Figures/CalibrationFULL10.pdf, id=139, 361.35pt x 361.35pt>
 File: Figures/CalibrationFULL10.pdf Graphic file (type pdf)
 
 <use Figures/CalibrationFULL10.pdf>
-Package pdftex.def Info: Figures/CalibrationFULL10.pdf used on input line 611.
+Package pdftex.def Info: Figures/CalibrationFULL10.pdf used on input line 625.
 (pdftex.def)             Requested size: 120.40076pt x 120.39824pt.
 
 <Figures/CalibrationNONE.pdf, id=140, 361.35pt x 361.35pt>
 File: Figures/CalibrationNONE.pdf Graphic file (type pdf)
 
 <use Figures/CalibrationNONE.pdf>
-Package pdftex.def Info: Figures/CalibrationNONE.pdf used on input line 618.
+Package pdftex.def Info: Figures/CalibrationNONE.pdf used on input line 632.
 (pdftex.def)             Requested size: 120.40076pt x 120.39824pt.
 
 <Figures/CalibrationSTO-Log.pdf, id=141, 361.35pt x 361.35pt>
 File: Figures/CalibrationSTO-Log.pdf Graphic file (type pdf)
 
 <use Figures/CalibrationSTO-Log.pdf>
-Package pdftex.def Info: Figures/CalibrationSTO-Log.pdf used on input line 622.
+Package pdftex.def Info: Figures/CalibrationSTO-Log.pdf used on input line 636.
 
 (pdftex.def)             Requested size: 120.40076pt x 120.39824pt.
 
@@ -870,7 +871,7 @@ Package pdftex.def Info: Figures/CalibrationSTO-Log.pdf used on input line 622.
 File: Figures/CalibrationSTO-Bri.pdf Graphic file (type pdf)
 
 <use Figures/CalibrationSTO-Bri.pdf>
-Package pdftex.def Info: Figures/CalibrationSTO-Bri.pdf used on input line 626.
+Package pdftex.def Info: Figures/CalibrationSTO-Bri.pdf used on input line 640.
 
 (pdftex.def)             Requested size: 120.40076pt x 120.39824pt.
 
@@ -878,7 +879,7 @@ Package pdftex.def Info: Figures/CalibrationSTO-Bri.pdf used on input line 626.
 File: Figures/CalibrationSO.pdf Graphic file (type pdf)
 
 <use Figures/CalibrationSO.pdf>
-Package pdftex.def Info: Figures/CalibrationSO.pdf used on input line 630.
+Package pdftex.def Info: Figures/CalibrationSO.pdf used on input line 644.
 (pdftex.def)             Requested size: 120.40076pt x 120.39824pt.
 
 
@@ -894,20 +895,20 @@ Missing character: There is no Þ in font ptmr7t!
 File: Figures/BiasesBoxplots.pdf Graphic file (type pdf)
 
 <use Figures/BiasesBoxplots.pdf>
-Package pdftex.def Info: Figures/BiasesBoxplots.pdf used on input line 655.
+Package pdftex.def Info: Figures/BiasesBoxplots.pdf used on input line 669.
 (pdftex.def)             Requested size: 433.61894pt x 289.07928pt.
 
-Overfull \hbox (3.61432pt too wide) in paragraph at lines 655--657
+Overfull \hbox (3.61432pt too wide) in paragraph at lines 669--671
  [][] 
  []
 
 [18 <./Figures/BiasesBoxplots.pdf>]
 File: Figures/LegendExamplePlot.pdf Graphic file (type pdf)
  <use Figures/LegendExamplePlot.pdf>
-Package pdftex.def Info: Figures/LegendExamplePlot.pdf used on input line 684.
+Package pdftex.def Info: Figures/LegendExamplePlot.pdf used on input line 698.
 (pdftex.def)             Requested size: 430.00462pt x 57.33417pt.
 
-Overfull \hbox (1.71002pt too wide) in paragraph at lines 684--686
+Overfull \hbox (1.71002pt too wide) in paragraph at lines 698--700
  []|  [] 
  []
 
@@ -915,37 +916,37 @@ Overfull \hbox (1.71002pt too wide) in paragraph at lines 684--686
 File: Figures/ExamplePlot1b.pdf Graphic file (type pdf)
 
 <use Figures/ExamplePlot1b.pdf>
-Package pdftex.def Info: Figures/ExamplePlot1b.pdf used on input line 691.
+Package pdftex.def Info: Figures/ExamplePlot1b.pdf used on input line 705.
 (pdftex.def)             Requested size: 210.70462pt x 210.70244pt.
 
 <Figures/ExamplePlot2b.pdf, id=211, 361.35pt x 361.35pt>
 File: Figures/ExamplePlot2b.pdf Graphic file (type pdf)
 
 <use Figures/ExamplePlot2b.pdf>
-Package pdftex.def Info: Figures/ExamplePlot2b.pdf used on input line 695.
+Package pdftex.def Info: Figures/ExamplePlot2b.pdf used on input line 709.
 (pdftex.def)             Requested size: 210.70462pt x 210.70244pt.
 
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
 [19] [20 <./Figures/ExamplePlot1b.pdf> <./Figures/ExamplePlot2b.pdf>]
-Overfull \hbox (6.79999pt too wide) in paragraph at lines 723--724
+Overfull \hbox (6.79999pt too wide) in paragraph at lines 737--738
  [][][] 
  []
 
 [21]
-Overfull \hbox (6.79999pt too wide) in paragraph at lines 752--753
+Overfull \hbox (6.79999pt too wide) in paragraph at lines 766--767
  [][][] 
  []
 
 
-Overfull \hbox (4.43887pt too wide) in paragraph at lines 754--755
+Overfull \hbox (4.43887pt too wide) in paragraph at lines 768--769
 \OT1/ptm/m/n/10.95 First, vec-tor-ize all the re-sponse vec-tors $[][]$ into a 
 sin-gle vec-tor de-noted $[][] \OT1/cmr/m/n/10.95 = [][]$\OT1/ptm/m/n/10.95 .
  []
 
 [22]
-Overfull \hbox (6.79999pt too wide) in paragraph at lines 766--767
+Overfull \hbox (6.79999pt too wide) in paragraph at lines 780--781
  [][][] 
  []
 
@@ -993,7 +994,7 @@ mf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb></usr/local/texlive/2011
 /texmf-dist/fonts/type1/urw/times/utmb8a.pfb></usr/local/texlive/2011/texmf-dis
 t/fonts/type1/urw/times/utmr8a.pfb></usr/local/texlive/2011/texmf-dist/fonts/ty
 pe1/urw/times/utmri8a.pfb>
-Output written on paper.pdf (25 pages, 407593 bytes).
+Output written on paper.pdf (25 pages, 407587 bytes).
 PDF statistics:
  313 PDF objects out of 1000 (max. 8388607)
  221 compressed objects within 3 object streams
