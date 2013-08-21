@@ -143,16 +143,17 @@
 
 \begin{aug}
 \author{\fnms{Ville A.} \snm{Satop\"a\"a}\corref{}\ead[label=e1]{satopaa@wharton.upenn.edu}},
-\author{\fnms{Shane T.} \snm{Jensen}\ead[label=e3]{stjensen@wharton.upenn.edu}}
+\author{\fnms{Shane T.} \snm{Jensen}\ead[label=e3]{stjensen@wharton.upenn.edu}},
+\author{\fnms{Lyle H.} \snm{Ungar}\ead[label=e2]{ungar@cis.upenn.edu}},
+\author{\fnms{Barbara A.} \snm{Mellers}\ead[label=e4]{mellers@wharton.upenn.edu}},
 \and
-\author{\fnms{Lyle H.} \snm{Ungar}\ead[label=e2]{ungar@cis.upenn.edu}}
+\author{\fnms{Phil E.} \snm{Tetlock}\ead[label=e5]{tetlock@wharton.upenn.edu}}
 
 \runauthor{Satop\"a\"a et al.}
 
- \affiliation{Department of Statistics\\ The Wharton School of the University of Pennsylvania   \printead{e1,e3}}
-
-
-\affiliation{Department of Computer and Information Science\\ University of Pennsylvania, \printead{e2}}
+ \affiliation{Department of Statistics, The Wharton School of the University of Pennsylvania\\   \printead{e1,e3}}
+ \affiliation{Department of Computer and Information Science, University of Pennsylvania\\ \printead{e2}}
+ \affiliation{Department of Psychology, University of Pennsylvania\\ \printead{e4,e5}}
  \address{Philadelphia, PA 19104- 6340, USA\\  \printead{e1}}
   
 \end{aug}
@@ -201,25 +202,13 @@ Most research on subjective probability aggregation concentrates on procedures t
 \section{Introduction}
 \label{intro}
 Individual experts can differ radically from one another in their abilities to assess probabilities of future events. The quality of their assessments is typically evaluated with an important attribute called \textit{calibration}. An expert is said to be well-calibrated if 
-the proportion of events that actually occurred is, say, 60\% for all those events for which he assessed a probability of 0.60. 
-%the long-run frequency of occurrence of the events agrees with his probability forecasts. This means that, for instance, among all those events for which an expert assesses a probability of  0.60, the proportion of events that actually occur is 60\%.  
-Even though several experiments have been conducted to show that experts are generally poorly calibrated (see, e.g., \citet{cooke1991experts, shlyakhter1994quantifying}), some personal differences among the experts have been found to associate with calibration. In particular, \citet{wright1994coherence} argue that a higher self-rated expertise on the subject matter implies better calibration. 
+the proportion of events that actually occurred is, say, 60\% for all those events for which he assessed a probability of 0.60. Even though several experiments have been conducted to show that experts are generally poorly calibrated (see, e.g., \citet{cooke1991experts, shlyakhter1994quantifying}), some personal differences among the experts have been found to associate with calibration. In particular, \citet{wright1994coherence} argue that a higher self-rated expertise on the subject matter implies better calibration. 
 
-%Therefore self-reported expertise should be taken in to account when modeling probability forecasts given by a diverse group of experts. 
-Unfortunately, calibration by itself does not guarantee usefulness of a probability assessment. For instance, if the empirical frequency of  the last 10 years of a relatively stationary process is 45\%, the expert can assess a constant probability of 0.45 and turn out well-calibrated. His probability, however, is not very useful in decision making. In general, a probability assessments that is near 0.0 or 1.0, is considered more informative, and an expert who makes such assessments is called \textit{sharp}.
-%called \textit{smooth} or \textit{not sharp}. If, on other hand, most of his probabilities are near 0.0 or 1.0, he is deemed \textit{sharp}. 
-%This notion leads to a second important attribute called \textit{sharpness}, which is a statement about the distribution of the assessed probabilities. If most of the probabilities are near 0.0 and 1.0, the assessor is said to be sharp.
-In the forecasting literature sharpness is often combined with calibration into a single goal of maximizing sharpness subject to calibration (see, e.g., \citet{raftery2005using, Ranjan08}). An expert that meets this goal is considered to give perfect probability forecasts (\citet{gneiting2004verifying}). Even though expecting perfect forecasts from an expert is not reasonable in practice, this criterion has led to a wide range of novel and insightful observations in probability forecasting. 
+Unfortunately, calibration by itself does not guarantee usefulness of a probability assessment. For instance, if the empirical frequency of  the last 10 years of a relatively stationary process is 45\%, the expert can assess a constant probability of 0.45 and turn out well-calibrated. His probability, however, is not very useful in decision making. In general, a probability assessments that is near 0.0 or 1.0, is considered more informative, and an expert who makes such assessments is called \textit{sharp}. In the forecasting literature sharpness is often combined with calibration into a single goal of maximizing sharpness subject to calibration (see, e.g., \citet{raftery2005using, Ranjan08}). An expert that meets this goal is considered to give perfect probability forecasts (\citet{gneiting2004verifying}). Even though expecting perfect forecasts from an expert is not reasonable in practice, this criterion has led to a wide range of novel and insightful observations in probability forecasting. 
 
 One such observation is related to the aggregation of multiple probabilities. There is strong empirical evidence that bringing together the strengths of different experts by combining their probability forecasts into a single consensus, known as the \textit{crowd belief},  results in better predictive performance. Being motivated by the long list of applications of probability forecasts, including medical diagnosis (\citet{wilson1998prediction, pepe2003statistical}, political and socio-economic foresight (\citet{tetlock2005expert}), and meteorology (\citet{sanders1963subjective, vislocky1995improved, baars2005performance}), researchers have proposed many different approaches to combining probability forecasts (see, e.g., \citet{Ranjan08, satopaa} for some recent studies, and \citet{Genest, Wallsten97evaluatingand, clemen2007aggregating, primo2009calibration} for a comprehensive overview). The general focus, however, has been on developing one-time aggregation procedures that consult the experts' advice only once before the future event resolves. 
 
-Therefore many complex areas of probability aggregation still remain rather unexplored. 
-%Therefore this paper makes an advance towards rather unexplored areas of probability aggregation by modeling forecasting 
-%This paper introduces an aggregation procedure that allows multiple probability assessments from a single expert before the event resolves. 
-%The context considered in this paper, on the other hand, allows the experts to update their probability assessments over a period of time before the future event resolves.
-%
-%considering a dynamic context with a time period during which the experts are allowed to update their beliefs. 
-For instance, consider an investor aiming to assess whether a stock index will finish trading at or above some threshold on a given date. In order to maximize his overall predictive accuracy, he may consult a group of experts every day and adjust his estimate of the aggregate probability accordingly. Since the experts are allowed to update their probability assessments on a daily basis, the aggregation should be performed by taking into account the correlation and time-series nature of their advice. Analyzing this kind of future events under daily updating of the forecasts is the main focus of this paper. The core research goal is to construct an interpretable time-series model that incorporates self-reported expertise in order to estimate a sharp and well-calibrated version of the crowd belief. The model is then used for
+Therefore many complex areas of probability aggregation still remain rather unexplored. For instance, consider an investor aiming to assess whether a stock index will finish trading at or above some threshold on a given date. In order to maximize his overall predictive accuracy, he may consult a group of experts every day and adjust his estimate of the aggregate probability accordingly. Since the experts are allowed to update their probability assessments on a daily basis, the aggregation should be performed by taking into account the correlation and time-series nature of their advice. Analyzing this kind of future events under daily updating of the forecasts is the main focus of this paper. The core research goal is to construct an interpretable time-series model that incorporates self-reported expertise in order to estimate a sharp and well-calibrated version of the crowd belief. The model is then used for
 \begin{itemize}
 \item the analysis of group-level under- and overconfidence across different levels of self-reported expertise,
 %\item confidence bands for the crowd belief,
@@ -229,52 +218,12 @@ For instance, consider an investor aiming to assess whether a stock index will f
 
 The paper begins with a description of our probability forecasting data that were collected by asking over 2,300 experts to give probability forecasts and to self-assess their level of expertise on a number of 166 geopolitical binary events. After summarizing the dataset, the paper introduces a dynamic hierarchical model for capturing the crowd belief. The model is estimated in a two-step procedure: First, constrained parameter estimates are obtained via Gibbs sampling. These estimates are then transformed in to their unconstrained equivalents by a calibrating step. An extension of this model to polychotomous outcomes is briefly discussed before the model evaluation sections. The first evaluation section uses synthetic data to study the accuracy of the two-step procedure to capture parameter values. The second and much longer evaluation section uses the model on our probability forecasting data. The main goal is to illustrate and also to study the specific research objectives itemized above. The paper concludes with a discussion on future research directions and model limitations.
 
-
-%Two commonly desired attributes of an aggregator are \textit{calibration} and \textit{sharpness}: 
-
-
-%Sharpness, on the other hand, is a statement about the spread of the forecasts. The aggregator is said to be sharp if the resulting forecasts are near 0 and 1. These two attributes are typically combined into a single goal of finding an aggregator that maximizes sharpness subject to calibration (see, e.g., \citet{gneiting2004verifying, raftery2005using}).
-
-%
-%
-%
-%
-%
-%\noindent
-%\\
-%Element 1: MAIN THEME: The broad theme is subjective probability aggregation. Use a catchy initial phrase: "Individuals can differ radically from one another in the precision to which they are able to  evaluate the likelihood of a future event happening." This is makes a statement about human cognitive process and does not include any odd terms. \\
-%Element 2: WHY CARE: Explain the importance of probability aggregation (in a static context) for decision making. Explain why time-series advice is more realistic. (1 REABSTC-LogN) Lack of previous literature on time-series, subjective probability. (2 REASON)  \\
-%Element 3: SUMMARY OF LITERATURE: See the guidelines. We want to to site work done on static case. There is also some work done on repeated forecasts, i.e. see raftery's paper.\\
-%Element 4: MAIN CONTRIBUTION: "Our main contribution arises from our abilities ... " Advertise the data agin.\\
-%Element 5: WE NEED A CLEAR INDICATION OF THE FOLLOWING:\\
-%(a) The core research question: The main goal of this study is to find an interpretable model for detecting a a calibrated crowd belief.\\
-%(b) More specific research objectives: With such a model we can make predictions, answer questions about bias-vs-expertise, and evaluate question difficulty. It may be a good idea to use bullet points here for this. \\
-%(c) Context: Geopolitcal events. Describe the data we have briefly.\\
-%(d) Units of analysis: Group of experts with different self-reported expertise; different questions in the dataset.\\
-%Element 6: STRUCTURE OF THE PAPER\\
-%%
-%\ville{Much of the earlier paper can be included: define calibration and sharpness, normality around the calibrated crowd belief}
-%
-%\ville{Not studied in time-series - to our knowledge: REQUIRES LITERATURE REVIEW}
-%
-%\ville{Define calibration}
-%
-%\ville{Time series allows many more predictions and hence study of calibration -- this is not possible in static context where we would have only 166 predictions. Note that this method can still be applied to any given time point.}
-%
-%\ville{what are we hoping to learn from the data (applications) and why}
-%
-%\ville{Structure of the paper: theory, results (insight + precition)}
-%
 \section{Geopolitical Forecasting Data}
 \label{data}
 The data collection began with a recruitment of 2,365 forecasters ranging from graduate students to forecasting and political science faculty and practitioners. The recruiting was made from professional societies, research centers, alumni associations, science bloggers, and word of mouth. Requirements included at least a Bachelor's degree and completion of psychological and political tests that took roughly two hours. These measures assessed cognitive styles, cognitive abilities, personality traits, political attitudes, and real-world knowledge. The experts were asked to give probability forecasts (to the second decimal point) and to self-assess their level of expertise (measured on a 1-to-5 scale with 1 = Not At All Expert and 5 = Extremely Expert) on a number of 166 geopolitical binary events taking place between September 29, 2011 and May 8, 2013. Each question was active for a period of time during which the participating experts were allowed to update their forecasts as frequently as they liked without being penalized. The forecasters knew that their probability estimates would be assessed for accuracy using Brier scores\footnote{The Brier score is the squared distance between the probability forecast and the event indicator that equals 1.0 or 0.0 depending on whether the event happened or not, respectively. See \citet{Brier} for the original introduction.}. This incentivized them to report their true beliefs instead of attempting to game the system (\citet{winkler1968good}). In addition to receiving \$150 for meeting minimum participation requirements that did not depend on prediction accuracy, the forecasters also received status rewards for their performance via leader-boards displaying Brier scores for the top 20 forecasters. Since a typical expert participated only in a small subset of the 166 questions, the forecasters are considered indistinguishable conditional on the self-reported level of expertise.
-Tables \ref{DataStats} and \ref{ExpertiseTable} provide more relevant summary statistics on the data. Notice that the distribution of the self-reported expertise is skewed to the right
-%: some questions involved very few experts who associated themselves with the highest level of expertise. Notice also 
-and that some questions remained active longer than others.  For more details on the data and its collection see \citet{ungar2012good}.
+Tables \ref{DataStats} and \ref{ExpertiseTable} provide more relevant summary statistics on the data. Notice that the distribution of the self-reported expertise is skewed to the right and that some questions remained active longer than others.  For more details on the data and its collection see \citet{ungar2012good}.
 
-To illustrate the nature of the data with some concrete examples, Figures \ref{Example1} and \ref{Example2} show scatterplots of the probability forecasts given for (a) \textit{Will the expansion of the European bailout fund be ratified by all 17 Eurozone nations before 1 November 2011?}, and (b) \textit{Will the Nikkei 225 index finish trading at or above 9,500 on 30 September 2011?}. The points have been jittered slightly to make overlaps visible.
-%Overall, Figures \ref{Example1} and \ref{Example2} contain 872 forecasts made by 710 experts and 1,860 forecasts made by 1,376 experts, respectively. 
-The darkness of the points are positively associated with the self-reported expertise levels. Given that the European bailout fund was ratified before 1 November 2011 and that the Nikkei 225 index finished trading at around 8,700 on 30 September 2011, the general trend of the probability forecasts converge to the correct answers. There is, however, much disagreement among the experts. This disagreement persists even near the closing dates of the questions. Unfortunately, the data is not only noisy but also quite sparse. As mentioned before, the forecasters were allowed to update their forecast as long as the questions remained active. Updating, however, was done on a very infrequent basis. An expert gave, on average, only 0.0159 forecasts per day. A typical expert, therefore, made a forecast about every 62 days. As a result the average response rate was around 13.5 forecasts per day from a large group of experts. 
+To illustrate the nature of the data with some concrete examples, Figures \ref{Example1} and \ref{Example2} show scatterplots of the probability forecasts given for (a) \textit{Will the expansion of the European bailout fund be ratified by all 17 Eurozone nations before 1 November 2011?}, and (b) \textit{Will the Nikkei 225 index finish trading at or above 9,500 on 30 September 2011?}. The points have been jittered slightly to make overlaps visible. The darkness of the points are positively associated with the self-reported expertise levels. Given that the European bailout fund was ratified before 1 November 2011 and that the Nikkei 225 index finished trading at around 8,700 on 30 September 2011, the general trend of the probability forecasts converge to the correct answers. There is, however, much disagreement among the experts. This disagreement persists even near the closing dates of the questions. Unfortunately, the data is not only noisy but also quite sparse. As mentioned before, the forecasters were allowed to update their forecast as long as the questions remained active. Updating, however, was done on a very infrequent basis. An expert gave, on average, only 0.0159 forecasts per day. A typical expert, therefore, made a forecast about every 62 days. As a result the average response rate was around 13.5 forecasts per day from a large group of experts. 
 
 \vspace{-1em}
 \begin{figure}[h!]
@@ -285,13 +234,10 @@ The darkness of the points are positively associated with the self-reported expe
 \hspace{-0.5em}
 \subfigure[\textit{Will the expansion of the European bailout fund be ratified by all 17 Eurozone nations before 1 November 2011?}]{
 \hspace*{-1em}  \includegraphics[width= 0.49\textwidth]{Figures/ExamplePlot1}
-%\hspace*{-1em}  \includegraphics[width= 1.5in]{CalibrationPLATTSPH10}
-%\caption{$\beta = 1$, $\alpha = 0$}
 \label{Example1}
 } \hspace{0.5em}
 \subfigure[\textit{Will the Nikkei 225 index finish trading at or above 9,500 on 30 September 2011?}]{
 \hspace*{-1em}  \includegraphics[width= 0.49\textwidth]{Figures/ExamplePlot2}
-%\caption{\textit{Sample-Then-Calibrate} with logarithmic score}
 \label{Example2}
 }
 
@@ -332,23 +278,6 @@ Frequency (\%) & 25.3 & 30.7 & 33.6 &  8.2 &  2.1 \\\hline
 
 
 
-
-%
-% For instance, two of the questions were
-%\begin{quote}\textit{
-%Will the expansion of the European bailout fund be ratified by all 17 Eurozone nations before 1 November 2011? %1021
-%}\end{quote}
-%and
-%\begin{quote}\textit{
-%Will the Nikkei 225 index finish trading at or above 9,500 on 30 September 2011? %1011
-%}
-%\end{quote}
-
-
-
-
-
-
 \section{Model}
 \label{model}
 Let $p_{i,t,k} \in (0,1)$ be the probability forecast given by the $i$th expert at time $t$ for the $k$th question, where $i = i, \dots, I_k$, $t = 1, \dots, T_k$, and $k = 1, \dots, K$. Denote the logit-probabilities with $Y_{i,t,k} = \logit(p_{i,t,k}) = \log \left( \frac{p_{i,t,k}}{1-p_{i,t,k}}\right) \in \R$ and collect the logit-probability forecasts given for question $k$ at time $t$ into a vector $\boldsymbol{Y}_{t,k} = [Y_{1,t,k}\ Y_{2,t,k}\ \dots\ Y_{I_{k},t,k}]^T$. Partition the experts into $J$ groups based on some individual feature, such as self-reported expertise, with each group sharing a common multiplicative bias term $b_{j} \in \R$ for $j = 1, \dots, J$. Collect these bias terms into a bias vector $\boldsymbol{b} = [b_{1}\ b_{2}\ \dots\ b_{J}]^T$ and let $\boldsymbol{M}_k$ be a $I_k \times J$ matrix denoting  the group-memberships of the forecasters in question $k$. That is, if the $i$th expert participating in the $k$th question belongs to the $j$th group, then the $i$th row of $\boldsymbol{M}_k$ is the $j$th standard basis vector, $\boldsymbol{e}_j$. The bias vector $\boldsymbol{b}$ does not include a subindex because it is considered shared among all the $K$ questions. To secure model identifiability, it is sufficient to share only one of the elements of $\boldsymbol{b}$ among the questions. This element defines a baseline under which it is possible to estimate the remaining $J-1$ bias terms separately within each of the questions. In this paper, however, the entire vector $\boldsymbol{b}$ is shared because some of the questions in our real-world data set involve very few experts with the highest level of self-reported expertise. Under this notation, the model for the $k$th question can be expressed as 
@@ -363,55 +292,18 @@ where Equation (\ref{observedpr}) denotes the observed process, Equation (\ref{h
 w_{t, k} | \tau^2_k &\stackrel{i.i.d.}{\sim}& \mathcal{N}(0, \tau^2_k),
 \end{eqnarray*}
 and $(\mu_0, \sigma_0^2) \in (\R, \R^+)$ are hyper-parameters chosen a priori. The hidden state $X_{t,k}$ represents the sharp and calibrated logit-probability for the $k$th event given the information available up to and including time $t$. To make this more specific, let $Z_k \in \{0, 1\}$ indicate whether the event associated with the $k$th question happened $\left(Z_k = 1\right)$ or did not happen $\left(Z_k = 0\right)$. If $\{\mathcal{F}_{t,k}\}_{t=1}^{T_k}$ is a filtration representing the information available up to and including a given time point, then $\E[Z_k | \mathcal{F}_{t,k}] = \P(Z_k = 1| \mathcal{F}_{t,k}) = \logit^{-1}(X_{t,k})$. These probabilities are made estimable by assuming that the observed process is associated with the filtration $\{\mathcal{F}_{t,k}\}_{t=1}^{T_k}$ and hence can be used as a proxy for the amount of information available at any given time point. Therefore it is not unreasonable to interpreted the hidden process as the crowd belief across time. 
-%Each modeling task should begin with observations about the nature of the question. With a good understanding of the question, the modeler can proceed to construct a model that has an interpretable and intuitive connection to the real world.
 
 To give intuitive interpretations of the other model parameters, notice that the error term in the observed process has mean zero. Therefore the forecasters are assumed to be, on average, a multiplicative constant $\boldsymbol{b}$ away from the calibrated crowd belief. An individual element of $\boldsymbol{b}$ can be interpreted as a group-specific \textit{systematic bias} that labels the group either as over-confident $\left( b_j \in (1, \infty)\right)$ or as under-confident $\left(b_j \in (0,1)\right)$. The bias terms are analyzed and discussed more in Section \ref{ExpertBias}. Any other deviation from the calibrated crowd belief is considered \textit{random noise}. This noise is measured in terms of $\sigma^2_k$ and can be assumed to be caused by momentary over-optimism (or pessimism), false beliefs, or other misconceptions. 
  
  Similarly to the observed process, the hidden process  has a systematic and a random component. The \textit{random fluctuations} are measured in terms of $\tau^2_k$ and can be assumed to represent changes or shocks to the underlying circumstances that ultimately decide the outcome of the event. The \textit{systematic component} $\gamma_k$, on the other hand, allows the model to incorporate a constant signal stream that drifts the hidden process to infinity (when $\gamma_k \in (1, \infty)$) or zero (when $\gamma_k \in (0, 1)$). If the uncertainty in the question diminishes as the current time point $t$ approaches $T_k$, the hidden process drifts to infinity. Alternatively, the hidden process can drift to zero in which case any available information about the target event does not improve predictive accuracy. Since each of the $K$ questions in our dataset was resolved within a pre-specified timeframe, $\gamma_k$ is expected to fall within the interval $(1, \infty)$ for all $k = 1, \dots, K$. 
  
-%
-%\textit{Random noise, $\sigma^2_k$:} The variability of each observed value $Y_{i,t,k}$ around the biased hidden state $b_j \tilde{X}_{t,k}$. This can be thought of as being caused by momentary over-optimism (or pessimism), false beliefs, or other misconceptions. 
-%Note that only the most informed expert making an objective estimation based solely on facts can be expected to give $X_t$ as his prediction. Unfortunately, human experts hardly make such objective estimates. Therefore this noise component is an important part of our model. 
-%
-%\textit{Random signal, $\tau^2_k$:} This variability is caused by changes in the amount of true information that is available to the experts. It allows the model to incorporate changes or shocks to the underlying circumstances that ultimately decide the outcome of the event. 
-%
-%\textit{Systematic noise, $b_{j}$:} This is a bias in the observed values given by the $j$th most expert group and can be interpreted as groupwise over- or under-confidence that pulls the observed values away from the hidden state values. 
-%
-%\textit{Systematic signal, $\gamma_k$:} Since the event associated with the $k$th question in our dataset realizes by time $T_k$, the uncertainty in the question reduces as the current time point $t$ approaches the final time point $T_k$. This reduction in uncertainty can be viewed as a constant signal stream that pushes the hidden process towards either extreme as more time passes by. 
-
-%These interpretations have been summarized in Table \ref{signalnoise}.
-%\begin{table}
-%\centering
-%\begin{tabular}{| c | c |  c | }\hline
-% Model Factors & Signal & Noise \\ 
-%Random & $\tau^2_k$ & $\sigma^2_k$ \\ 
-%Systematic & $\gamma_k$ & $b_{j,k}$ \\ \hline
-%\end{tabular}
-%\caption{The signal/noise structure of the dynamic linear model}
-%\label{signalnoise}
-%\end{table}
-
-
 
 \section{Model Estimation}
 \label{identifiability}
-%Unfortunately, the model as described by Equations (\ref{observedpr}) and (\ref{hiddenpr}) is not identifiable. To see this, let $a$ be any positive constant. Then $(\boldsymbol{b} a, X_{t,k}/a, a \tau) \neq (\boldsymbol{b}, X_{t,k}, \tau)$ yield the same likelihood. As a result, the parameter values tend to drift during the estimation process.  Several solutions are as follows.
-%
-%\begin{enumerate}
-%\item[a.]  Place informative prior distributions on some of the non-identifiable parameters. These prior distributions, however, must be highly informative in order to provide identifiability. Since studying the expertise biases is one of the research objectives of this paper, placing a highly restrictive prior distribution on $\boldsymbol{b}$ is not satisfactory. Having strong apriori knowledge of $\tau_k$, on the other hand, seems difficult to justify.  
-%\item[b.] The parameters could be constrained to reduce the number of degrees of freedom in the model. A popular choice is to fix one of the bias terms to some constant. For instance, the third expertise group could be chosen as the baseline group by fixing $b_3 = 1$. This, however, assumes that the third expertise group is unbiased. Such an assumption is hardly realistic and would hinder our analysis of under- and overconfidence among the expertise groups. 
-%\item[c.] Reduce the degrees of freedom by introducing more information to the modeling process. 
-% \end{enumerate}
-% 
-%The next two subsections introduce two hierarchical approaches that combine solutions b. and c. to restore identifiability without sacrificing the interpretability of the model. The first approach, called  \textit{Sample-Then-Calibrate}, is flexible and results into an efficient sampling algorithm. The second approach, named \textit{Sample-Only}, on the other hand, produces uncertainty estimates for all the unknown parameters in a coherent, fully Bayesian manner. 
-
-%
 
 
 
 The most challenging part of our model estimation is to incorporate the event indicators $\{Z_k\}_{k=1}^K$ such that the hidden process is well-calibrated and the interpretability of our model is not compromised. This section introduces a two-step procedure, called \textit{Sample-Then-Calibrate} or simply \textit{STC}, that achieves this goal in a flexible, yet efficient manner by first estimating  the model parameters under a constraint (\textit{Sampling Step}) and then performing a one-dimension optimization procedure to transform the constrained estimates into their unconstrained counterparts (\textit{Calibration Step}). 
-
-%The second approach, named \textit{Sample-Only} (SO), on the other hand, produces uncertainty estimates for all the unknown parameters in a fully Bayesian manner. 
 
 
 \subsection{Sampling Step}
@@ -427,15 +319,8 @@ where the trailing input parameter emphasizes the constraint $b_{3} = 1$. Since 
 
 
 
-%See Appendix \ref{appendix} for the technical details.
-
 \subsection{Calibration Step}
 \label{calibration_step}
-%First choose one of the $J$ groups as the baseline group. Denote this group by $j^*$ and fix its multiplicative bias term $b_{j^*} = 1$.  Denote the constrained version of the observed process by
-%\begin{eqnarray*}
-%\boldsymbol{Y}_{t, k} &=&  \boldsymbol{M}_k \boldsymbol{b} (1) X_{t, k}(1)+ \boldsymbol{v}_{t, k},
-%\end{eqnarray*}
-%where the input parameter emphasizes the constraint $b_{j^*} = 1$. Since this constrained model is identifiable, estimates of $\boldsymbol{b}(1)$ and $X_{t, k}(1)$ can be obtained. Denote these estimates by $\hat{\boldsymbol{b}}(1)$ and $\hat{X}_{t, k}(1)$, respectively. 
 Since the model parameters can be estimated under a constrained version of $b_3$, the next step is to determine how $b_3$ should be constrained such that both the sharpness and calibration of the estimated hidden process are maximized. This section introduces an efficient procedure that finds the optimal constraint without requiring any additional runs of the sampling step. First, assume that parameter estimates  $\hat{\boldsymbol{b}}(1)$ and $\hat{X}_{t, k}(1)$ have already been obtained via the constrained sampling step described in Section \ref{sampling_step}. Since for any $\beta \in \R / \{0\}$,
 \begin{eqnarray*}
 \boldsymbol{Y}_{t, k} &=&  \boldsymbol{M}_k \boldsymbol{b} (1) X_{t, k}(1)+ \boldsymbol{v}_{t, k}\\
@@ -446,13 +331,9 @@ the parameter values under $b_{3} = \beta$ can be obtained from $\boldsymbol{b} 
 %Furthermore, an estimate of $X_{t, k}(\beta)$ is given by $\hat{X}_{t, k}(1)/\beta$. 
 This means that $X_{t,k} = X_{t,k}(1)/\beta$ when $\beta$ is equal to the true value of $b_3$. Since the hidden process $X_{t, k}$ is assumed to be sharp and well-calibrated, $b_3$ can be estimated by the value of $\beta$ that simultaneously maximizes the sharpness and calibration of $\hat{X}_{t, k}(1) / \beta$. A natural criterion for this maximization is provided by the class of \textit{proper scoring rules} that combine sharpness and calibration (\citet{gneiting2008rejoinder, buja2005loss}). Due to the possibility of \textit{complete separation} in any one question (see, e.g., \citet{gelman2008weakly}), the maximization must be performed over multiple questions. Therefore,
 \begin{eqnarray}
-%\hat{\beta}_{OSE} &=& \argmax_{\beta \in \R / \{0\}} \sum_{k=1}^K \frac{1}{T_k}  \sum_{t=1}^{T_k} \int_{\R} S(Z_k,  X_{k,t}(\beta)) d\P(X_{k,t} | \boldsymbol{Y}) \nonumber\\
-%&\approx& \argmax_{\beta \in \R / \{0\}} \sum_{k=1}^K \frac{1}{T_k} \sum_{t=1}^{T_k}   \frac{1}{G} \left( \sum_{g=1}^{G}  S\left(Z_k,  \hat{X}_{k,t}^{(g)}(\beta) \right) \right) \label{OSE}
  \hat{\beta}&=&  \argmax_{\beta \in \R / \{0\}} \sum_{k=1}^K \sum_{t=1}^{T_k}  S\left(Z_k, \hat{X}_{k,t}(1) / \beta \right) \label{OSE}
 \end{eqnarray}
-where $S$ is a strictly proper scoring rule such as 
-%that is a natural choice for binary-classification questions (\citet{buja2005loss}) and can be conveniently adapted to the question at hand (\citet{Gneiting04strictlyproper}). 
-the negative Brier score (\citet{Brier})
+where $S$ is a strictly proper scoring rule such as the negative Brier score (\citet{Brier})
 \begin{eqnarray*}
 S_{BRI}(Z, X) &=& -(Z - \logit^{-1}(X))^2
 \end{eqnarray*}
@@ -460,9 +341,6 @@ or the logarithmic score (\citet{good1952rational})
 \begin{eqnarray*}
 S_{LOG}(Z, X) &=& Z \log\left(\logit^{-1}(X)\right) + (1-Z) \log\left(1-\logit^{-1}(X)\right)
 \end{eqnarray*}
-%The proper scoring rule can be conveniently adapted to the question at hand (\citet{Gneiting04strictlyproper}). 
-%Notice that Equation (\ref{OSE}) under $S_{LOG}$ is equivalent to finding the maximum likelihood estimator of the (inverse) slope coefficient for a (centered) logistic regression model with $Z_k$ as the response and $\hat{X}_{k,t}$ as the explanatory variable.
-%Since the expected utility under a strictly proper scoring rule for an observation $Z \sim p$ is uniquely maximized by forecasting exactly $p$ (\citet{Gneiting04strictlyproper}), the estimated log-odds $\hat{X}_{t, k}(1) / \hat{\beta}_{OSE}$ can be expected to be well-calibrated. 
 Since it is not clear which rule should be used for predicting geopolitical events, such as the ones in our dataset, the \textit{Sample-Then-Calibrate} procedure is evaluated  separately under both rules in Sections \ref{syntheticData} and \ref{realData}. Once $\hat{\beta}$ has been computed, estimates of the unconstrained model parameters are given by
 \begin{eqnarray}
  \hat{X}_{t,k}&=& \hat{X}_{k,t}(1) / \hat{\beta} \nonumber\\
@@ -472,20 +350,6 @@ Since it is not clear which rule should be used for predicting geopolitical even
   \hat{\gamma}_{k}&=& \hat{\gamma}_{k}(1)\nonumber
 \end{eqnarray}
 Notice that the parameters $\sigma^2_k$ and $\gamma_k$ are not affected by the constraint. Therefore their constrained and unconstrained estimates are the same.
-
-%\subsection{Sample-Only}
-%In order to clarify the upcoming notation, denote the calibrated logit-probabilities and  the event indicators across all $K$ questions with $\boldsymbol{X}$ and $\boldsymbol{Z}$, respectively. A Bayesian version of Equation (\ref{OSE}) under $S_{LOG}$ can be derived by specifying a prior distribution $p(\beta | \boldsymbol{X})$ and a likelihood function $p(\boldsymbol{Z} | \beta, \boldsymbol{X})$. The posterior distribution of $\beta$ conditional on $\boldsymbol{X}$ is then given by $p(\beta | \boldsymbol{X}, \boldsymbol{Z}) \propto p( \boldsymbol{Z} | \beta, \boldsymbol{X}) p(\beta | \boldsymbol{X})$. Recall that Equation (\ref{OSE}) under $S_{LOG}$ is equivalent to fitting a logistic regression model with $Z_k$ as the response and $X_{k,t}$ as the explanatory variable. To give a Bayesian version of this logistic regression, the likelihood is chosen to be proportional to
-%\begin{eqnarray}
-%p( \boldsymbol{Z} | \beta, \boldsymbol{X}) &\propto& \prod_{k=1}^K \prod_{t=1}^{T_k}  \logit^{-1} \left(X_{k,t}/\beta  \right)^{Z_k} \left( 1-  \logit^{-1} \left( X_{k,t}/\beta  \right) \right)^{1-Z_k} \label{OSE2}
-%\end{eqnarray}
-%Similarly to  \citet{gelman2003bayesian} the prior is chosen to be locally uniform and independent, $p(1/\beta) \propto 1$. Posterior estimates of $\beta$ can be sampled from Equation (\ref{OSE2}) using generic sampling algorithms such as the Metropolis algorithm (\citet{metropolis1953equation}) or slice sampling (\citet{neal2003slice}).
-
-%Notice that with this procedure it is not necessary to estimate $\boldsymbol{b}$ under a constraint. Instead we could let $p(Z_k | X_{t,k}) \propto \logit^{-1} \left(X_{k,t}  \right)^{Z_k} \left( 1-  \logit^{-1} \left( X_{k,t}  \right) \right)^{1-Z_k}$ independently across all time points and questions similarly to Equation (\ref{OSE2}), and estimate the elements of the bias vector $\boldsymbol{b}$ directly. Even though this would make $\beta$ unnecessary, the resulting procedure, which is equivalent to the version with $\beta$, does not make a clear connection to the \textit{Sample-Then-Calibrate} approach. 
-
-
-
-%Overall, this approach can be viewed as a Bayesian equivalent of Equation (\ref{OSE}) under the logarithmic score, $S_{LOG}$.
-%This assumes an independent $Z_k$ for each time point in the $k$th question. This is a coarse approximation since these indicators are, in fact, perfectly correlated. It does, however, reinforce good calibration and is therefore of practical use. 
 
 \subsection{Discussion}
 If the class labels in the data are balanced with respect to the time points, the calibration step with the logarithmic scoring rule is approximately equivalent to \textit{Platt calibration}, which has been shown to yield good calibration under various modeling scenarios (see, e.g., \citet{platt1999probabilistic, niculescu2005obtaining}). To see this, recall that the Platt calibrated logit-probabilities are given by $\hat{A} + \hat{B}\hat{X}_{t,k}(1)$, where 
@@ -500,19 +364,6 @@ To understand the behavior of the coefficients $A$ and $B$, express the logistic
 \end{eqnarray*}
 with $e_{t,k} \stackrel{i.i.d.}{\sim} \mathcal{N}(0,\sigma^2)$. If the data are balanced with respect to the time points, then exactly half of the summands in Equation (\ref{platt}) have $Z_k = 1$ and the average response logit-probability $\logit(\P(Z_k = 1 | \hat{X}_{t,k})) $ is close to zero. Since the values of $\hat{X}_{t,k}$ are estimated logit-probabilities of the same $K$ events across different time points, their overall average is also around zero. Therefore both the response and explanatory variables are approximately centered. This means that the intercept term $A$ is near zero reducing Platt calibration to Equation (\ref{OSE}) under the logarithmic scoring rule. If the data is not balanced, Platt calibration can be easily incorporated into our model via an additional intercept parameter. This, however, reduces the interpretability of our model. Fortunately, compromising interpretability is rarely necessary because it is often possible to use the data in a well-balanced form. One procedure to attain this is described in the beginning of Section \ref{realData}.
 
-
-
-
-%In terms of the prior distributions, we assume that $\alpha$ and $\beta$ are a priori independent with 
-%\begin{eqnarray*}
-%\beta &\sim& \text{Cauchy}(1, 1/2.5)\\
-%\alpha &\sim& \text{Cauchy}(0, 10),
-%\end{eqnarray*}
-%which are essentially the weakly informative default priors introduced in \citet{gelman2008weakly}. The only difference is in the centering of the prior $p(\beta)$. \citet{gelman2008weakly} recommend centering this prior at 0. Since a priori we have no reason to assume under- or overconfidence of the $\tilde{X}_{t,k}$ process, the prior $p(\beta)$ should be centered at 1 instead. 
-%
-%Unlike the \textit{Sample-Then-Calibrate} approach, the \textit{Sample-Only} approach models the uncertainty in estimating $(\beta, \alpha)$. The \textit{Sample-Only} approach also results into an algorithm that produces all estimates from a single procedure; hence, making it appear more coherent.  The \textit{Sample-Then-Calibrate} approach, on other hand, enjoys the flexibility to choose a score function, $S$, that suits the application at hand (see \citet{Gneiting04strictlyproper}). Furthermore, the  \textit{Sample-Then-Calibrate} approach results into a slightly more efficient sampling procedure. 
-
-%Even though both approaches assume a hierarchical model with a common $\boldsymbol{b}$ across the questions,
 
 
 
@@ -538,18 +389,8 @@ On the left-hand side of observed process
 is a $I_k \times 1$ matrix of the expert logit-probabilities for the $m$th outcome of the $k$th question at time $t$, and on the left-hand side of the hidden process
 \begin{eqnarray*}
 \boldsymbol{X}_{t,k} &=&  \left[ \begin{matrix}X_{1,t,k} &X_{2,t,k} & \dots &X_{M-1,t,k} \end{matrix} \right]^T
-%&=&  \left[ \begin{matrix} X_{1,t,k} + \alpha_1 & X_{2,t,k} + \alpha_2  & \dots & X_{M-1,t,k} + \alpha_{M-1}  \end{matrix} \right]^T\\
-%&=&  \left[ \begin{matrix} \log \left( p_{1,t,k}/p_{M,t,k} \right) & \log \left( p_{2,t,k}/p_{M,t,k} \right) & \dots & \log \left( p_{M-1,t,k}/p_{M,t,k} \right) \end{matrix} \right]^T
 \end{eqnarray*}
 is the matrix of sharp and calibrated logit-probabilities at time $t$. Choosing one of the outcomes as the base-case, ensures that the probabilities will sum to one at any given time point. Since this multinomial extension is equivalent to having $M-1$ independent binary-outcome models (see Section \ref{model}), the estimation can be done separately for each outcome. Therefore, even though this paper focuses on modeling binary events, all the properties and discussion generalize trivially to the multi-outcome case.
-
-%\subsection*{Incomplete Data or Missing Observations}
-%If the observation $\boldsymbol{Y}_{t,k}$ is completely missing at time $t$, the update step is skipped and the state estimates are sampled from
-%\begin{align*}
-%\mathcal{N}(\gamma_k \hat{X}_{t-1|t-1}, \gamma^2 P_{t-1|t-1} + \tau^2)
-%\end{align*}
-%If, on the other hand, only some subset of the experts report their forecast at time $t$, then the observation vector $\boldsymbol{Y}_t$ has a smaller dimension. Fortunately, the formulae derived in the previous subsection remain valid even if the dimension of the observation vector is allowed to change; see, e.g., Theorem 2.1 in \textit{Kalman filter with outliers and missing observations} by Cipra and Romera. 
-
 
 \section{Synthetic Data Results \ville{TODO}}
 \label{syntheticData}
@@ -572,36 +413,28 @@ The simulation is performed over a four-dimensional grid of values: The number o
 
 \subfigure[]{
 \hspace*{-1em}  \includegraphics[width= 0.33\textwidth]{Figures/SyntheticSigma2}
-%\hspace*{-1em}  \includegraphics[width= 1.5in]{CalibrationPLATTSPH10}
-%\caption{$\beta = 1$, $\alpha = 0$}
 \label{SyntheticSigma2}
 }
 \subfigure[]{
 \hspace*{-1em} \includegraphics[width=  0.33\textwidth]{Figures/SyntheticBeta}
-%\caption{\textit{Sample-Then-Calibrate} with Brier score}
 \label{SyntheticBeta}
 }
 \subfigure[]{
 \hspace*{-1em} \includegraphics[width=  0.33\textwidth]{Figures/SyntheticK}
-%\caption{\textit{Sample-Only} }
 \label{SyntheticK}
 }
 
 \vspace{-2em}
 \subfigure[]{
 \hspace*{-1em}  \includegraphics[width= 0.33\textwidth]{Figures/SyntheticSigma2bias}
-%\hspace*{-1em}  \includegraphics[width= 1.5in]{CalibrationPLATTSPH10}
-%\caption{$\beta = 1$, $\alpha = 0$}
 \label{SyntheticSigma2}
 }
 \subfigure[]{
 \hspace*{-1em} \includegraphics[width=  0.33\textwidth]{Figures/SyntheticBetabias}
-%\caption{\textit{Sample-Then-Calibrate} with Brier score}
 \label{SyntheticBeta}
 }
 \subfigure[]{
 \hspace*{-1em} \includegraphics[width=  0.33\textwidth]{Figures/SyntheticKbias}
-%\caption{\textit{Sample-Only} }
 \label{SyntheticK}
 }
 
@@ -620,75 +453,17 @@ This section discusses results related to the real-world data described in Secti
 
 The first matter regards human experts making probability forecasts of 0.0 or 1.0 even when they are not completely sure of the outcome of the future event. For instance, all the 166 questions in our dataset contained both a zero and a one. Transforming such forecasts into the logit-space yields infinities that are highly influential and cause problems in model estimation. To avoid this, \citet{Ariely00theeffects} suggest changing $p = 0.0$ and $1.0$ to $p = 0.02$ and $0.98$, respectively. This is similar to winsorising which sets the extreme probabilities to a specified percentile of the data (see, e.g., \citet{hastings1947low} for more details on winsorising).  \citet{Geo}, on the other hand, consider only probabilities that fall within a constrained interval, say $[0.001, 0.999]$, and discard the rest. Since this implies ignoring a portion of the data, we decided to adopt the first approach by changing $p = 0.0$ and $1.0$ to $p = 0.01$ and $0.99$, respectively. 
 
-%Given that the experts were allowed to report their probability forecasts to the second decimal place, this compromise was considered rather natural.
-
 
 The second matter is related to the distribution of the class labels in the dataset. If the set of events that occurred is much larger than the set of events that did not occur (or \textit{vice versa}), the dataset is called \textit{imbalanced}. On such data the model can end up over-focusing on the larger class, and as a result, give very accurate forecast performance over the larger class at the cost of performing poorly over the smaller class (see, e.g., \citet{chen2009learning, wallace2012class}). Fortunately, it is often possible to detect a well-balanced form of the dataset. The first step is to find a partition, $S_0$ and $S_1$, of the question indices, $\{1, 2, \dots, K\}$, such that the equality $\sum_{k \in S_0} T_k  = \sum_{k \in S_1} T_k$ is as closely approximated as possible. This is equivalent to an NP-hard problem known in computer science as the \textit{Partition Problem}:  determine whether a given set of positive integers can be partitioned into two sets such that the sums of the two sets equal to each other (see, e.g., \citet{karmarkar1982differencing, hayes2002easiest}). A simple solution is to use a greedy algorithm, which iterates through the values of $T_k$ in descending order, assigning each $T_k$ to the subset that currently has the smaller sum (see, e.g. \citet{kellerer2004knapsack, gent1996phase} for more details on the Partition Problem). After finding a well-balanced partition, the next step is to assign the class labels such that the labels for the questions in $S_x$ are equal to $x$ with $x = 0$ or $1$. Recall from section \ref{calibration_step} that $Z_k$ represents the event indicator for the event associated with the $k$th question. To define a balanced set of indicators, for all $k \in S_x$, let
 \begin{align*}
  \tilde{Z}_k &= x\\
-%\{\tilde{p}_{i,t,k} | i = 1, \dots, I_k, t = 1, \dots, T_k\} &=  \begin{cases} 
-%\{1-p_{i,t,k} | i = 1, \dots, I_k, t = 1, \dots, T_k\} & \text{if } Z_k = 1-x\\
-%\{p_{i,t,k} | i = 1, \dots, I_k, t = 1, \dots, T_k\} & \text{if } Z_k = x 
 \tilde{p}_{i,t,k} &=  \begin{cases} 
 1-p_{i,t,k} & \text{if } Z_k = 1-x\\
 p_{i,t,k}& \text{if } Z_k = x 
 \end{cases}
 \end{align*}
 with $i = 1, \dots, I_k$, and $t = 1, \dots, T_k$. The set $\left\{\left(\tilde{Z}_k, \{\tilde{p}_{i,t,k} | i = 1, \dots, I_k, t = 1, \dots, T_k \}\right) \right\}_{k=1}^K$ is a balanced version of the data. 
-%Notice that this procedure extends trivially to multi-outcome (polychotomous) events because many of the multinomial models, such as the multinomial logistic regression (see, e.g., \citet{agresti2002categorical}) or the multi-outcome extension of our model, can be expressed as a set of independent binary-response models to which the above balancing procedure can be applied directly. 
 This procedure was used to balance our real-world dataset both in terms of events and time points. The final output splits the events exactly in half ($|S_0| = |S_1| = 83$) such that number of time points in the first and second halves are 8,737 and 8,738, respectively. 
-
-%\subsection{Incoherent and Imbalanced Data}
-%\label{practicalmatters}
-%The first issue that needs to be addressed arises from human experts making probability forecasts of 0 or 1 even when they are not completely sure of the outcome. For instance, each of the forecast pools associated with the 166 questions in our data contained both a zero and a one. Transforming such forecasts into the logit-space yields infinities which are highly influential and hence cause questions in model estimation. To avoid this, \citet{Ariely00theeffects} suggest changing $p = 0$ and $1$ to $p = 0.02$ and $0.98$, respectively. This is similar to winsorising which sets the extreme probabilities to a specified percentile of the data (see, e.g., \citet{hastings1947low} for more details on winsorising).  \citet{Geo}, on the other hand, consider only probabilities that fall within a constrained interval, say $[0.001, 0.999]$, and discard the rest. Since this implies ignoring a portion of the data, we have adopted the first approach by changing $p = 0$ and $1$ to $p = 0.01$ and $0.99$, respectively. Given that the experts were allowed to report their probability forecasts with a precision of 0.01, this practical compromise was considered a natural choice.
- 
-% The second issue is related to the distribution of the class labels in the dataset. If the set of events that occurred is much larger than the set of events that did not occur (or \textit{vice versa}), the dataset is called \textit{imbalanced}. On such data the model can end up over-focusing on the larger class and, as a results, give very accurate forecast performance over the larger class but poor forecast performance over the  smaller class (see, e.g., \citet{chen2009learning, wallace2012class}).
-% %Imbalanced data can also cause Platt calibration to overfit (see \citet{mitchell2007multi}). 
-%Furthermore, as discussed in Section \ref{Sample-Then-Calibrate-Ident}, balancing the data allows the model to imitate Platt Calibration without losing interpretability. 
-%
-%To describe the process of balancing the data, recall that our goal is to construct a model that is well-calibrated at any time point across all questions. The class labels in the data must therefore be balanced with respect to the total number of time points. The first step is to find a partition, $S_0$ and $S_1$, of the question indices, $\{1, 2, \dots, K\}$, such that the equality $\sum_{k \in S_0} T_k  = \sum_{k \in S_1} T_k$
-%is as closely approximated as possible. This is equivalent to an NP-hard question known in computer science as the \textit{Partition Problem}:  determine whether a given set of positive integers can be partitioned into two sets such that the sums of the two sets equal to each other (see, e.g., \citet{karmarkar1982differencing, hayes2002easiest}). A simple option is to use a greedy algorithm, which iterates through the values of $T_k$ in an ascending order, assigning each $T_k$ to the subset that currently has the smaller sum (see, e.g. \citet{kellerer2004knapsack, gent1996phase} for more details on the Partition Problem). After finding such a partition, the final step is to assign the class labels such that the labels for the questions in $S_x$ are equal to $x$ with $x = 0$ or $1$. In other words, let $\tilde{Z}_k = x$ and
-%\begin{align*}
-%\{\tilde{p}_{i,t,k | i = 1, \dots, I_k, t = 1, \dots, T_k}\} &=  \begin{cases} 
-%\{1-p_{i,t,k} | i = 1, \dots, I_k, t = 1, \dots, T_k\} & \text{if } Z_k = 1-x\\
-%\{p_{i,t,k} | i = 1, \dots, I_k, t = 1, \dots, T_k\} & \text{if } Z_k = x 
-%\end{cases}
-%\end{align*}
-%for $k \in S_x$. The final set $\left\{\left(\tilde{Z}_k, \{\tilde{p}_{i,t,k | i = 1, \dots, I_k, t = 1, \dots, T_k} \}\right) \right\}_{k=1}^K$ is a balanced version of the data. This procedure simultaneously balances our dataset both in terms of events and time points. The final output splits the events exactly in half ($|S_0| = |S_1| = 83$) such that number of time points in the first and second halves are 8,737 and 8,738, respectively. 
-
- 
-% Both of these approaches, however, are rather \textit{ad-hoc} and unsatisfactory: while the first one requires the user to pick a specified percentile or range within the unit interval, the second one ignores a portion of the data. 
-% 
-% Therefore we put in our efforts to propose a simple, yet slightly more principled approach: First, fit a cubic smoothing spline to a set of equidistant probabilities in the open interval $(0,1)$ and their corresponding logit probabilities. Second, use this spline to extrapolate the extreme logit probability $\logit(1.0)$. Third, assign the negative of this extrapolated logit probability to the other extreme logit probability, $\logit(0.0)$. The initial choice of the probability grid matters: generally finer grids lead to larger extrapolated values for $\logit(1.0)$. Fortunately, the dataset at hand often offers a natural choice for the grid. For instance, in our case the experts reported their probability forecasts with an accuracy of 0.01. Therefore  $0.50, 0.51, \dots, 0.99$ gives us the initial probability grid. Under this choice, the extrapolation yields $\widehat{\logit(1.0)} \approx 5.509$. This is approximately equivalent to changing $p = 0.0$ and $1.0$ to $p = 0.004$ and $0.996$, respectively. 
-% 
-% Overall, this approach seems more reasonable than the earlier described solutions by \citet{Ariely00theeffects} and  \citet{Geo} because (a) it does not discard any data and (b) it uses the application-specific scale to construct a smooth, strictly increasing, yet finite transformation from probability scale to logit scale. 
- 
-%\subsection{Unbalanced Data}
-%Since in our case the explanatory variables are probabilities associated with dichotomous events, the data can be balanced by choosing between $\{p_i\}_{i=1}^{I_k}$ and $\{1-p_i\}_{i=1}^{I_k}$ for the first $K/2$ events depending on the whether the events occurred or not, respectively. That is, if the event occurred (or did not occur), choose $\{p_i\}_{i=1}^{I_k}$ (or $\{1-p_i\}_{i=1}^{I_k}$, respectively). Set $Z_k$ for $k = 1, \dots, K/2$ equal to 1. For the remaining $K/2$ questions, on the other hand, choose $\{1-p_i\}_{i=1}^{I_k}$ (or $\{p_i\}_{i=1}^{I_k}$) if the event happened (or did not happen, respectively) and then set $Z_k$ for $k = K/2+1, \dots, K$ equal to 0.
-% event $k = 1, \dots, K$ such that
-%\begin{eqnarray}
-%|\{k : \{p_i\}_{i=1}^{I_k} \text{, } Z_k = 1 \}| + |\{k : \{1-p_i\}_{i=1}^{I_k}  \text{, } Z_k = 0\}| &=& K/2 \label{balanceddata}
-%\end{eqnarray}
-%and then defining a new set of event indicators denoted $\{Z_k^b\}_{k=1}^K$, where $Z_k^b = 1$ if  $k$th event is in either set described in Equation (\ref{balanceddata}) and $Z_k^b = 0$ otherwise. 
-%
-
-
-
-
-
-
-
-%To make this more specific, let $S_1$ be an index set for events that both occurred and for which we choose $\{p_i\}_{i=1}^{I_k}$. Correspondingly, let $S_2$ be an index set for events that both did not occur and for which we choose $\{1-p_i\}_{i=1}^{I_k}$. The dataset is balanced if the sets $S_1$ and $S_2$ satisfy
-%\begin{eqnarray*}
-%\sum_{k \in S_1 \cup S_2} T_k  &=& \frac{\sum_{k=1}^K T_k}{2}
-%%|\{(k, t) : \{p_i\}_{i=1}^{I_k} \text{, } Z_k = 1\text{, } t \in \{1, \dots, T_k\} \}|\\
-%% + |\{(k,t) : \{1-p_i\}_{i=1}^{I_k}  \text{, } Z_k = 0\text{, } t \in \{1, \dots, T_k\} \}| &=& \frac{\sum_{k=1}^K T_k}{2}
-%\end{eqnarray*}
-%with $Z_k = 1$ if $k \in S_1 \cup S_2$ and $Z_k = 0$ otherwise. This i
-
-
-
-
 
 
 \subsection{Out-of-Sample Forecasting}
@@ -729,8 +504,6 @@ is the average probability forecast given at time $t$ for the $k$th question, th
  \bar{p}_{1,k} & \text{ for } t  = 1 \\
 \alpha \bar{p}_{t,k}  + (1-\alpha) \hat{p}_{t-1,k}(\alpha) & \text{ for } t > 1
 \end{cases}
-%\hat{p}_1 &=& \bar{p}_1 \\	
-%\hat{p}_t &=& \alpha \bar{p}_t  + (1-\alpha) \hat{p}_{t-1}, \text{ for } t > 1
 \end{eqnarray*}
 where the input parameter $\alpha$ is learned from the training set by 
 \begin{eqnarray*}
@@ -738,33 +511,6 @@ where the input parameter $\alpha$ is learned from the training set by
 \end{eqnarray*}
  
  
- 
-%
-%\item Many time-series models have been developed for univariate time series. Our data, however, is not univariate nor directly multivariate. The response vector changes in size across time. Therefore in order to use the standard time series models, we turn the data into a univariate time series by considering the average forecast at each time point. 
-%
-%Autoregressive integrated moving average, ARIMA($p,d,q$), applied to the average forecasts given at each time point, $t$. The parameters, $p,d$, and $q$, are learnt form the training set by
-%\begin{eqnarray*}
-%(p,d,q) &=& \argmin_{p,d,q \in \mathbb{Z}^+} \sum_{k=1}^K \sum_{t=1}^{T_k} \left(Z_k - \hat{p}_{t,k}\right)^2,
-%\end{eqnarray*}
-%where $\hat{p}_{t,k}$ is the ARIMA prediction for the $k$th question at time $t$. 
-%
-%\item  \textit{Exponentially Weighted Moving Logit Aggregator} (EWMLA). This is a moving version of the aggregator, $\hat{p}_G(a)$, introduced in \cite{satopaa}. If $\boldsymbol{p}_{t,k}$ is a vector collecting all the probability forecasts made for the $k$th question at time $t$, then the EWMLA forecasts are found recursively as
-%\begin{eqnarray*}
-%\hat{p}_{t,k}(\alpha, \nu) =
-%\begin{cases}
-%G_{t,k}(\nu ) & \text{ for } t  = 1 \\
-%\alpha G_{t,k}(\nu )  + (1-\alpha) \hat{p}_{t-1,k}(\alpha, \nu)  & \text{ for } t > 1
-%\end{cases}
-%\end{eqnarray*}
-%where
-%\begin{eqnarray*}
-%G_{t,k}(\nu )  &=& \frac{\left[ \prod\limits_{i=1}^{N_{t,k}} \left( \frac{p_{i, t, k}}{1-p_{i, t, k}} \right)^{1/N_{t,k}} \right]^\nu}{1+\left[ \prod\limits_{i=1}^{N_{t,k}} \left( \frac{p_{i, t, k}}{1-p_{i, t, k}} \right)^{1/N_{t,k}} \right]^\nu}
-%\end{eqnarray*}
-%The tuning parameters, $(\alpha, \nu) $, are learned from the training set by
-%\begin{eqnarray*}
-%(\hat{\alpha}, \hat{\nu}) &=& \argmin_{\nu \in \R, \alpha \in [0,1]} \sum_{k \in S_{train}} \sum_{t=1}^{T_k} \left(Z_k - \hat{p}_{t,k}(\alpha, \nu)\right)^2
-%\end{eqnarray*}
-
 \item  \textit{Exponentially Weighted Moving Logit Aggregator (EWMLA)}. This is a moving version of the aggregator $\hat{p}_G(\boldsymbol{b})$ that was introduced in \cite{satopaa}. If $\boldsymbol{p}_{t,k}$ is a vector collecting all the probability forecasts made for the $k$th question at time $t$, then the EWMLA forecasts are found recursively from
 \begin{eqnarray*}
 \hat{p}_{t,k}(\alpha, \boldsymbol{b}) =
@@ -802,7 +548,6 @@ The competing models are evaluated via a 10-fold cross-validation\footnote{A 5-f
 
 Table \ref{prediction} summarizes different ways to aggregate these scores: The first option, denoted by \textit{Scores by Day}, weighs the questions by the number of days the question remained open. This is performed by computing the average of the 17,475 scores. The second option, denoted by \textit{Scores by Problem}, gives each question an equal weight regardless how long the question remained open. This is done by first averaging the scores within a question, and then averaging the average scores across all the questions. Both scores can be further broken down into subcategories by considering the length of the questions. The questions are divided into \textit{Short} questions (30 days or fewer), \textit{Medium} questions (between 31 and 59 days), and \textit{Long} Problems (60 days or more). The number of questions in these subcategories were 36, 32 and 98, respectively. The bolded scores indicate the lowest score in each column. The values in the parenthesis quantify the variability in the scores: Under \textit{Scores by Day} the values give the standard errors of all the scores. Under \textit{Scores by Problem}, on other hand, the values represent the standard errors of the average scores across the questions. 
 
-% Requires the booktabs if the memoir class is not being used
 \begin{table}[htbp]
    \centering
       \begin{tabular}{l llll} % Column formatting, @{} suppresses leading/trailing space
@@ -839,28 +584,6 @@ Overall, STC-Bri and STC-Log achieve the lowest average scores across all column
 The dataset contained a few long questions with an abrupt change of the crowd belief from one answer option to another. Since these abrupt changes happened generally towards the end of each question, during most days the Brier scores were really high. Given that these problems were typically very long, they gained a higher weight under \textit{Scores by Day} than under \textit{Scores by Problem}. This explains why the \textit{Scores by Day} are higher than the \textit{Scores by Problem} under the columns \textit{All Problems} and \textit{Long}.
 
 
-%% Requires the booktabs if the memoir class is not being used
-%\begin{table}[htbp]
-%   \centering
-%   
-%   %\topcaption{Table captions are better up top} % requires the topcapt package
-%   \begin{tabular}{l llllllll} % Column formatting, @{} suppresses leading/trailing space
-%\hline
-%& \multicolumn{2}{ c }{All Problems} & \multicolumn{2}{ c }{Short} & \multicolumn{2}{ c }{Medium} & \multicolumn{2}{ c }{Long}\\
-%Method & Days &Problems & Days &Problems & Days &Problems & Days &Problems\\ \hline
-%SDLM & 0.101 (0.024) & 0.066 (0.013) & 0.098 (0.024) & 0.102 (0.025)\\ 
-%BSTC-Log & 0.097 (0.045) & 0.053 (0.022) & 0.100 (0.046) & 0.099 (0.046)\\ 
-%STC-Bri & 0.096 (0.036) & 0.056 (0.018) & 0.097 (0.036) & 0.098 (0.037)\\ 
-%STC-Log & 0.096 (0.036) & 0.056 (0.018) & 0.096 (0.036) & 0.098 (0.037)\\ 
-%EWMBA & 0.102 (0.041) & 0.060 (0.015) & 0.110 (0.040) & 0.103 (0.042)\\ 
-%EWMLA & 0.102 (0.040) & 0.061 (0.017) & 0.111 (0.046) & 0.103 (0.040)\\ 
-%EWMA & 0.111 (0.020) & 0.089 (0.010) & 0.111 (0.019) & 0.112 (0.021)\\ 
-%   \end{tabular}
-%   \caption{Mean Brier Scores based on 10-fold cross-validation. The bolded values indicate the lowest scores in each column.}
-%   \label{prediction}
-%\end{table}
-
-
 
 \subsection{In- and Out-of-Sample Sharpness and Calibration}
 \label{calibration}
@@ -872,23 +595,18 @@ A calibration plot is a simple tool for assessing the sharpness and calibration 
 \subfigure[\scriptsize SDLM In-Sample]{
 \hspace*{-1.1em}
   \includegraphics[width= 0.28\textwidth]{Figures/CalibrationNONE10}
-%\hspace*{-1em}  \includegraphics[width= 1.5in]{CalibrationPLATTSPH10}
-%\caption{$\beta = 1$, $\alpha = 0$}
 \label{CalibrationNONEa}
 }
 \subfigure[\scriptsize STC-Log In-Sample]{
 \hspace*{-3em}  \includegraphics[width= 0.28\textwidth]{Figures/CalibrationLOG10}
-%\caption{\textit{Sample-Then-Calibrate} with logarithmic score}
 \label{CalibrationPLATTLOG10}
 }
 \subfigure[\scriptsize STC-Bri In-Sample]{
 \hspace*{-3em} \includegraphics[width= 0.28\textwidth]{Figures/CalibrationBRI10}
-%\caption{\textit{Sample-Then-Calibrate} with Brier score}
 \label{CalibrationPLATTBRI10}
 }
 \subfigure[\scriptsize BSTC-Log In-Sample]{
 \hspace*{-3em} \includegraphics[width= 0.28\textwidth]{Figures/CalibrationFULL10}
-%\caption{\textit{Sample-Only} }
 \label{CalibrationPLATTFULL10}
 }
 
@@ -896,23 +614,18 @@ A calibration plot is a simple tool for assessing the sharpness and calibration 
 \vspace{-1.5em}
 \subfigure[\scriptsize SDLM Out-of-Sample]{
 \hspace*{-1.1em}  \includegraphics[width= 0.28\textwidth]{Figures/CalibrationNONE}
-%\hspace*{-1em}  \includegraphics[width= 1.5in]{CalibrationPLATTSPH10}
-%\caption{$\beta = 1$, $\alpha = 0$}
 \label{CalibrationNONEb}
 }
 \subfigure[\scriptsize STC-Log Out-of-Sample]{
 \hspace*{-3em}  \includegraphics[width= 0.28\textwidth]{Figures/CalibrationSTO-Log}
-%\caption{\textit{Sample-Then-Calibrate} with logarithmic score}
 \label{CalibrationSTC-Log}
 }
 \subfigure[\scriptsize STC-Bri Out-of-Sample]{
 \hspace*{-3em} \includegraphics[width= 0.28\textwidth]{Figures/CalibrationSTO-Bri}
-%\caption{\textit{Sample-Then-Calibrate} with Brier score}
 \label{CalibrationSTC-Bri}
 }
 \subfigure[\scriptsize BSTC-Log Out-of-Sample]{
 \hspace*{-3em} \includegraphics[width= 0.28\textwidth]{Figures/CalibrationSO}
-%\caption{\textit{Sample-Only} }
 \label{CalibrationBSTC-Log}
 }
 
@@ -926,21 +639,9 @@ The top and bottom rows of Figure \ref{Calibration-Out} present calibration plot
 
 Overall, the \textit{Sample-Then-Calibrate}-procedure is sharp and well-calibrated both in- and out-of-sample with only a few points barely falling outside the \textit{point-wise} critical values. Since the calibration does not change drastically from the top to the bottom row, the \textit{Sample-Then-Calibrate}-procedure can be considered to present robustness against over-fitting. This is, however, not the case with BSTC-Log that is well-calibrated in-sample but presents over-confidence out-of-sample. Figures \ref{CalibrationNONEa} and \ref{CalibrationNONEb} serve as baselines by showing the reliability plots for the SDLM-model. Since this model does not perform any explicit calibration, it is not surprising to see most points outside the critical values. The pattern in the deviations suggests drastic under-confidence, and the inset histogram reveals drastic lack of sharpness. 
 
-% Sharpness refers to the distribution of the forecast probabilities. The closer the forecasts are to zero and one, the sharper the model is said to be. This is an important feature in forecasting, where the main objective typically is to maximize sharpness with respect to calibration (see, e.g., \cite{Ranjan08,raftery2005using}). 
- 
-% Overall, both in-sample calibration and sharpness increase from (a) to (d) with \textit{BSTC-Log} being the sharpest and most calibrated. 
-
-
-
-
 
 \subsection{Group-Level Expertise Bias}
 \label{ExpertBias}
-%In Section \ref{calibration} it was briefly mentioned that the experts as a group are under-confident relative to the calibrated crowd belief.
-%This section analyzes the biases across different levels of self-reported expertise. 
-%Figure \ref{Biases} is similar in nature to the plots seen in the previous section. This time, however, instead of comparing the predicted probabilities against the empirical occurrence rate, we are comparing the expected expert predictions against the calibrated probabilities under different modeling approaches; that is,  $\logit^{-1}(b_j (X +\alpha))$ against $\logit^{-1}(X)$ for $j = 1, \dots, 5$ and $X \in \R$. Furthermore, we separate the results by the self-reported expertise levels. 
-%Recall from Section \ref{data} that we asked the experts to self-assess their expertise level on a 1-to-5 scale (1 = Not At All Expert to 5 = Extremely Expert). 
-%Recall from Section \ref{model} that the vector $\boldsymbol{b}$ collects the bias terms specific to each self-reported expertise group. 
 Recall from Section \ref{data} that the experts were asked to self-assess their expertise level (on a 1-to-5 scale with 1 = Not At All Expert to 5 = Extremely Expert) on  all of the 166 questions in our real-world dataset. Based on these self-assessments the experts were then divided into 5 expertise groups, and each of the expertise groups was assigned a separate multiplicative bias term. This section uses the \textit{Sample-Then-Calibrate}-procedure to explore the posterior distribution of these group-level bias terms. Figure \ref{Biases} presents the posterior distributions of the bias terms with side-by-side box plots. Since the distributions fall completely below the \textit{no-bias} reference-line at 1.0, the expertise groups are deemed under-confident. 
 
 
@@ -948,55 +649,11 @@ The under-confidence, however, decreases as the level of the self-reported exper
 
 Overall, finding under-confidence is a rather surprising result given that many previous studies have been conducted to show that experts are likely to be over-confident. For instance,  \citet{lichtenstein1977calibration, morgan1992uncertainty, bier2004implications} summarize the results from numerous calibration studies, and conclude that experts are systematically over-conÞdent about their probability assessments. Our result, however, is a statement about groups of experts and hence does not invalidate the possibility of the individual experts being overconfident. To make conclusions at the individual-level based on the group-level bias terms would result into a \textit{ecological inference fallacy} (see, e.g., \citet{lubinski1996seeing}).
 
-%This follows from the well-known Simpson's Paradox (\citet{simpson1951interpretation}) that  explains why the trend of the individuals can be reversed after they are aggregated into a single group. 
-
-
-
-
-
-%The well-informed experts, in the contrary, place themselves well among the two groups with the levels of self-reported expertise. 
 
 \begin{figure}[!ht]
-%\centering
-%\hspace*{-42em} 	\includegraphics[width=  0.8\textwidth]{Figures/Figures/LegendBias} % requires the graphicx package
-%\vspace{-2.7em}
-%
-%\subfigure[]{
-%  \includegraphics[width = 0.32 \textwidth]{Figures/BiasesPLATTLOG}
-%%\caption{\textit{Sample-Then-Calibrate} with logarithmic score}
-%\label{BiasesPLATTLOG}
-%}
-%\subfigure[]{
-%\hspace*{-1em} \includegraphics[width = 0.32 \textwidth]{Figures/BiasesPLATTBRI}
-%%\caption{\textit{Sample-Then-Calibrate} with Brier score}
-%\label{BiasesPLATTBRI}
-%}
-
-%\subfigure[]{
-%\hspace*{-1em} \includegraphics[width = 0.5 \textwidth]{Figures/BiasesFULL}
-%%\caption{\textit{Sample-Only} }
-%\label{BiasesFULL}
-%}
 \vspace*{-1em} 
 \includegraphics{Figures/BiasesBoxplots}
-%\caption{\textit{Sample-Then-Calibrate} with Brier score}
 \label{BiasesLOGBoxplots}
-
-%\subfigure[STC-Log]{
-%\hspace*{-1em} \includegraphics[width = 0.5 \textwidth]{Figures/BiasesLOGBoxplots}
-%%\caption{\textit{Sample-Then-Calibrate} with Brier score}
-%\label{BiasesLOGBoxplots}
-%}
-%\subfigure[STC-Bri]{
-%\hspace*{-1em} \includegraphics[width = 0.5 \textwidth]{Figures/BiasesBRIBoxplots}
-%%\caption{\textit{Sample-Then-Calibrate} with Brier score}
-%\label{BiasesBRIBoxplots}
-%}
-%\subfigure[BSTC-Log]{
-%\hspace*{-1em} \includegraphics[width = 0.32 \textwidth]{Figures/BiasesFULLBoxplots}
-%%\caption{\textit{Sample-Then-Calibrate} with Brier score}
-%\label{BiasesFULLBoxplots}
-%}
 
 \caption[Optional caption for list of figures]{Comparing the bias-levels across self-reported expertise under different approaches. 
 Posterior distributions of $b_j$ for $j = 1, \dots, 5$ under the \textit{Sample-Then-Calibrate} approach that optimizes over the logarithmic score and the \textit{Sample-Then-Calibrate} approach that optimizes over the Brier score.
@@ -1004,16 +661,9 @@ Posterior distributions of $b_j$ for $j = 1, \dots, 5$ under the \textit{Sample-
 \label{Biases}
 \end{figure}
 
-%Under the \textit{Sample-Only} approach, the posterior mean of $\alpha$ is around 0.155, which is very small in the logit scale. Therefore 
-%\begin{eqnarray*}
-%\E[\boldsymbol{Y}_{t, k}] &=&  \boldsymbol{M}_k \boldsymbol{b} (X_{t, k} +\alpha) \approx \boldsymbol{M}_k \boldsymbol{b} X_{t, k}
-%\end{eqnarray*}
-%and t
+
 More specific group-level inference can be performed by computing probabilities based the estimated posterior distributions. For instance, the posterior probability that the most expert group is the least under-confident is approximately equal to $1.0$, and 
-%More specifically, $\P(b_5 > b_j \text{ for } j = 1, \dots, 4) \approx 1.0$.
-the posterior probability of a strictly decreasing level of under-confidence is approximately 0.87. 
- %In other words, $\P(b_5 > b_4 > \dots > b_1) \approx 0.871$.  
- The latter probability is driven down by the inseparability of the two groups associated with the lowest levels of self-reported expertise. The fact that these groups are very similar suggests that the forecasters are poor at assessing how little they know about a subject that is strange to them. If these groups are combined into a single group, the posterior probability of a strictly decreasing level of under-confidence is approximately 1.0. 
+the posterior probability of a strictly decreasing level of under-confidence is approximately 0.87. The latter probability is driven down by the inseparability of the two groups associated with the lowest levels of self-reported expertise. The fact that these groups are very similar suggests that the forecasters are poor at assessing how little they know about a subject that is strange to them. If these groups are combined into a single group, the posterior probability of a strictly decreasing level of under-confidence is approximately 1.0. 
 
 
 
@@ -1026,12 +676,6 @@ the posterior probability of a strictly decreasing level of under-confidence is 
 \label{QuestionDifficulty}
 One advantage of our model arises from its ability to produce estimates of interpretable question-specific parameters $\gamma_k$, $\sigma^2_k$, and $\tau^2_k$. These quantities can be combined in many interesting ways to answer questions about different groups of experts or the questions themselves. For instance, being able to assess the difficulty of a question could lead to more principled ways of aggregating performance measures across questions or to novel insight on the kind of questions that are found difficult by experts (see, e.g., a discussion on the \textit{Hard-Easy Effect} in \cite{Wilson94cognitivefactors}). To illustrate, recall that higher values of $\sigma^2_k$ suggest greater disagreement among the participating experts. Since experts are more likely to disagree over a difficult question than an easy one, it is reasonable to assume that $\sigma^2_k$ has a positive relationship with question difficulty. An alternative measure is given by $\tau_k$ that quantifies the volatility of the underlying circumstances that ultimately decide the outcome of the event. Therefore a high value of $\tau_k$ can cause the outcome of the event appear unstable and difficult to predict. 
 
-%This constant drives the hidden process and is therefore directly indicative of the rate at which the calibrated crowd belief approaches 0.0 or 1.0.  If this rate is very slow, the day-to-day accumulation of available and relevant information does not 
-
-%is, how early on does the question become solvable. 
-
-
-%Since $\sigma^2_k$ has a positive and $\gamma_k$ a negative relationship with question difficulty, these two quantities could be then combined via multiplication, $\sigma^2_k / \gamma_k$, into a single measure of question difficulty. 
 
 As a final illustration of our model, consider the two questions used for illustrative purposes in Section \ref{data}. Figure \ref{ExamplePlotsFinal} is a copy of Figure \ref{ExamplePlots} with the addition of a solid line surrounded by a dashed band. The solid line represents the posterior mean of the calibrated crowd belief as estimated by STC-Log. The dashed lines connect the point-wise 95\% posterior intervals across different time points. Since $\hat{\sigma}_k^2 = 2.43$  and $\hat{\sigma}_k^2 = 1.77$ for the questions depicted in Figures \ref{Example1b} and \ref{Example2b}, respectively, the first question provokes more disagreement among the experts than the second one. Intuitively this makes sense because the target event in Figure \ref{Example1b}  is determined by several conditions that may change radically from one day to the next while the target event in Figure \ref{Example2b} is determined by a relatively steady stock market index. Therefore it is not surprising to find that the first question has $\hat{\tau}_k^2 = 1.38$ while the second one has  $\hat{\tau}_k^2 = 0.198$. We conclude that the first question can be considered inherently more difficult than the second one. 
 
@@ -1043,13 +687,10 @@ As a final illustration of our model, consider the two questions used for illust
 \hspace{-0.5em}
 \subfigure[\textit{Will the expansion of the European bailout fund be ratified by all 17 Eurozone nations before 1 November 2011?}]{
 \hspace*{-1em}  \includegraphics[width= 0.49\textwidth]{Figures/ExamplePlot1b}
-%\hspace*{-1em}  \includegraphics[width= 1.5in]{CalibrationPLATTSPH10}
-%\caption{$\beta = 1$, $\alpha = 0$}
 \label{Example1b}
 } \hspace{0.5em}
 \subfigure[\textit{Will the Nikkei 225 index finish trading at or above 9,500 on 30 September 2011?}]{
 \hspace*{-1em}  \includegraphics[width= 0.49\textwidth]{Figures/ExamplePlot2b}
-%\caption{\textit{Sample-Then-Calibrate} with logarithmic score}
 \label{Example2b}
 }
 
@@ -1058,13 +699,6 @@ As a final illustration of our model, consider the two questions used for illust
 \end{figure}
 
 
-
-%
-%\begin{enumerate}
-%\item Expert Noise $ \sigma^2$.
-%\item Distance from 0.5 and how quickly the process approaches the extreme probabilities 0.0 and 1.0. This is determined largely by the value of $\gamma$. 
-%\item Rank-correlation
-%\end{enumerate}
 
 \section{Discussion}
 This paper introduced an interpretable time-series model that incorporates self-reported expertise and captures a sharp and well-calibrated crowd belief across time. The model is estimated in two-steps: The first step samples constrained versions of the model parameters via a Gibbs sampler that only makes use of standard distributions. The second step involves a one-dimensional optimization procedure that transforms the constrained parameter values into their unconstrained counterparts. Due to the rather unorthodox nature of our dataset, our work expands the literature towards less-studied areas of  probability aggregation. 
@@ -1078,40 +712,11 @@ The model was applied to an unusually large dataset on probability forecasting d
  
 Other future directions could aim to remove some of the obvious limitations of our model. For instance, recall that the random components are assumed to follow a normal distribution. This is a strong assumption that may not always be justified. Logit-probabilities, however, have been modeled with a normal distribution before (see, e.g., \citet{Erev1994}). Furthermore, the normal distribution is a rather standard assumption in psychological models (see, e.g.,  signal-detection theory  in \citet{tanner1954decision}). A second limitation resides in the assumption that both the observed and hidden processes are expected to grow linearly. This assumption could be relaxed, for instance, by adding higher order terms to the model. A more complex model, however, is likely to sacrifice interpretability. Given that our model is able to detect very intricate patterns in the crowd belief  (see Figure \ref{ExamplePlotsFinal}), compromising interpretability for the sake of facilitating non-linear growth is hardly necessary. 
 
-%Despite these and potentially other unmentioned limitations, the model yields very good predictive performance and calibration on real data. 
- 
-%
-%Ideally the model could be further developed into a non-hierarchical version that does not share any information among the forecasting questions. Such a model could be used to study group-level bias across different questions and to make aggregate probability forecasts without a separate training set. Due to \textit{perfect separation}, however, some sharing among the questions is necessary unless the modeler has access to prior information on the bias terms, the hidden states, or their variability. Under strong enough prior information the estimation procedure can be made regular enough to be performed separately for each question. This, however, was considered to be outside the scope of this paper and was therefore not discussed in detail. 
-%
-
-
-%
-%This leads to several research objectives including
-%\begin{itemize}
-%\item the analysis of under- and overconfidence across different levels of self-reported expertise,
-%\item confidence bands for the crowd belief,
-%\item accurate probability forecasts, and
-%\item many question-specific quantities that have easy interpretations and can be used to gain novel insight in the social sciences. 
-%\end{itemize}
-%
-
-
-%Allow observed variance to vary across expert groups. Allow more terms (e.g. the bias and variance terms) to vary over time. Model the bias based on expert characteristic. Problem difficulty.
-
-
 
 \appendix
 \section{Technical Details of the Sampling Step}
 \label{appendix}
-%The implementation of the hierarchical procedure introduced in Section \ref{model} consist of two steps: \ref{GibbsSampler} Run the Gibbs sampler that to obtain estimates of the constrained parameters. \ref{Optimization} Perform a one-dimensional maximization to transform the constrained parameter estimates into their unconstrained counterparts. 
 
-%The main difference arises in the way the hidden states and the calibration parameter, $\beta$, are sampled. 
-
-%\subsection{Technical Details: \textit{Sample-Then-Calibrate}}
-%\label{Sample-Then-Calibrate}
-%This subsection describes the details of \textit{Sample-Then-Calibrate} approach one block of model parameters at a time.
-%\subsection{Sampling Step}
-%\label{GibbsSampler}
 The Gibbs sampler iteratively samples all the unknown parameters from their full-conditionals one block of parameters at a time. Since this is performed under the constraint $b_3 = 1$ to ensure model identifiability, the constrained parameter estimates should be denoted with a trailing $(1)$ to maintain consistency with earlier notation. For instance, the constrained estimate of $\gamma_k$ should be denoted by $\hat{\gamma}_k(1)$ while the unconstrained estimate is denoted by $\hat{\gamma}_k$. For the sake of clarity, however, the constraint suffix is omitted in this section. Nonetheless, it is important to keep in mind that all the estimates in this section are constrained.
 
 \begin{center}
@@ -1156,14 +761,6 @@ Since the covariance matrix in Equation (\ref{BiasVector}) is diagonal, the cons
 \end{eqnarray*}
 Since the experts are not required to give a new prediction at every time unit, the design matrices must be trimmed accordingly such that their dimensions match up with the dimensions of the observed matrices. 
 
-%
-%Adopting the non-informative prior $p(\boldsymbol{b}, \sigma_k^2 | \boldsymbol{X}_k) \propto \sigma_k^{-2}$, the parameters $\boldsymbol{b}_k$ and $\sigma^2_k$ can be sampled via a standard Bayesian regression setup as follows.
-%\begin{eqnarray*}
-%\boldsymbol{b}_k | \dots &\sim& \mathcal{MVN}_J \left( (\boldsymbol{X}_k^T \boldsymbol{X}_k)^{-1} \boldsymbol{X}_k^T \boldsymbol{Y}_k, (\boldsymbol{X}_k^T \boldsymbol{X}_k)^{-1} \sigma^2_k\right) \\
-%\sigma^2_k | \dots &\sim& \text{Inv-}\chi^2\left(|\boldsymbol{Y}_k| - J, \frac{1}{|\boldsymbol{Y}_k| - J} (\boldsymbol{Y}_k - \boldsymbol{X}_k \boldsymbol{b}_k)^T (\boldsymbol{Y}_k - \boldsymbol{X}_k \boldsymbol{b}_k) \right),
-%\end{eqnarray*}
-%where the final distribution is scaled inverse-$\chi^2$ (see, e.g., \citet{gelman2003bayesian}). For identifiability reasons, one of the elements of $\boldsymbol{b}_k$ should be fixed to some pre-specified constant, say, 1. The remaining elements can be estimated separately for each question. 
-%
 
 \begin{center}
 \framecolorbox[\textwidth]{gray}{gray!15}{Sample $\gamma_k$ and $\tau^2_k$}
@@ -1175,66 +772,7 @@ Estimating the parameters related to the hidden process are estimated via a regr
 \end{eqnarray*}
 where the final distribution is a scaled inverse-$\chi^2$ (see, e.g., \citet{gelman2003bayesian}).
 
-%\begin{center}
-%\framecolorbox[\textwidth]{Figures/gray}{gray!15}{Estimate $\beta$}
-%\end{center}
-%\subsection{Calibration Step}
-%\label{Optimization}
-%
-%The calibration parameter $\beta$ is estimated via a one-dimensional maximization procedure
-%\begin{eqnarray*}
-% \hat{\beta}&=&  \argmax_{\beta \in \R / \{0\}} \sum_{k=1}^K \sum_{t=1}^{T_k}  S\left(Z_k, \hat{X}_{k,t}(1) / \beta \right),\\
-%\end{eqnarray*}
-%where $S$ is a proper scoring rule. The unconstrained parameter estimates are then given by
-%\begin{eqnarray*}
-% \hat{X}_{t,k}&=& \hat{X}_{k,t}(1) / \hat{\beta} \\
-% \hat{\boldsymbol{b}}_{t,k}&=& \hat{\boldsymbol{b}}(1) \hat{\beta}\\
-%  \hat{\tau}_{k}^2&=& \hat{\tau}_{k}^2(1) \hat{\beta}^2\\
-%  \hat{\sigma}_{k}^2&=& \hat{\sigma}_{k}^2(1)\\
-%  \hat{\gamma}_{k}&=& \hat{\gamma}_{k}(1)
-%\end{eqnarray*}
 
-
-%\subsection{Technical Details: \textit{Sample-Only}}
-%
-%This subsection describes the details of \textit{Sample-Only} approach one block of model parameters at a time.
-%\begin{center}
-%\framecolorbox[\textwidth]{Figures/gray}{gray!15}{Sample $X_{t,k}$}
-%\end{center}
-%Since the \textit{Sample-Only} approach conditions on $\{Z_k\}_{k=1}^K$, the FFBS algorithm cannot be used for sampling the hidden states. Instead, he hidden states are sampled in an increasing order one at a time from
-%\begin{eqnarray*}
-%X_{t,k} | \dots &\propto&  \logit^{-1} \left( X_{k,t}/\beta \right)^{Z_k} \left( 1-  \logit^{-1} \left( X_{k,t}/\beta \right) \right)^{1-Z_k}\\
-%&& \times \exp\left( -\frac{1}{2\sigma_k^{2}} \left( \boldsymbol{Y}_{t,k} - \boldsymbol{M}_k \boldsymbol{b}X_{t,k}\right)^T \left( \boldsymbol{Y}_{t,k} - \boldsymbol{M}_k \boldsymbol{b}X_{t,k} \right)\right)\\
-%&& \times \exp\left(-\frac{1}{2\tau^{2}_k}\left(X_{t,k} - \gamma_k X_{t-1,k} \right)^2 \right),
-%\end{eqnarray*}
-%where the initial state is sampled from $X_{0,k} \sim \mathcal{N}(0,1)$. The sampling is done via the Metropolis algorithm (\citet{metropolis1953equation}) with a Normal proposal centered at the current value and variance tuned to give an acceptance ratio around 50\%.
-%
-%
-%% Since the final forecasts $\{\boldsymbol{Y}_{T_k, k}\}_{k=1}^K$ contain all the information within $\{Z_k\}_{k=1}^K$, we have that 
-%%\begin{eqnarray*}
-%%p(\boldsymbol{X}_{k} | \boldsymbol{Y}_{1:T_k, k},  Z_k, \dots) &=& p(\boldsymbol{X}_{k} | \boldsymbol{Y}_{1:T_k, k}, \dots)
-%%\end{eqnarray*}
-%%Therefore the FFBS-algorithm can be used to sample the hidden states also in the \textit{Sample-Only} approach.
-%
-%
-%
-%\begin{center}
-%\framecolorbox[\textwidth]{Figures/gray}{gray!15}{Sample $\left(\boldsymbol{b}, \sigma^2\right)$ and $\left(\gamma, \tau^2\right)$}
-%\end{center}
-%The same as for the \text{Sample-Then-Calibrate} approach. See Section \ref{Sample-Then-Calibrate}.
-%
-%\begin{center}
-%\framecolorbox[\textwidth]{Figures/gray}{gray!15}{Sample $\beta$}
-%\end{center}
-%This is equivalent to logistic regression. By adopting a locally uniform prior $p(1/\beta) \propto 1$, the calibration parameter can be sampled from
-%\begin{eqnarray*}
-%\beta | \dots &\propto& \prod_{k=1}^K \prod_{t=1}^{T_k}  \logit^{-1} \left( X_{k,t}/\beta \right)^{Z_k} \left( 1-  \logit^{-1} \left( X_{k,t}/\beta \right) \right)^{1-Z_k}
-%\end{eqnarray*}
-%This is performed via the Metropolis algorithm (\citet{metropolis1953equation})  with a Normal proposal centered at the current value and variance tuned to give an acceptance ratio around 50\%.
-
-
-
-% \bibliographystyle{plainnat}
 \bibliographystyle{imsart-nameyear}
 \bibliography{biblio}		% expects file "myrefs.bib"
 

@@ -1,0 +1,636 @@
+\begin{thebibliography}{50}
+% BibTex style file: imsart-nameyear.bst, 2013-01-28
+% Default style options (sort=1,type=nameyear).
+% Used options (sort=1,type=nameyear).
+
+\bibitem[\protect\citeauthoryear{Allard, Comunian and Renard}{2012}]{Geo}
+\begin{barticle}[author]
+\bauthor{\bsnm{Allard},~\bfnm{D.}\binits{D.}},
+  \bauthor{\bsnm{Comunian},~\bfnm{A.}\binits{A.}} \AND
+  \bauthor{\bsnm{Renard},~\bfnm{P.}\binits{P.}}
+(\byear{2012}).
+\btitle{Probability Aggregation Methods in Geoscience}.
+\bjournal{Mathematical Geosciences}
+\bvolume{44}
+\bpages{545-581}.
+\end{barticle}
+\endbibitem
+
+\bibitem[\protect\citeauthoryear{Ariely et~al.}{2000}]{Ariely00theeffects}
+\begin{barticle}[author]
+\bauthor{\bsnm{Ariely},~\bfnm{Dan}\binits{D.}},
+  \bauthor{\bsnm{Au},~\bfnm{Wing~Tung}\binits{W.~T.}},
+  \bauthor{\bsnm{Bender},~\bfnm{Randall~H.}\binits{R.~H.}},
+  \bauthor{\bsnm{Budescu},~\bfnm{David~V.}\binits{D.~V.}},
+  \bauthor{\bsnm{Dietz},~\bfnm{Christiane~B.}\binits{C.~B.}},
+  \bauthor{\bsnm{Gu},~\bfnm{Hongbin}\binits{H.}},
+  \bauthor{\bsnm{Wallsten},~\bfnm{Thomas~S.}\binits{T.~S.}} \AND
+  \bauthor{\bsnm{Zauberman},~\bfnm{Gal}\binits{G.}}
+(\byear{2000}).
+\btitle{The effects of averaging subjective probability estimates between and
+  within judges}.
+\bjournal{Journal of Experimental Psychology: Applied}
+\bvolume{6}
+\bpages{130-147}.
+\end{barticle}
+\endbibitem
+
+\bibitem[\protect\citeauthoryear{Baars and Mass}{2005}]{baars2005performance}
+\begin{barticle}[author]
+\bauthor{\bsnm{Baars},~\bfnm{Jeffrey~A}\binits{J.~A.}} \AND
+  \bauthor{\bsnm{Mass},~\bfnm{Clifford~F}\binits{C.~F.}}
+(\byear{2005}).
+\btitle{Performance of National Weather Service forecasts compared to
+  operational, consensus, and weighted model output statistics}.
+\bjournal{Weather and forecasting}
+\bvolume{20}
+\bpages{1034--1047}.
+\end{barticle}
+\endbibitem
+
+\bibitem[\protect\citeauthoryear{Baron et~al.}{2013}]{Baron}
+\begin{barticle}[author]
+\bauthor{\bsnm{Baron},~\bfnm{J.}\binits{J.}},
+  \bauthor{\bsnm{Ungar},~\bfnm{L.~H.}\binits{L.~H.}},
+  \bauthor{\bsnm{Mellers},~\bfnm{B.~A.}\binits{B.~A.}} \AND
+  \bauthor{\bsnm{E.},~\bfnm{Tetlock~P.}\binits{T.~P.}}
+(\byear{2013}).
+\btitle{Two reasons to make aggregated probability forecasts more extreme}.
+\bjournal{submitted}.
+\end{barticle}
+\endbibitem
+
+\bibitem[\protect\citeauthoryear{Bier}{2004}]{bier2004implications}
+\begin{barticle}[author]
+\bauthor{\bsnm{Bier},~\bfnm{Vicki}\binits{V.}}
+(\byear{2004}).
+\btitle{Implications of the research on expert overconfidence and dependence}.
+\bjournal{Reliability Engineering \& System Safety}
+\bvolume{85}
+\bpages{321--329}.
+\end{barticle}
+\endbibitem
+
+\bibitem[\protect\citeauthoryear{Bonferroni}{1936}]{bonferroni}
+\begin{barticle}[author]
+\bauthor{\bsnm{Bonferroni},~\bfnm{C.~E.}\binits{C.~E.}}
+(\byear{1936}).
+\btitle{Teoria statistica delle classi e calcolo delle probabilit\'a}.
+\bjournal{Pubblicazioni del R Istituto Superiore di Scienze Economiche e
+  Commerciali di Firenze}
+\bvolume{8}
+\bpages{3-62}.
+\end{barticle}
+\endbibitem
+
+\bibitem[\protect\citeauthoryear{Brier}{1950}]{Brier}
+\begin{barticle}[author]
+\bauthor{\bsnm{Brier},~\bfnm{G.~W.}\binits{G.~W.}}
+(\byear{1950}).
+\btitle{Verification of Forecasts Expressed in Terms of Probability}.
+\bjournal{Monthly Weather Review}
+\bvolume{78}
+\bpages{1-3}.
+\end{barticle}
+\endbibitem
+
+\bibitem[\protect\citeauthoryear{Br{\"o}cker and
+  Smith}{2007}]{brocker2007increasing}
+\begin{barticle}[author]
+\bauthor{\bsnm{Br{\"o}cker},~\bfnm{Jochen}\binits{J.}} \AND
+  \bauthor{\bsnm{Smith},~\bfnm{Leonard~A}\binits{L.~A.}}
+(\byear{2007}).
+\btitle{Increasing the reliability of reliability diagrams}.
+\bjournal{Weather and Forecasting}
+\bvolume{22}
+\bpages{651--661}.
+\end{barticle}
+\endbibitem
+
+\bibitem[\protect\citeauthoryear{Buja, Stuetzle and Shen}{2005}]{buja2005loss}
+\begin{barticle}[author]
+\bauthor{\bsnm{Buja},~\bfnm{Andreas}\binits{A.}},
+  \bauthor{\bsnm{Stuetzle},~\bfnm{Werner}\binits{W.}} \AND
+  \bauthor{\bsnm{Shen},~\bfnm{Yi}\binits{Y.}}
+(\byear{2005}).
+\btitle{Loss functions for binary class probability estimation and
+  classification: Structure and applications}.
+\bjournal{Working draft, November}.
+\end{barticle}
+\endbibitem
+
+\bibitem[\protect\citeauthoryear{Carter and Kohn}{1994}]{carter1994gibbs}
+\begin{barticle}[author]
+\bauthor{\bsnm{Carter},~\bfnm{Chris~K}\binits{C.~K.}} \AND
+  \bauthor{\bsnm{Kohn},~\bfnm{Robert}\binits{R.}}
+(\byear{1994}).
+\btitle{On Gibbs sampling for state space models}.
+\bjournal{Biometrika}
+\bvolume{81}
+\bpages{541--553}.
+\end{barticle}
+\endbibitem
+
+\bibitem[\protect\citeauthoryear{Chen}{2009}]{chen2009learning}
+\begin{barticle}[author]
+\bauthor{\bsnm{Chen},~\bfnm{Yetian}\binits{Y.}}
+(\byear{2009}).
+\btitle{Learning Classifiers from Imbalanced, Only Positive and Unlabeled Data
+  Sets}.
+\bjournal{Department of Computer Science Iowa State University}.
+\end{barticle}
+\endbibitem
+
+\bibitem[\protect\citeauthoryear{Clemen and
+  Winkler}{2007}]{clemen2007aggregating}
+\begin{barticle}[author]
+\bauthor{\bsnm{Clemen},~\bfnm{Robert~T}\binits{R.~T.}} \AND
+  \bauthor{\bsnm{Winkler},~\bfnm{Robert~L}\binits{R.~L.}}
+(\byear{2007}).
+\btitle{Aggregating probability distributions}.
+\bjournal{Advances in Decision Analysis}
+\bpages{154--176}.
+\end{barticle}
+\endbibitem
+
+\bibitem[\protect\citeauthoryear{Cooke}{1991}]{cooke1991experts}
+\begin{barticle}[author]
+\bauthor{\bsnm{Cooke},~\bfnm{Roger~M}\binits{R.~M.}}
+(\byear{1991}).
+\btitle{Experts in uncertainty: opinion and subjective probability in science}.
+\end{barticle}
+\endbibitem
+
+\bibitem[\protect\citeauthoryear{Erev, Wallsten and Budescu}{1994}]{Erev1994}
+\begin{barticle}[author]
+\bauthor{\bsnm{Erev},~\bfnm{I}\binits{I.}},
+  \bauthor{\bsnm{Wallsten},~\bfnm{T.~S.}\binits{T.~S.}} \AND
+  \bauthor{\bsnm{Budescu},~\bfnm{D.~V.}\binits{D.~V.}}
+(\byear{1994}).
+\btitle{Simultaneous Over- and Underconfidence: The Role of Error in Judgment
+  Processes.}
+\bjournal{Psychological Review}
+\bvolume{66}
+\bpages{519-527}.
+\end{barticle}
+\endbibitem
+
+\bibitem[\protect\citeauthoryear{Gelman et~al.}{2003}]{gelman2003bayesian}
+\begin{bbook}[author]
+\bauthor{\bsnm{Gelman},~\bfnm{Andrew}\binits{A.}},
+  \bauthor{\bsnm{Carlin},~\bfnm{John~B}\binits{J.~B.}},
+  \bauthor{\bsnm{Stern},~\bfnm{Hal~S}\binits{H.~S.}} \AND
+  \bauthor{\bsnm{Rubin},~\bfnm{Donald~B}\binits{D.~B.}}
+(\byear{2003}).
+\btitle{Bayesian data analysis}.
+\bpublisher{CRC press}.
+\end{bbook}
+\endbibitem
+
+\bibitem[\protect\citeauthoryear{Gelman et~al.}{2008}]{gelman2008weakly}
+\begin{barticle}[author]
+\bauthor{\bsnm{Gelman},~\bfnm{Andrew}\binits{A.}},
+  \bauthor{\bsnm{Jakulin},~\bfnm{Aleks}\binits{A.}},
+  \bauthor{\bsnm{Pittau},~\bfnm{Maria~Grazia}\binits{M.~G.}} \AND
+  \bauthor{\bsnm{Su},~\bfnm{Yu-Sung}\binits{Y.-S.}}
+(\byear{2008}).
+\btitle{A weakly informative default prior distribution for logistic and other
+  regression models}.
+\bjournal{The Annals of Applied Statistics}
+\bpages{1360--1383}.
+\end{barticle}
+\endbibitem
+
+\bibitem[\protect\citeauthoryear{Genest and Zidek}{1986}]{Genest}
+\begin{barticle}[author]
+\bauthor{\bsnm{Genest},~\bfnm{C.}\binits{C.}} \AND
+  \bauthor{\bsnm{Zidek},~\bfnm{J.~V.}\binits{J.~V.}}
+(\byear{1986}).
+\btitle{Combining Probability Distributions: A Critique and an Annotated
+  Bibliography}.
+\bjournal{Statistical Science}
+\bvolume{1}
+\bpages{114-148}.
+\end{barticle}
+\endbibitem
+
+\bibitem[\protect\citeauthoryear{Gent and Walsh}{1996}]{gent1996phase}
+\begin{binproceedings}[author]
+\bauthor{\bsnm{Gent},~\bfnm{Ian~P}\binits{I.~P.}} \AND
+  \bauthor{\bsnm{Walsh},~\bfnm{Toby}\binits{T.}}
+(\byear{1996}).
+\btitle{Phase transitions and annealed theories: Number partitioning as a case
+  study'}.
+In \bbooktitle{ECAI}
+\bpages{170--174}.
+\bpublisher{Citeseer}.
+\end{binproceedings}
+\endbibitem
+
+\bibitem[\protect\citeauthoryear{Gneiting et~al.}{2004}]{gneiting2004verifying}
+\begin{binproceedings}[author]
+\bauthor{\bsnm{Gneiting},~\bfnm{Tilmann}\binits{T.}},
+  \bauthor{\bsnm{Raftery},~\bfnm{AE}\binits{A.}},
+  \bauthor{\bsnm{Balabdaoui},~\bfnm{F}\binits{F.}} \AND
+  \bauthor{\bsnm{Westveld},~\bfnm{A}\binits{A.}}
+(\byear{2004}).
+\btitle{Verifying probabilistic forecasts: Calibration and sharpness}.
+In \bbooktitle{17th Conference on Probablity and Statistics in the Atmospheric
+  Sciences}.
+\end{binproceedings}
+\endbibitem
+
+\bibitem[\protect\citeauthoryear{Gneiting et~al.}{2008}]{gneiting2008rejoinder}
+\begin{barticle}[author]
+\bauthor{\bsnm{Gneiting},~\bfnm{Tilmann}\binits{T.}},
+  \bauthor{\bsnm{Stanberry},~\bfnm{Larissa~I}\binits{L.~I.}},
+  \bauthor{\bsnm{Grimit},~\bfnm{Eric~P}\binits{E.~P.}},
+  \bauthor{\bsnm{Held},~\bfnm{Leonhard}\binits{L.}} \AND
+  \bauthor{\bsnm{Johnson},~\bfnm{Nicholas~A}\binits{N.~A.}}
+(\byear{2008}).
+\btitle{Rejoinder on: Assessing probabilistic forecasts of multivariate
+  quantities, with an application to ensemble predictions of surface winds}.
+\bjournal{Test}
+\bvolume{17}
+\bpages{256--264}.
+\end{barticle}
+\endbibitem
+
+\bibitem[\protect\citeauthoryear{Good}{1952}]{good1952rational}
+\begin{barticle}[author]
+\bauthor{\bsnm{Good},~\bfnm{Irving~John}\binits{I.~J.}}
+(\byear{1952}).
+\btitle{Rational decisions}.
+\bjournal{Journal of the Royal Statistical Society. Series B (Methodological)}
+\bpages{107--114}.
+\end{barticle}
+\endbibitem
+
+\bibitem[\protect\citeauthoryear{Hastings et~al.}{1947}]{hastings1947low}
+\begin{barticle}[author]
+\bauthor{\bsnm{Hastings},~\bfnm{Cecil}\binits{C.}},
+  \bauthor{\bsnm{Mosteller},~\bfnm{Frederick}\binits{F.}},
+  \bauthor{\bsnm{Tukey},~\bfnm{John~W}\binits{J.~W.}} \AND
+  \bauthor{\bsnm{Winsor},~\bfnm{Charles~P}\binits{C.~P.}}
+(\byear{1947}).
+\btitle{Low moments for small samples: a comparative study of order
+  statistics}.
+\bjournal{The Annals of Mathematical Statistics}
+\bvolume{18}
+\bpages{413--426}.
+\end{barticle}
+\endbibitem
+
+\bibitem[\protect\citeauthoryear{Hayes}{2002}]{hayes2002easiest}
+\begin{barticle}[author]
+\bauthor{\bsnm{Hayes},~\bfnm{Brian}\binits{B.}}
+(\byear{2002}).
+\btitle{The easiest hard problem}.
+\bjournal{American Scientist}
+\bvolume{90}
+\bpages{113--117}.
+\end{barticle}
+\endbibitem
+
+\bibitem[\protect\citeauthoryear{Karmarkar and
+  Karp}{1982}]{karmarkar1982differencing}
+\begin{bbook}[author]
+\bauthor{\bsnm{Karmarkar},~\bfnm{Narendra}\binits{N.}} \AND
+  \bauthor{\bsnm{Karp},~\bfnm{Richard~M}\binits{R.~M.}}
+(\byear{1982}).
+\btitle{The differencing method of set partitioning}.
+\bpublisher{Computer Science Division (EECS), University of California
+  Berkeley}.
+\end{bbook}
+\endbibitem
+
+\bibitem[\protect\citeauthoryear{Kellerer, Pferschy and
+  Pisinger}{2004}]{kellerer2004knapsack}
+\begin{bbook}[author]
+\bauthor{\bsnm{Kellerer},~\bfnm{Hans}\binits{H.}},
+  \bauthor{\bsnm{Pferschy},~\bfnm{Ulrich}\binits{U.}} \AND
+  \bauthor{\bsnm{Pisinger},~\bfnm{David}\binits{D.}}
+(\byear{2004}).
+\btitle{Knapsack problems}.
+\bpublisher{Springer}.
+\end{bbook}
+\endbibitem
+
+\bibitem[\protect\citeauthoryear{Lichtenstein, Fischhoff and
+  Phillips}{1977}]{lichtenstein1977calibration}
+\begin{bbook}[author]
+\bauthor{\bsnm{Lichtenstein},~\bfnm{Sarah}\binits{S.}},
+  \bauthor{\bsnm{Fischhoff},~\bfnm{Baruch}\binits{B.}} \AND
+  \bauthor{\bsnm{Phillips},~\bfnm{Lawrence~D}\binits{L.~D.}}
+(\byear{1977}).
+\btitle{Calibration of probabilities: The state of the art}.
+\bpublisher{Springer}.
+\end{bbook}
+\endbibitem
+
+\bibitem[\protect\citeauthoryear{Lubinski and
+  Humphreys}{1996}]{lubinski1996seeing}
+\begin{barticle}[author]
+\bauthor{\bsnm{Lubinski},~\bfnm{David}\binits{D.}} \AND
+  \bauthor{\bsnm{Humphreys},~\bfnm{Lloyd~G}\binits{L.~G.}}
+(\byear{1996}).
+\btitle{Seeing the forest from the trees: When predicting the behavior or
+  status of groups, correlate means.}
+\bjournal{Psychology, Public Policy, and Law}
+\bvolume{2}
+\bpages{363}.
+\end{barticle}
+\endbibitem
+
+\bibitem[\protect\citeauthoryear{Metropolis
+  et~al.}{1953}]{metropolis1953equation}
+\begin{barticle}[author]
+\bauthor{\bsnm{Metropolis},~\bfnm{Nicholas}\binits{N.}},
+  \bauthor{\bsnm{Rosenbluth},~\bfnm{Arianna~W}\binits{A.~W.}},
+  \bauthor{\bsnm{Rosenbluth},~\bfnm{Marshall~N}\binits{M.~N.}},
+  \bauthor{\bsnm{Teller},~\bfnm{Augusta~H}\binits{A.~H.}} \AND
+  \bauthor{\bsnm{Teller},~\bfnm{Edward}\binits{E.}}
+(\byear{1953}).
+\btitle{Equation of state calculations by fast computing machines}.
+\bjournal{The journal of chemical physics}
+\bvolume{21}
+\bpages{1087}.
+\end{barticle}
+\endbibitem
+
+\bibitem[\protect\citeauthoryear{Migon et~al.}{2005}]{migon2005dynamic}
+\begin{barticle}[author]
+\bauthor{\bsnm{Migon},~\bfnm{Helio~S}\binits{H.~S.}},
+  \bauthor{\bsnm{Gamerman},~\bfnm{Dani}\binits{D.}},
+  \bauthor{\bsnm{Lopes},~\bfnm{Hedibert~F}\binits{H.~F.}} \AND
+  \bauthor{\bsnm{Ferreira},~\bfnm{Marco~AR}\binits{M.~A.}}
+(\byear{2005}).
+\btitle{Dynamic models}.
+\bjournal{Handbook of Statistics}
+\bvolume{25}
+\bpages{553--588}.
+\end{barticle}
+\endbibitem
+
+\bibitem[\protect\citeauthoryear{Morgan}{1992}]{morgan1992uncertainty}
+\begin{bbook}[author]
+\bauthor{\bsnm{Morgan},~\bfnm{Millett~Granger}\binits{M.~G.}}
+(\byear{1992}).
+\btitle{Uncertainty: a guide to dealing with uncertainty in quantitative risk
+  and policy analysis}.
+\bpublisher{Cambridge University Press}.
+\end{bbook}
+\endbibitem
+
+\bibitem[\protect\citeauthoryear{Neal}{2003}]{neal2003slice}
+\begin{barticle}[author]
+\bauthor{\bsnm{Neal},~\bfnm{Radford~M}\binits{R.~M.}}
+(\byear{2003}).
+\btitle{Slice sampling}.
+\bjournal{Annals of statistics}
+\bpages{705--741}.
+\end{barticle}
+\endbibitem
+
+\bibitem[\protect\citeauthoryear{Niculescu-Mizil and
+  Caruana}{2005}]{niculescu2005obtaining}
+\begin{binproceedings}[author]
+\bauthor{\bsnm{Niculescu-Mizil},~\bfnm{Alexandru}\binits{A.}} \AND
+  \bauthor{\bsnm{Caruana},~\bfnm{Rich}\binits{R.}}
+(\byear{2005}).
+\btitle{Obtaining Calibrated Probabilities from Boosting.}
+In \bbooktitle{UAI}
+\bpages{413}.
+\end{binproceedings}
+\endbibitem
+
+\bibitem[\protect\citeauthoryear{Pepe}{2003}]{pepe2003statistical}
+\begin{barticle}[author]
+\bauthor{\bsnm{Pepe},~\bfnm{Margaret~Sullivan}\binits{M.~S.}}
+(\byear{2003}).
+\btitle{The statistical evaluation of medical tests for classification and
+  prediction}.
+\end{barticle}
+\endbibitem
+
+\bibitem[\protect\citeauthoryear{Platt et~al.}{1999}]{platt1999probabilistic}
+\begin{barticle}[author]
+\bauthor{\bsnm{Platt},~\bfnm{John}\binits{J.}} \betal{et~al.}
+(\byear{1999}).
+\btitle{Probabilistic outputs for support vector machines and comparisons to
+  regularized likelihood methods}.
+\bjournal{Advances in large margin classifiers}
+\bvolume{10}
+\bpages{61--74}.
+\end{barticle}
+\endbibitem
+
+\bibitem[\protect\citeauthoryear{Primo et~al.}{2009}]{primo2009calibration}
+\begin{barticle}[author]
+\bauthor{\bsnm{Primo},~\bfnm{Cristina}\binits{C.}},
+  \bauthor{\bsnm{Ferro},~\bfnm{Christopher~AT}\binits{C.~A.}},
+  \bauthor{\bsnm{Jolliffe},~\bfnm{Ian~T}\binits{I.~T.}} \AND
+  \bauthor{\bsnm{Stephenson},~\bfnm{David~B}\binits{D.~B.}}
+(\byear{2009}).
+\btitle{Calibration of probabilistic forecasts of binary events}.
+\bjournal{Monthly Weather Review}
+\bvolume{137}
+\bpages{1142--1149}.
+\end{barticle}
+\endbibitem
+
+\bibitem[\protect\citeauthoryear{Raftery et~al.}{2005}]{raftery2005using}
+\begin{barticle}[author]
+\bauthor{\bsnm{Raftery},~\bfnm{Adrian~E}\binits{A.~E.}},
+  \bauthor{\bsnm{Gneiting},~\bfnm{Tilmann}\binits{T.}},
+  \bauthor{\bsnm{Balabdaoui},~\bfnm{Fadoua}\binits{F.}} \AND
+  \bauthor{\bsnm{Polakowski},~\bfnm{Michael}\binits{M.}}
+(\byear{2005}).
+\btitle{Using Bayesian model averaging to calibrate forecast ensembles}.
+\bjournal{Monthly Weather Review}
+\bvolume{133}
+\bpages{1155--1174}.
+\end{barticle}
+\endbibitem
+
+\bibitem[\protect\citeauthoryear{Ranjan and Gneiting}{2010}]{Ranjan08}
+\begin{barticle}[author]
+\bauthor{\bsnm{Ranjan},~\bfnm{R.}\binits{R.}} \AND
+  \bauthor{\bsnm{Gneiting},~\bfnm{T.}\binits{T.}}
+(\byear{2010}).
+\btitle{Combining Probability Forecasts}.
+\bjournal{Journal of the Royal Statistical Society: Series B (Statistical
+  Methodology)}
+\bvolume{72}
+\bpages{71-91}.
+\end{barticle}
+\endbibitem
+
+\bibitem[\protect\citeauthoryear{Sanders}{1963}]{sanders1963subjective}
+\begin{barticle}[author]
+\bauthor{\bsnm{Sanders},~\bfnm{Frederick}\binits{F.}}
+(\byear{1963}).
+\btitle{On subjective probability forecasting}.
+\bjournal{Journal of Applied Meteorology}
+\bvolume{2}
+\bpages{191--201}.
+\end{barticle}
+\endbibitem
+
+\bibitem[\protect\citeauthoryear{Satop\"a\"a et~al.}{2013}]{satopaa}
+\begin{barticle}[author]
+\bauthor{\bsnm{Satop\"a\"a},~\bfnm{V.~A.}\binits{V.~A.}},
+  \bauthor{\bsnm{Baron},~\bfnm{J.}\binits{J.}},
+  \bauthor{\bsnm{Foster},~\bfnm{D.~P.}\binits{D.~P.}},
+  \bauthor{\bsnm{Mellers},~\bfnm{B.~A.}\binits{B.~A.}},
+  \bauthor{\bsnm{Tetlock},~\bfnm{P.~E.}\binits{P.~E.}} \AND
+  \bauthor{\bsnm{Ungar},~\bfnm{L.~H.}\binits{L.~H.}}
+(\byear{2013}).
+\btitle{Combining Multiple Probability Predictions Using a Simple Logit Model}.
+\bjournal{submitted}.
+\end{barticle}
+\endbibitem
+
+\bibitem[\protect\citeauthoryear{Shlyakhter
+  et~al.}{1994}]{shlyakhter1994quantifying}
+\begin{barticle}[author]
+\bauthor{\bsnm{Shlyakhter},~\bfnm{Alexander~I}\binits{A.~I.}},
+  \bauthor{\bsnm{Kammen},~\bfnm{Daniel~M}\binits{D.~M.}},
+  \bauthor{\bsnm{Broido},~\bfnm{Claire~L}\binits{C.~L.}} \AND
+  \bauthor{\bsnm{Wilson},~\bfnm{Richard}\binits{R.}}
+(\byear{1994}).
+\btitle{Quantifying the credibility of energy projections from trends in past
+  data: The US energy sector}.
+\bjournal{Energy Policy}
+\bvolume{22}
+\bpages{119--130}.
+\end{barticle}
+\endbibitem
+
+\bibitem[\protect\citeauthoryear{Tanner~Jr and
+  Swets}{1954}]{tanner1954decision}
+\begin{barticle}[author]
+\bauthor{\bsnm{Tanner~Jr},~\bfnm{Wilson~P}\binits{W.~P.}} \AND
+  \bauthor{\bsnm{Swets},~\bfnm{John~A}\binits{J.~A.}}
+(\byear{1954}).
+\btitle{A decision-making theory of visual detection.}
+\bjournal{Psychological review}
+\bvolume{61}
+\bpages{401}.
+\end{barticle}
+\endbibitem
+
+\bibitem[\protect\citeauthoryear{Tetlock}{2005}]{tetlock2005expert}
+\begin{bbook}[author]
+\bauthor{\bsnm{Tetlock},~\bfnm{Philip~E}\binits{P.~E.}}
+(\byear{2005}).
+\btitle{Expert political judgment: How good is it? How can we know?}
+\bpublisher{Princeton University Press}.
+\end{bbook}
+\endbibitem
+
+\bibitem[\protect\citeauthoryear{Ungar et~al.}{2012}]{ungar2012good}
+\begin{binproceedings}[author]
+\bauthor{\bsnm{Ungar},~\bfnm{Lyle}\binits{L.}},
+  \bauthor{\bsnm{Mellers},~\bfnm{Barbara}\binits{B.}},
+  \bauthor{\bsnm{Satop{\"a}{\"a}},~\bfnm{Ville}\binits{V.}},
+  \bauthor{\bsnm{Tetlock},~\bfnm{Philip}\binits{P.}} \AND
+  \bauthor{\bsnm{Baron},~\bfnm{Jon}\binits{J.}}
+(\byear{2012}).
+\btitle{The Good Judgment Project: A Large Scale Test of Different Methods of
+  Combining Expert Predictions}.
+In \bbooktitle{2012 AAAI Fall Symposium Series}.
+\end{binproceedings}
+\endbibitem
+
+\bibitem[\protect\citeauthoryear{Vislocky and
+  Fritsch}{1995}]{vislocky1995improved}
+\begin{barticle}[author]
+\bauthor{\bsnm{Vislocky},~\bfnm{Robert~L}\binits{R.~L.}} \AND
+  \bauthor{\bsnm{Fritsch},~\bfnm{J~Michael}\binits{J.~M.}}
+(\byear{1995}).
+\btitle{Improved model output statistics forecasts through model consensus}.
+\bjournal{Bulletin of the American Meteorological Society}
+\bvolume{76}
+\bpages{1157--1164}.
+\end{barticle}
+\endbibitem
+
+\bibitem[\protect\citeauthoryear{Wallace and Dahabreh}{2012}]{wallace2012class}
+\begin{binproceedings}[author]
+\bauthor{\bsnm{Wallace},~\bfnm{Byron~C}\binits{B.~C.}} \AND
+  \bauthor{\bsnm{Dahabreh},~\bfnm{Issa~J}\binits{I.~J.}}
+(\byear{2012}).
+\btitle{Class probability estimates are unreliable for imbalanced data (and how
+  to fix them)}.
+In \bbooktitle{Data Mining (ICDM), 2012 IEEE 12th International Conference on}
+\bpages{695--704}.
+\bpublisher{IEEE}.
+\end{binproceedings}
+\endbibitem
+
+\bibitem[\protect\citeauthoryear{Wallsten, Budescu and
+  Erev}{1997}]{Wallsten97evaluatingand}
+\begin{barticle}[author]
+\bauthor{\bsnm{Wallsten},~\bfnm{Thomas~S.}\binits{T.~S.}},
+  \bauthor{\bsnm{Budescu},~\bfnm{David~V.}\binits{D.~V.}} \AND
+  \bauthor{\bsnm{Erev},~\bfnm{Ido}\binits{I.}}
+(\byear{1997}).
+\btitle{Evaluating and combining subjective probability estimates}.
+\bjournal{Journal of Behavioral Decision Making}
+\bvolume{10}
+\bpages{243--268}.
+\end{barticle}
+\endbibitem
+
+\bibitem[\protect\citeauthoryear{Wilson and
+  Wilson}{1994}]{Wilson94cognitivefactors}
+\begin{bmisc}[author]
+\bauthor{\bsnm{Wilson},~\bfnm{Alyson~G.}\binits{A.~G.}} \AND
+  \bauthor{\bsnm{Wilson},~\bfnm{Alyson~G.}\binits{A.~G.}}
+(\byear{1994}).
+\btitle{Cognitive Factors Affecting Subjective Probability Assessment}.
+\end{bmisc}
+\endbibitem
+
+\bibitem[\protect\citeauthoryear{Wilson et~al.}{1998}]{wilson1998prediction}
+\begin{barticle}[author]
+\bauthor{\bsnm{Wilson},~\bfnm{Peter~WF}\binits{P.~W.}},
+  \bauthor{\bsnm{D’Agostino},~\bfnm{Ralph~B}\binits{R.~B.}},
+  \bauthor{\bsnm{Levy},~\bfnm{Daniel}\binits{D.}},
+  \bauthor{\bsnm{Belanger},~\bfnm{Albert~M}\binits{A.~M.}},
+  \bauthor{\bsnm{Silbershatz},~\bfnm{Halit}\binits{H.}} \AND
+  \bauthor{\bsnm{Kannel},~\bfnm{William~B}\binits{W.~B.}}
+(\byear{1998}).
+\btitle{Prediction of coronary heart disease using risk factor categories}.
+\bjournal{Circulation}
+\bvolume{97}
+\bpages{1837--1847}.
+\end{barticle}
+\endbibitem
+
+\bibitem[\protect\citeauthoryear{Winkler and Murphy}{1968}]{winkler1968good}
+\begin{barticle}[author]
+\bauthor{\bsnm{Winkler},~\bfnm{Robert~L}\binits{R.~L.}} \AND
+  \bauthor{\bsnm{Murphy},~\bfnm{Allan~H}\binits{A.~H.}}
+(\byear{1968}).
+\btitle{“Good” Probability Assessors1}.
+\end{barticle}
+\endbibitem
+
+\bibitem[\protect\citeauthoryear{Wright et~al.}{1994}]{wright1994coherence}
+\begin{barticle}[author]
+\bauthor{\bsnm{Wright},~\bfnm{George}\binits{G.}},
+  \bauthor{\bsnm{Rowe},~\bfnm{Gene}\binits{G.}},
+  \bauthor{\bsnm{Bolger},~\bfnm{Fergus}\binits{F.}} \AND
+  \bauthor{\bsnm{Gammack},~\bfnm{John}\binits{J.}}
+(\byear{1994}).
+\btitle{Coherence, calibration, and expertise in judgmental probability
+  forecasting}.
+\bjournal{Organizational Behavior and Human Decision Processes}
+\bvolume{57}
+\bpages{1--25}.
+\end{barticle}
+\endbibitem
+
+\end{thebibliography}

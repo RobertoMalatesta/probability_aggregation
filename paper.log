@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.3-1.40.12 (TeX Live 2011) (format=pdflatex 2011.7.3)  21 AUG 2013 11:20
+This is pdfTeX, Version 3.1415926-2.3-1.40.12 (TeX Live 2011) (format=pdflatex 2011.7.3)  21 AUG 2013 12:18
 entering extended mode
  \write18 enabled.
  file:line:error style messages enabled.
@@ -715,112 +715,26 @@ LaTeX Font Info:    Try loading font information for U+msb on input line 112.
 File: umsb.fd 2009/06/22 v3.00 AMS symbols B
 )
 \@address@1=\toks59
-
-
-Package natbib Warning: Citation `cooke1991experts' on page 1 undefined on inpu
-t line 206.
-
-
-Package natbib Warning: Citation `shlyakhter1994quantifying' on page 1 undefine
-d on input line 206.
-
-
-Package natbib Warning: Citation `wright1994coherence' on page 1 undefined on i
-nput line 206.
-
-
-Package natbib Warning: Citation `raftery2005using' on page 1 undefined on inpu
-t line 212.
-
-
-Package natbib Warning: Citation `Ranjan08' on page 1 undefined on input line 2
-12.
-
-
-Package natbib Warning: Citation `gneiting2004verifying' on page 1 undefined on
- input line 212.
-
-[1{/usr/local/texlive/2011/texmf-var/fonts/map/pdftex/updmap/pdftex.map}
+ [1{/usr/local/texlive/2011/texmf-var/fonts/map/pdftex/updmap/pdftex.map}
 
 ]
+LaTeX Font Info:    Try loading font information for OMS+ptm on input line 213.
 
-Package natbib Warning: Citation `wilson1998prediction' on page 2 undefined on 
-input line 214.
-
-
-Package natbib Warning: Citation `pepe2003statistical' on page 2 undefined on i
-nput line 214.
-
-
-Package natbib Warning: Citation `tetlock2005expert' on page 2 undefined on inp
-ut line 214.
-
-
-Package natbib Warning: Citation `sanders1963subjective' on page 2 undefined on
- input line 214.
-
-
-Package natbib Warning: Citation `vislocky1995improved' on page 2 undefined on 
-input line 214.
-
-
-Package natbib Warning: Citation `baars2005performance' on page 2 undefined on 
-input line 214.
-
-
-Package natbib Warning: Citation `Ranjan08' on page 2 undefined on input line 2
-14.
-
-
-Package natbib Warning: Citation `satopaa' on page 2 undefined on input line 21
-4.
-
-
-Package natbib Warning: Citation `Genest' on page 2 undefined on input line 214
-.
-
-
-Package natbib Warning: Citation `Wallsten97evaluatingand' on page 2 undefined 
-on input line 214.
-
-
-Package natbib Warning: Citation `clemen2007aggregating' on page 2 undefined on
- input line 214.
-
-
-Package natbib Warning: Citation `primo2009calibration' on page 2 undefined on 
-input line 214.
-
-LaTeX Font Info:    Try loading font information for OMS+ptm on input line 224.
 
 (/usr/local/texlive/2011/texmf-dist/tex/latex/psnfss/omsptm.fd
 File: omsptm.fd 
 )
 LaTeX Font Info:    Font shape `OMS/ptm/m/n' in size <10.95> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 224.
-LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <9> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 270.
-
-
-Package natbib Warning: Citation `Brier' on page 2 undefined on input line 270.
-
-
-
-Package natbib Warning: Citation `winkler1968good' on page 2 undefined on input
- line 270.
-
-
-Package natbib Warning: Citation `ungar2012good' on page 2 undefined on input l
-ine 273.
-
-[2] <Figures/LegendExamplePlot.pdf, id=13, 1084.05pt x 144.54pt>
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 213.
+ [2]
+<Figures/LegendExamplePlot.pdf, id=13, 1084.05pt x 144.54pt>
 File: Figures/LegendExamplePlot.pdf Graphic file (type pdf)
 
 <use Figures/LegendExamplePlot.pdf>
-Package pdftex.def Info: Figures/LegendExamplePlot.pdf used on input line 282.
+Package pdftex.def Info: Figures/LegendExamplePlot.pdf used on input line 231.
 (pdftex.def)             Requested size: 430.00462pt x 57.33417pt.
 
-Overfull \hbox (1.71002pt too wide) in paragraph at lines 282--284
+Overfull \hbox (1.71002pt too wide) in paragraph at lines 231--233
  []|  [] 
  []
 
@@ -828,217 +742,127 @@ Overfull \hbox (1.71002pt too wide) in paragraph at lines 282--284
 File: Figures/ExamplePlot1.pdf Graphic file (type pdf)
 
 <use Figures/ExamplePlot1.pdf>
-Package pdftex.def Info: Figures/ExamplePlot1.pdf used on input line 291.
+Package pdftex.def Info: Figures/ExamplePlot1.pdf used on input line 238.
 (pdftex.def)             Requested size: 210.70462pt x 210.70244pt.
 
 <Figures/ExamplePlot2.pdf, id=15, 361.35pt x 361.35pt>
 File: Figures/ExamplePlot2.pdf Graphic file (type pdf)
 
 <use Figures/ExamplePlot2.pdf>
-Package pdftex.def Info: Figures/ExamplePlot2.pdf used on input line 296.
+Package pdftex.def Info: Figures/ExamplePlot2.pdf used on input line 242.
 (pdftex.def)             Requested size: 210.70462pt x 210.70244pt.
+ [3] [4 <./Figures/LegendExamplePlot.pdf> <./Figures/ExamplePlot1.pdf> <./Figur
+es/ExamplePlot2.pdf>] [5] [6] [7] [8]
+LaTeX Font Info:    Try loading font information for U+bbm on input line 400.
 
-
-LaTeX Warning: `!h' float specifier changed to `!ht'.
-
-[3] [4 <./Figures/LegendExamplePlot.pdf> <./Figures/ExamplePlot1.pdf> <./Figure
-s/ExamplePlot2.pdf>] [5]
-
-Package natbib Warning: Citation `gelman2003bayesian' on page 6 undefined on in
-put line 426.
-
-[6]
-
-Package natbib Warning: Citation `gneiting2008rejoinder' on page 7 undefined on
- input line 447.
-
-
-Package natbib Warning: Citation `buja2005loss' on page 7 undefined on input li
-ne 447.
-
-
-Package natbib Warning: Citation `gelman2008weakly' on page 7 undefined on inpu
-t line 447.
-
-
-Package natbib Warning: Citation `Brier' on page 7 undefined on input line 455.
-
-
-
-Package natbib Warning: Citation `good1952rational' on page 7 undefined on inpu
-t line 459.
-
-
-Package natbib Warning: Citation `platt1999probabilistic' on page 7 undefined o
-n input line 491.
-
-
-Package natbib Warning: Citation `niculescu2005obtaining' on page 7 undefined o
-n input line 491.
-
-[7] [8]
-LaTeX Font Info:    Try loading font information for U+bbm on input line 559.
- (/usr/local/texlive/2011/texmf-dist/tex/latex/bbm-macros/ubbm.fd
+(/usr/local/texlive/2011/texmf-dist/tex/latex/bbm-macros/ubbm.fd
 File: ubbm.fd 1999/03/15 V 1.2 Font definition for bbm font - TH
-)
-<Figures/LegendSynthetic.pdf, id=65, 1300.86pt x 72.27pt>
+) [9]
+<Figures/LegendSynthetic.pdf, id=69, 1300.86pt x 72.27pt>
 File: Figures/LegendSynthetic.pdf Graphic file (type pdf)
 
 <use Figures/LegendSynthetic.pdf>
-Package pdftex.def Info: Figures/LegendSynthetic.pdf used on input line 570.
+Package pdftex.def Info: Figures/LegendSynthetic.pdf used on input line 411.
 (pdftex.def)             Requested size: 430.00462pt x 23.88885pt.
 
-Overfull \hbox (19.71002pt too wide) in paragraph at lines 570--572
+Overfull \hbox (19.71002pt too wide) in paragraph at lines 411--413
  []|  [] 
  []
 
-<Figures/SyntheticSigma2.pdf, id=66, 361.35pt x 361.35pt>
+<Figures/SyntheticSigma2.pdf, id=70, 361.35pt x 361.35pt>
 File: Figures/SyntheticSigma2.pdf Graphic file (type pdf)
 
 <use Figures/SyntheticSigma2.pdf>
-Package pdftex.def Info: Figures/SyntheticSigma2.pdf used on input line 578.
+Package pdftex.def Info: Figures/SyntheticSigma2.pdf used on input line 417.
 (pdftex.def)             Requested size: 141.9023pt x 141.90186pt.
 
-<Figures/SyntheticBeta.pdf, id=67, 361.35pt x 361.35pt>
+<Figures/SyntheticBeta.pdf, id=71, 361.35pt x 361.35pt>
 File: Figures/SyntheticBeta.pdf Graphic file (type pdf)
 
 <use Figures/SyntheticBeta.pdf>
-Package pdftex.def Info: Figures/SyntheticBeta.pdf used on input line 583.
+Package pdftex.def Info: Figures/SyntheticBeta.pdf used on input line 421.
 (pdftex.def)             Requested size: 141.9023pt x 141.90186pt.
 
-<Figures/SyntheticK.pdf, id=68, 361.35pt x 361.35pt>
+<Figures/SyntheticK.pdf, id=72, 361.35pt x 361.35pt>
 File: Figures/SyntheticK.pdf Graphic file (type pdf)
 
 <use Figures/SyntheticK.pdf>
-Package pdftex.def Info: Figures/SyntheticK.pdf used on input line 588.
+Package pdftex.def Info: Figures/SyntheticK.pdf used on input line 425.
 (pdftex.def)             Requested size: 141.9023pt x 141.90186pt.
 
-<Figures/SyntheticSigma2bias.pdf, id=69, 361.35pt x 361.35pt>
+<Figures/SyntheticSigma2bias.pdf, id=73, 361.35pt x 361.35pt>
 File: Figures/SyntheticSigma2bias.pdf Graphic file (type pdf)
 
 <use Figures/SyntheticSigma2bias.pdf>
-Package pdftex.def Info: Figures/SyntheticSigma2bias.pdf used on input line 596
+Package pdftex.def Info: Figures/SyntheticSigma2bias.pdf used on input line 431
 .
 (pdftex.def)             Requested size: 141.9023pt x 141.90186pt.
 
-<Figures/SyntheticBetabias.pdf, id=70, 361.35pt x 361.35pt>
+<Figures/SyntheticBetabias.pdf, id=74, 361.35pt x 361.35pt>
 File: Figures/SyntheticBetabias.pdf Graphic file (type pdf)
 
 <use Figures/SyntheticBetabias.pdf>
-Package pdftex.def Info: Figures/SyntheticBetabias.pdf used on input line 601.
+Package pdftex.def Info: Figures/SyntheticBetabias.pdf used on input line 435.
 (pdftex.def)             Requested size: 141.9023pt x 141.90186pt.
 
-<Figures/SyntheticKbias.pdf, id=71, 361.35pt x 361.35pt>
+<Figures/SyntheticKbias.pdf, id=75, 361.35pt x 361.35pt>
 File: Figures/SyntheticKbias.pdf Graphic file (type pdf)
 
 <use Figures/SyntheticKbias.pdf>
-Package pdftex.def Info: Figures/SyntheticKbias.pdf used on input line 606.
+Package pdftex.def Info: Figures/SyntheticKbias.pdf used on input line 439.
 (pdftex.def)             Requested size: 141.9023pt x 141.90186pt.
+ [10 <./Figures/LegendSynthetic.pdf> <./Figures/SyntheticSigma2.pdf> <./Figures
+/SyntheticBeta.pdf> <./Figures/SyntheticK.pdf> <./Figures/SyntheticSigma2bias.p
+df> <./Figures/SyntheticBetabias.pdf> <./Figures/SyntheticKbias.pdf>] [11] [12]
+ [13]
+Overfull \hbox (1.45427pt too wide) in paragraph at lines 532--533
+\OT1/ptm/m/n/10.95 ver-sion of the Beta-transformed (lin-ear) ag-gre-ga-tor was
+ in-tro-duced in Ran-jan and Gneit-
+ []
 
-
-LaTeX Warning: `!h' float specifier changed to `!ht'.
-
-[9]
-
-Package natbib Warning: Citation `Ariely00theeffects' on page 10 undefined on i
-nput line 621.
-
-
-Package natbib Warning: Citation `hastings1947low' on page 10 undefined on inpu
-t line 621.
-
-
-Package natbib Warning: Citation `Geo' on page 10 undefined on input line 621.
-
-[10 <./Figures/LegendSynthetic.pdf> <./Figures/SyntheticSigma2.pdf> <./Figures/
-SyntheticBeta.pdf> <./Figures/SyntheticK.pdf> <./Figures/SyntheticSigma2bias.pd
-f> <./Figures/SyntheticBetabias.pdf> <./Figures/SyntheticKbias.pdf>]
-
-Package natbib Warning: Citation `chen2009learning' on page 11 undefined on inp
-ut line 626.
-
-
-Package natbib Warning: Citation `wallace2012class' on page 11 undefined on inp
-ut line 626.
-
-
-Package natbib Warning: Citation `karmarkar1982differencing' on page 11 undefin
-ed on input line 626.
-
-
-Package natbib Warning: Citation `hayes2002easiest' on page 11 undefined on inp
-ut line 626.
-
-
-Package natbib Warning: Citation `kellerer2004knapsack' on page 11 undefined on
- input line 626.
-
-
-Package natbib Warning: Citation `gent1996phase' on page 11 undefined on input 
-line 626.
-
-[11]
-
-Package natbib Warning: Citation `gelman2003bayesian' on page 12 undefined on i
-nput line 714.
-
-
-Package natbib Warning: Citation `metropolis1953equation' on page 12 undefined 
-on input line 714.
-
-
-Package natbib Warning: Citation `neal2003slice' on page 12 undefined on input 
-line 714.
-
-[12]
-
-Package natbib Warning: Citation `satopaa' on page 13 undefined on input line 7
-68.
-
-
-Package natbib Warning: Citation `Ranjan08' on page 13 undefined on input line 
-786.
-
-[13] [14] [15] <Figures/CalibrationNONE10.pdf, id=136, 361.35pt x 361.35pt>
+[14]
+LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <9> not available
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 557.
+ [15] <Figures/CalibrationNONE10.pdf, id=136, 361.35pt x 361.35pt>
 File: Figures/CalibrationNONE10.pdf Graphic file (type pdf)
 
 <use Figures/CalibrationNONE10.pdf>
-Package pdftex.def Info: Figures/CalibrationNONE10.pdf used on input line 880.
+Package pdftex.def Info: Figures/CalibrationNONE10.pdf used on input line 599.
 (pdftex.def)             Requested size: 120.40076pt x 120.39824pt.
 
 <Figures/CalibrationLOG10.pdf, id=137, 361.35pt x 361.35pt>
 File: Figures/CalibrationLOG10.pdf Graphic file (type pdf)
 
 <use Figures/CalibrationLOG10.pdf>
-Package pdftex.def Info: Figures/CalibrationLOG10.pdf used on input line 885.
+Package pdftex.def Info: Figures/CalibrationLOG10.pdf used on input line 603.
 (pdftex.def)             Requested size: 120.40076pt x 120.39824pt.
 
 <Figures/CalibrationBRI10.pdf, id=138, 361.35pt x 361.35pt>
 File: Figures/CalibrationBRI10.pdf Graphic file (type pdf)
 
 <use Figures/CalibrationBRI10.pdf>
-Package pdftex.def Info: Figures/CalibrationBRI10.pdf used on input line 890.
+Package pdftex.def Info: Figures/CalibrationBRI10.pdf used on input line 607.
 (pdftex.def)             Requested size: 120.40076pt x 120.39824pt.
 
 <Figures/CalibrationFULL10.pdf, id=139, 361.35pt x 361.35pt>
 File: Figures/CalibrationFULL10.pdf Graphic file (type pdf)
 
 <use Figures/CalibrationFULL10.pdf>
-Package pdftex.def Info: Figures/CalibrationFULL10.pdf used on input line 895.
+Package pdftex.def Info: Figures/CalibrationFULL10.pdf used on input line 611.
 (pdftex.def)             Requested size: 120.40076pt x 120.39824pt.
 
 <Figures/CalibrationNONE.pdf, id=140, 361.35pt x 361.35pt>
 File: Figures/CalibrationNONE.pdf Graphic file (type pdf)
 
 <use Figures/CalibrationNONE.pdf>
-Package pdftex.def Info: Figures/CalibrationNONE.pdf used on input line 904.
+Package pdftex.def Info: Figures/CalibrationNONE.pdf used on input line 618.
 (pdftex.def)             Requested size: 120.40076pt x 120.39824pt.
 
 <Figures/CalibrationSTO-Log.pdf, id=141, 361.35pt x 361.35pt>
 File: Figures/CalibrationSTO-Log.pdf Graphic file (type pdf)
 
 <use Figures/CalibrationSTO-Log.pdf>
-Package pdftex.def Info: Figures/CalibrationSTO-Log.pdf used on input line 909.
+Package pdftex.def Info: Figures/CalibrationSTO-Log.pdf used on input line 622.
 
 (pdftex.def)             Requested size: 120.40076pt x 120.39824pt.
 
@@ -1046,7 +870,7 @@ Package pdftex.def Info: Figures/CalibrationSTO-Log.pdf used on input line 909.
 File: Figures/CalibrationSTO-Bri.pdf Graphic file (type pdf)
 
 <use Figures/CalibrationSTO-Bri.pdf>
-Package pdftex.def Info: Figures/CalibrationSTO-Bri.pdf used on input line 914.
+Package pdftex.def Info: Figures/CalibrationSTO-Bri.pdf used on input line 626.
 
 (pdftex.def)             Requested size: 120.40076pt x 120.39824pt.
 
@@ -1054,66 +878,36 @@ Package pdftex.def Info: Figures/CalibrationSTO-Bri.pdf used on input line 914.
 File: Figures/CalibrationSO.pdf Graphic file (type pdf)
 
 <use Figures/CalibrationSO.pdf>
-Package pdftex.def Info: Figures/CalibrationSO.pdf used on input line 919.
+Package pdftex.def Info: Figures/CalibrationSO.pdf used on input line 630.
 (pdftex.def)             Requested size: 120.40076pt x 120.39824pt.
 
 
-Package natbib Warning: Citation `bonferroni' on page 16 undefined on input lin
-e 927.
+LaTeX Warning: `!h' float specifier changed to `!ht'.
 
-
-Package natbib Warning: Citation `brocker2007increasing' on page 16 undefined o
-n input line 927.
-
-[16 <./Figures/CalibrationNONE10.pdf> <./Figures/CalibrationLOG10.pdf> <./Figur
-es/CalibrationBRI10.pdf> <./Figures/CalibrationFULL10.pdf> <./Figures/Calibrati
-onNONE.pdf> <./Figures/CalibrationSTO-Log.pdf> <./Figures/CalibrationSTO-Bri.pd
-f> <./Figures/CalibrationSO.pdf>]
-
-Package natbib Warning: Citation `Baron' on page 17 undefined on input line 949
-.
-
-
-Package natbib Warning: Citation `lichtenstein1977calibration' on page 17 undef
-ined on input line 951.
-
-
-Package natbib Warning: Citation `morgan1992uncertainty' on page 17 undefined o
-n input line 951.
-
-
-Package natbib Warning: Citation `bier2004implications' on page 17 undefined on
- input line 951.
-
+[16] [17 <./Figures/CalibrationNONE10.pdf> <./Figures/CalibrationLOG10.pdf> <./
+Figures/CalibrationBRI10.pdf> <./Figures/CalibrationFULL10.pdf> <./Figures/Cali
+brationNONE.pdf> <./Figures/CalibrationSTO-Log.pdf> <./Figures/CalibrationSTO-B
+ri.pdf> <./Figures/CalibrationSO.pdf>]
 Missing character: There is no ﬁ in font ptmr7t!
 
-Package natbib Warning: Citation `lubinski1996seeing' on page 17 undefined on i
-nput line 951.
-
-<Figures/BiasesBoxplots.pdf, id=196, 433.62pt x 289.08pt>
+<Figures/BiasesBoxplots.pdf, id=199, 433.62pt x 289.08pt>
 File: Figures/BiasesBoxplots.pdf Graphic file (type pdf)
 
 <use Figures/BiasesBoxplots.pdf>
-Package pdftex.def Info: Figures/BiasesBoxplots.pdf used on input line 983.
+Package pdftex.def Info: Figures/BiasesBoxplots.pdf used on input line 655.
 (pdftex.def)             Requested size: 433.61894pt x 289.07928pt.
 
-Overfull \hbox (3.61432pt too wide) in paragraph at lines 983--986
+Overfull \hbox (3.61432pt too wide) in paragraph at lines 655--657
  [][] 
  []
-
-[17]
-
-Package natbib Warning: Citation `Wilson94cognitivefactors' on page 18 undefine
-d on input line 1029.
 
 [18 <./Figures/BiasesBoxplots.pdf>]
 File: Figures/LegendExamplePlot.pdf Graphic file (type pdf)
  <use Figures/LegendExamplePlot.pdf>
-Package pdftex.def Info: Figures/LegendExamplePlot.pdf used on input line 1042.
-
+Package pdftex.def Info: Figures/LegendExamplePlot.pdf used on input line 684.
 (pdftex.def)             Requested size: 430.00462pt x 57.33417pt.
 
-Overfull \hbox (1.71002pt too wide) in paragraph at lines 1042--1044
+Overfull \hbox (1.71002pt too wide) in paragraph at lines 684--686
  []|  [] 
  []
 
@@ -1121,90 +915,63 @@ Overfull \hbox (1.71002pt too wide) in paragraph at lines 1042--1044
 File: Figures/ExamplePlot1b.pdf Graphic file (type pdf)
 
 <use Figures/ExamplePlot1b.pdf>
-Package pdftex.def Info: Figures/ExamplePlot1b.pdf used on input line 1051.
+Package pdftex.def Info: Figures/ExamplePlot1b.pdf used on input line 691.
 (pdftex.def)             Requested size: 210.70462pt x 210.70244pt.
 
 <Figures/ExamplePlot2b.pdf, id=211, 361.35pt x 361.35pt>
 File: Figures/ExamplePlot2b.pdf Graphic file (type pdf)
 
 <use Figures/ExamplePlot2b.pdf>
-Package pdftex.def Info: Figures/ExamplePlot2b.pdf used on input line 1056.
+Package pdftex.def Info: Figures/ExamplePlot2b.pdf used on input line 695.
 (pdftex.def)             Requested size: 210.70462pt x 210.70244pt.
 
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
-
-Package natbib Warning: Citation `lichtenstein1977calibration' on page 19 undef
-ined on input line 1075.
-
-
-Package natbib Warning: Citation `morgan1992uncertainty' on page 19 undefined o
-n input line 1075.
-
-
-Package natbib Warning: Citation `bier2004implications' on page 19 undefined on
- input line 1075.
-
-[19]
-
-Package natbib Warning: Citation `Erev1994' on page 20 undefined on input line 
-1081.
-
-
-Package natbib Warning: Citation `tanner1954decision' on page 20 undefined on i
-nput line 1081.
-
-[20 <./Figures/ExamplePlot1b.pdf> <./Figures/ExamplePlot2b.pdf>]
-Overfull \hbox (6.79999pt too wide) in paragraph at lines 1120--1121
+[19] [20 <./Figures/ExamplePlot1b.pdf> <./Figures/ExamplePlot2b.pdf>]
+Overfull \hbox (6.79999pt too wide) in paragraph at lines 723--724
  [][][] 
  []
-
-
-Package natbib Warning: Citation `carter1994gibbs' on page 21 undefined on inpu
-t line 1122.
-
-
-Package natbib Warning: Citation `migon2005dynamic' on page 21 undefined on inp
-ut line 1122.
 
 [21]
-Overfull \hbox (6.79999pt too wide) in paragraph at lines 1149--1150
+Overfull \hbox (6.79999pt too wide) in paragraph at lines 752--753
  [][][] 
  []
 
 
-Overfull \hbox (4.43887pt too wide) in paragraph at lines 1151--1152
+Overfull \hbox (4.43887pt too wide) in paragraph at lines 754--755
 \OT1/ptm/m/n/10.95 First, vec-tor-ize all the re-sponse vec-tors $[][]$ into a 
 sin-gle vec-tor de-noted $[][] \OT1/cmr/m/n/10.95 = [][]$\OT1/ptm/m/n/10.95 .
  []
 
-
-Overfull \hbox (6.79999pt too wide) in paragraph at lines 1171--1172
+[22]
+Overfull \hbox (6.79999pt too wide) in paragraph at lines 766--767
  [][][] 
  []
 
-
-Package natbib Warning: Citation `gelman2003bayesian' on page 22 undefined on i
-nput line 1178.
-
-No file paper.bbl.
-
-Package natbib Warning: There were undefined citations.
-
-[22] [23] (./paper.aux)
+(./paper.bbl [23] [24]
+Missing character: There is no ‚ in font ptmrc7t!
+Missing character: There is no Ä in font ptmrc7t!
+Missing character: There is no ô in font ptmrc7t!
+Missing character: There is no ‚ in font ptmr7t!
+Missing character: There is no Ä in font ptmr7t!
+Missing character: There is no ú in font ptmr7t!
+Missing character: There is no ‚ in font ptmr7t!
+Missing character: There is no Ä in font ptmr7t!
+Missing character: There is no ù in font ptmr7t!
+) [25] (./paper.aux)
 
 LaTeX Warning: There were multiply-defined labels.
 
  ) 
 Here is how much of TeX's memory you used:
- 10125 strings out of 493633
- 157429 string characters out of 3143378
- 210167 words of memory out of 3000000
- 13154 multiletter control sequences out of 15000+200000
+ 10256 strings out of 493633
+ 160564 string characters out of 3143378
+ 209967 words of memory out of 3000000
+ 13283 multiletter control sequences out of 15000+200000
  36109 words of font info for 83 fonts, out of 3000000 for 9000
  831 hyphenation exceptions out of 8191
- 38i,16n,43p,1978b,374s stack positions out of 5000i,500n,10000p,200000b,50000s
+ 38i,16n,43p,1978b,436s stack positions out of 5000i,500n,10000p,200000b,50000s
  </Users/ville/Library/texlive/2011/texmf-var/fonts/pk/ljfour/public/bbm/bbm1
 0.657pk>{/usr/local/texlive/2011/texmf-dist/fonts/enc/dvips/base/8r.enc}</usr/l
 ocal/texlive/2011/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/lo
@@ -1226,10 +993,10 @@ mf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb></usr/local/texlive/2011
 /texmf-dist/fonts/type1/urw/times/utmb8a.pfb></usr/local/texlive/2011/texmf-dis
 t/fonts/type1/urw/times/utmr8a.pfb></usr/local/texlive/2011/texmf-dist/fonts/ty
 pe1/urw/times/utmri8a.pfb>
-Output written on paper.pdf (23 pages, 396215 bytes).
+Output written on paper.pdf (25 pages, 407593 bytes).
 PDF statistics:
- 306 PDF objects out of 1000 (max. 8388607)
- 216 compressed objects within 3 object streams
+ 313 PDF objects out of 1000 (max. 8388607)
+ 221 compressed objects within 3 object streams
  0 named destinations out of 1000 (max. 500000)
  106 words of extra memory for PDF output out of 10000 (max. 10000000)
 
