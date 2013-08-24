@@ -1,4 +1,4 @@
-\begin{thebibliography}{51}
+\begin{thebibliography}{53}
 % BibTex style file: imsart-nameyear.bst, 2013-01-28
 % Default style options (sort=1,type=nameyear).
 % Used options (sort=1,type=nameyear).
@@ -391,6 +391,18 @@ In \bbooktitle{ECAI}
 \end{bbook}
 \endbibitem
 
+\bibitem[\protect\citeauthoryear{Murphy and Winkler}{1987}]{murphy1987general}
+\begin{barticle}[author]
+\bauthor{\bsnm{Murphy},~\bfnm{Allan~H}\binits{A.~H.}} \AND
+  \bauthor{\bsnm{Winkler},~\bfnm{Robert~L}\binits{R.~L.}}
+(\byear{1987}).
+\btitle{A general framework for forecast verification}.
+\bjournal{Monthly Weather Review}
+\bvolume{115}
+\bpages{1330--1338}.
+\end{barticle}
+\endbibitem
+
 \bibitem[\protect\citeauthoryear{Neal}{2003}]{neal2003slice}
 \begin{barticle}[author]
 \bauthor{\bsnm{Neal},~\bfnm{Radford~M}\binits{R.~M.}}
@@ -615,6 +627,19 @@ In \bbooktitle{Data Mining (ICDM), 2012 IEEE 12th International Conference on}
 \bjournal{Circulation}
 \bvolume{97}
 \bpages{1837--1847}.
+\end{barticle}
+\endbibitem
+
+\bibitem[\protect\citeauthoryear{Winkler and Jose}{2008}]{winkler2008comments}
+\begin{barticle}[author]
+\bauthor{\bsnm{Winkler},~\bfnm{Robert~L}\binits{R.~L.}} \AND
+  \bauthor{\bsnm{Jose},~\bfnm{Victor Richmond~R}\binits{V.~R.~R.}}
+(\byear{2008}).
+\btitle{Comments on: Assessing probabilistic forecasts of multivariate
+  quantities, with an application to ensemble predictions of surface winds}.
+\bjournal{Test}
+\bvolume{17}
+\bpages{251--255}.
 \end{barticle}
 \endbibitem
 
