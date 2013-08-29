@@ -111,7 +111,7 @@
 \begin{document}
 \begin{frontmatter}
 % "Title of the paper"
-\title{Probability Aggregation: Dynamic Hierarchical Modeling of Expert Beliefs in Geopolitical Events}
+\title{Probability Aggregation: Dynamic Hierarchical Modeling of Sparse Expert Beliefs}
 \runtitle{Hierarchical Model for Expert Beliefs}
 
 % indicate corresponding author with \corref{}
@@ -258,11 +258,11 @@ Frequency (\%) & 25.3 & 30.7 & 33.6 &  8.2 &  2.1 \\\hline
 The data collection began with recruitment of 2,365 forecasters ranging from graduate students to political science faculty and practitioners. The recruiting was made from professional societies, research centers, alumni associations, science bloggers, and word of mouth. Requirements included at least a Bachelor's degree and completion of psychological and political tests that took roughly two hours. These measures assessed cognitive styles, cognitive abilities, personality traits, political attitudes, and real-world knowledge. The experts were asked to give probability forecasts (to the second decimal point) and to self-assess their level of expertise (on a 1-to-5 scale with 1 = Not At All Expert and 5 = Extremely Expert) on a number of 166 geopolitical binary events taking place between September 29, 2011 and May 8, 2013. Each question was active for a period of time during which the participating experts were allowed to update their forecasts as frequently as they liked without being penalized. The forecasters knew that their probability estimates would be assessed for accuracy using Brier scores\footnote{The Brier score is the squared distance between the probability forecast and the event indicator that equals 1.0 or 0.0 depending on whether the event happened or not, respectively. See \citet{Brier} for the original introduction.}. This incentivized them to report their true beliefs instead of attempting to game the system (\citet{winkler1968good}). In addition to receiving \$150 for meeting minimum participation requirements that did not depend on prediction accuracy, the forecasters also received status rewards for their performance via leader-boards displaying Brier scores for the top 20 forecasters. Since a typical expert participated only in a small subset of the 166 questions, the forecasters are considered indistinguishable conditional on the level of self-reported expertise.
 Tables \ref{DataStats} and \ref{ExpertiseTable} provide more relevant summary statistics on the data. Notice that the distribution of the self-reported expertise is skewed to the right and that some questions remained active longer than others.  For more details on the data and its collection see \citet{ungar2012good}.
 
-\vspace{-1em}
 \begin{figure}[h!]
+\vspace{-2em}
 \centering
-\hspace*{0em} 	\includegraphics[width=  \textwidth]{Figures/LegendExamplePlot} % requires the graphicx package
-\vspace{-4.5em}
+\hspace*{0em} 	\includegraphics{Figures/LegendExamplePlot} % requires the graphicx package
+\vspace{-3.5em}
 
 \hspace{-0.5em}
 \subfigure[\textit{Will the expansion of the European bailout fund be ratified by all 17 Eurozone nations before 1 November 2011?}]{
@@ -404,58 +404,62 @@ is a $I_k \times 1$ matrix of the expert logit-probabilities for the $m$th outco
 \end{eqnarray*}
 is the matrix of sharp and calibrated logit-probabilities at time $t$. Choosing one of the outcomes as the base-case, ensures that the probabilities will sum to one at any given time point. Since this multinomial extension is equivalent to having $M-1$ independent binary-outcome models (see Section \ref{model}), the estimation can be done separately for each outcome. Therefore, even though this paper focuses on modeling binary events, all the properties and discussion generalize to the multi-outcome case.
 
-\section{Synthetic Data Results \ville{TODO}}
+\section{Synthetic Data Results}
 \label{syntheticData}
 
-The synthetic data is not generated directly from the model for several reasons: (i) showing good performance on a dataset directly generated from the model assumptions is hardly any news, and (ii) generating data from the dynamic model description does not produce calibrated hidden states. The latter is important for our interpretation of the hidden states as the calibrated crowd belief. In order to achieve this, let $\{ Z_{t,k} \}_{t=1}^{T_k}$ denote the values of a standard Brownian motion at time points $t = 1, \dots, T_k, T_k $. Then,
+The synthetic data is not generated directly from the model for two reasons: (i) showing good performance on a dataset directly generated from the model assumptions is hardly any news, and (ii) generating data from the dynamic model description does not produce well-calibrated hidden states. The latter is important for our interpretation of the hidden states as the sharp and well-calibrated crowd belief. In order to achieve this, let $\{ Z_{t,k} \}_{t=1}^{T_k}$ denote the values of a standard Brownian motion at time points $t = 1, \dots, T_k $. Then,
 \begin{eqnarray*}
 Z_k &=& \mathbbm{1}\left( Z_{T_k, k}  > 0\right)\\
  X_{t,k} &=& \logit \left[ \Phi \left(\frac{Z_{t, k}}{\sqrt{T_k- t}} \right) \right]
 \end{eqnarray*}
-Once the hidden process has been generated, the expert logit forecasts are produced by adding white noise to the given sequences of $X_{t,k}$.  
+Once the hidden process has been generated, the expert logit-probabilities are produced from Equation (\ref{observedpr}) by applying bias and white noise to the given sequences of $X_{t,k}$. Following the real-world data setting in Section \ref{realData}, extreme logit-probabilities are truncated to avoid overly influential observations. More specifically, any $p_{i,t,k} = \logit^{-1}(Y_{i,t,k})$ less than 0.01 (or greater than 0.99) is truncated to 0.01 (or to 0.99). 
+
+The simulation is then performed over a three-dimensional grid of values: The number of questions, $K$, varies between $20$ and $80$ with steps of 15, the bias vector changes as $$\boldsymbol{b} = [0.50, 0.75, \dots, 1.50]^T \beta,$$ where $\beta$ takes values in $1/2, 3/4, 1, 4/3$, and $2/1$ symmetrically around 1 in the log-scale, and finally the values of $\sigma^2$ vary from $0.5$ to $2.0$ with steps of size 0.5. These grid values were considered realistic based on our experience with the real-world probability forecasting data.  At each grid point the simulation runs a total of 40 times; each time measuring how well the approaches estimate the hidden process and bias vector. The average loss from the 40 runs is used as the performance measure at that grid point. 
+
+Figure \ref{Synthetic} summarizes the results in a series of plots. The first row shows each grid variable's marginal effect on the accuracy to which the \textit{Sample-Then-Calibrate} under the logarithmic loss (STC-Log) and the Brier score (STC-Bri) are able to estimate the hidden process. The second row is similar in nature but measures the accuracy of estimating the bias vector instead. The plots were computed by choosing one grid variable (e.g. $\beta$)  at a time and averaging over the remaining two variables  (e.g. $K$, and $\sigma^2$).  Therefore each value in the plots represents an average of a $40 \times 5^2 = 1,000$ values. 
+
+Based on the first row of plots, STC-Log and STC-Bri estimate the hidden process to a similar accuracy. Even though some relative differences are visible in Figure \ref{SyntheticK}, the loss values are very small in absolute terms; hence suggesting good accuracy to capture the hidden process. The main differences arise in estimating the bias vector. Based on the second row of plots, the procedures capture the bias vector rather precisely as long as the true values of $\beta$ and $\sigma^2$ are not very small. Surprisingly, even though STC-Log is more accurate at estimating the bias vector across all three grid dimensions, it is unable to outperform STC-Bri in estimating the hidden process. 
 
 
+\ville{Talk about strictly decreasing scores in beta}
 
-The simulation is performed over a four-dimensional grid of values: The number of questions, $K$, varies between $10, 25, 50, 75$, and $100$, the values of $\beta$ change from $0.5$ to $1.5$ with steps of size 0.25, the values of $\alpha$ range from $-0.5$ to $0.5$ with steps of size 0.25, and finally the values of $\sigma^2$ vary from $0.25$ to $1.5$ with steps of size 0.25. At each grid point the simulation runs a total of two times; each time measuring how well the approaches estimate the hidden process in terms of quadratic loss. The average loss from the two runs is used as the performance measure at that grid point. Since the final results are summarized by choosing one of the grid variables (e.g. $\alpha$) and then averaging over the remaining three variables (e.g. $\beta$, $K$, and $\sigma^2$), each average value in the final results represents an average of a $2 \times 5^3 = 250$ values. 
+
 
 \begin{figure}[h!]
 \centering
-\hspace*{2em} 	\includegraphics[width=  \textwidth]{Figures/LegendSynthetic} % requires the graphicx package
-\vspace{-3em}
+ \hspace{-5em}	\includegraphics{Figures/LegendSynthetic} % requires the graphicx package
 
 \subfigure[]{
-\hspace*{-1em}  \includegraphics[width= 0.33\textwidth]{Figures/SyntheticSigma2}
+\hspace{-1em} \includegraphics{Figures/SyntheticSigma2}
 \label{SyntheticSigma2}
 }
 \subfigure[]{
-\hspace*{-1em} \includegraphics[width=  0.33\textwidth]{Figures/SyntheticBeta}
+\hspace{-1.5em} \includegraphics{Figures/SyntheticBeta}
 \label{SyntheticBeta}
 }
 \subfigure[]{
-\hspace*{-1em} \includegraphics[width=  0.33\textwidth]{Figures/SyntheticK}
+\hspace{-1.5em} \includegraphics{Figures/SyntheticK}
 \label{SyntheticK}
 }
 
-\vspace{-2em}
 \subfigure[]{
-\hspace*{-1em}  \includegraphics[width= 0.33\textwidth]{Figures/SyntheticSigma2bias}
-\label{SyntheticSigma2}
+\hspace{-1em}  \includegraphics{Figures/SyntheticSigma2bias}
+\label{SyntheticSigma2b}
 }
 \subfigure[]{
-\hspace*{-1em} \includegraphics[width=  0.33\textwidth]{Figures/SyntheticBetabias}
-\label{SyntheticBeta}
+\hspace{-1.5em}  \includegraphics{Figures/SyntheticBetabias}
+\label{SyntheticBetab}
 }
 \subfigure[]{
-\hspace*{-1em} \includegraphics[width=  0.33\textwidth]{Figures/SyntheticKbias}
-\label{SyntheticK}
+\hspace{-1.5em}   \includegraphics{Figures/SyntheticKbias}
+\label{SyntheticKb}
 }
 
 
-\caption[Optional caption for list of figures]{Comparing the approaches on synthetic data. (a) Performance under different values of $\sigma^2$. (b) Performance under different values of $\alpha$. (c) Performance under different values of $\beta$. (d) Performance under different numbers of questions, $K$.}
+\caption[Optional caption for list of figures]{Evaluating the \textit{Sample-Then-Calibrate}-model under synthetic data. (a) Performance under different values of $\sigma^2$. (b) Performance under different values of $\beta$. (c) Performance under different numbers of questions, $K$.}
 \label{Synthetic}
 \end{figure}
 
-Figure \ref{Synthetic} summarizes the results by choosing one grid variable at a time and then averaging over the remaining three variables. The \textit{Sample-Then-Calibrate} with log loss outperforms the other two approaches almost uniformly across the grid. 
 
 
 \section{Geopolitical Data Results}
@@ -607,43 +611,43 @@ A calibration plot is a simple tool for assessing the sharpness and calibration 
 
 
 \begin{figure}[h!]
+\newgeometry{left=5cm, right = 1cm, bottom=0.1cm}
+
 \subfigure[\scriptsize SDLM In-Sample]{
-\hspace*{-1.1em}
-  \includegraphics[width= 0.28\textwidth]{Figures/CalibrationNONE10}
+\hspace*{-3em}  \includegraphics{Figures/CalibrationNONE10}
 \label{CalibrationNONEa}
 }
 \subfigure[\scriptsize STC-Log In-Sample]{
-\hspace*{-3em}  \includegraphics[width= 0.28\textwidth]{Figures/CalibrationLOG10}
+\hspace*{-1.15em} \includegraphics{Figures/CalibrationLOG10}
 \label{CalibrationPLATTLOG10}
 }
 \subfigure[\scriptsize STC-Bri In-Sample]{
-\hspace*{-3em} \includegraphics[width= 0.28\textwidth]{Figures/CalibrationBRI10}
+\hspace*{-1.15em} \includegraphics{Figures/CalibrationBRI10}
 \label{CalibrationPLATTBRI10}
 }
 \subfigure[\scriptsize BSTC-Log In-Sample]{
-\hspace*{-3em} \includegraphics[width= 0.28\textwidth]{Figures/CalibrationFULL10}
-\label{CalibrationPLATTFULL10}
+\hspace*{-1.15em} \includegraphics{Figures/CalibrationFULL10}
+\hspace*{-2em} \label{CalibrationPLATTFULL10}
 }
 
 
-\vspace{-1.5em}
-\subfigure[\scriptsize SDLM Out-of-Sample]{
-\hspace*{-1.1em}  \includegraphics[width= 0.28\textwidth]{Figures/CalibrationNONE}
+\subfigure[ \scriptsize SDLM Out-of-Sample]{
+\hspace*{-3em} \includegraphics{Figures/CalibrationNONE}
 \label{CalibrationNONEb}
 }
-\subfigure[\scriptsize STC-Log Out-of-Sample]{
-\hspace*{-3em}  \includegraphics[width= 0.28\textwidth]{Figures/CalibrationSTO-Log}
+\subfigure[ \scriptsize STC-Log Out-of-Sample]{
+\hspace*{-1.15em} \includegraphics{Figures/CalibrationSTO-Log}
 \label{CalibrationSTC-Log}
 }
-\subfigure[\scriptsize STC-Bri Out-of-Sample]{
-\hspace*{-3em} \includegraphics[width= 0.28\textwidth]{Figures/CalibrationSTO-Bri}
+\subfigure[ \scriptsize STC-Bri Out-of-Sample]{
+\hspace*{-1.15em} \includegraphics{Figures/CalibrationSTO-Bri}
 \label{CalibrationSTC-Bri}
 }
-\subfigure[\scriptsize BSTC-Log Out-of-Sample]{
-\hspace*{-3em} \includegraphics[width= 0.28\textwidth]{Figures/CalibrationSO}
-\label{CalibrationBSTC-Log}
+\subfigure[\scriptsize  BSTC-Log Out-of-Sample]{
+\hspace*{-1.15em} \includegraphics{Figures/CalibrationSO}
+\hspace*{-2em}\label{CalibrationBSTC-Log}
 }
-
+\restoregeometry
 \caption[Optional caption for list of figures]{The top and bottom rows show in- and out-of-sample calibration and sharpness, respectively. The models are Simple Dynamic Linear Model (SDLM), the \textit{Sample-Then-Calibrate} approach that optimizes over the logarithmic score (STC-Log), the \textit{Sample-Then-Calibrate} approach that optimizes over the Brier score (STC-Bri), and the fully-Bayesian version of the \textit{Sample-Then-Calibrate} approach that optimizes over the logarithmic score (BSTC-Log).
 }
 \label{Calibration-Out}
@@ -671,6 +675,7 @@ Finding under-confidence in all the groups is a rather surprising result given t
 \vspace*{-1em} 
 \includegraphics{Figures/BiasesBoxplots}
 \label{BiasesLOGBoxplots}
+\vspace*{-2em} 
 
 \caption[Optional caption for list of figures]{Comparing the bias-levels across self-reported expertise under different approaches. 
 Posterior distributions of $b_j$ for $j = 1, \dots, 5$ under the \textit{Sample-Then-Calibrate} approach that optimizes over the logarithmic score and the \textit{Sample-Then-Calibrate} approach that optimizes over the Brier score.
@@ -699,16 +704,16 @@ As a final illustration of our model, consider the two questions used for illust
 \begin{figure}[h!]
 \vspace{-1em}
 \centering
-\hspace*{0em} 	\includegraphics[width=  \textwidth]{Figures/LegendExamplePlot} % requires the graphicx package
-\vspace{-4.5em}
+\hspace*{0em} 	\includegraphics{Figures/LegendExamplePlot} % requires the graphicx package
+\vspace{-3.5em}
 
 \hspace{-0.5em}
 \subfigure[\textit{Will the expansion of the European bailout fund be ratified by all 17 Eurozone nations before 1 November 2011?}]{
-\hspace*{-1em}  \includegraphics[width= 0.49\textwidth]{Figures/ExamplePlot1b}
+\hspace*{-1em}  \includegraphics{Figures/ExamplePlot1b}
 \label{Example1b}
 } \hspace{0.5em}
 \subfigure[\textit{Will the Nikkei 225 index finish trading at or above 9,500 on 30 September 2011?}]{
-\hspace*{-1em}  \includegraphics[width= 0.49\textwidth]{Figures/ExamplePlot2b}
+\hspace*{-1em}  \includegraphics{Figures/ExamplePlot2b}
 \label{Example2b}
 }
 
