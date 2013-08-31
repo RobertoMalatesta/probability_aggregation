@@ -407,56 +407,71 @@ is the matrix of sharp and calibrated logit-probabilities at time $t$. Choosing 
 \section{Synthetic Data Results}
 \label{syntheticData}
 
-The synthetic data is not generated directly from the model for two reasons: (i) showing good performance on a dataset directly generated from the model assumptions is hardly any news, and (ii) generating data from the dynamic model description does not produce well-calibrated hidden states. The latter is important for our interpretation of the hidden states as the sharp and well-calibrated crowd belief. In order to achieve this, let $\{ Z_{t,k} \}_{t=1}^{T_k}$ denote the values of a standard Brownian motion at time points $t = 1, \dots, T_k $. Then,
+The synthetic data is not generated directly from the model for two reasons: (i) showing good performance on a dataset directly generated from the model assumptions is hardly any news, and (ii) generating data from the dynamic model description does not produce well-calibrated hidden states. The latter is important for our interpretation of the hidden states as a sharp and well-calibrated versions of the crowd belief. To generate a well-calibrated hidden process, generate a path of the standard Brownian motion until time $T_k$ for question $k$, and let $Z_{t,k}$ denote the value of the path at time $t$. Then, for $t = 1, \dots, T_k$,
 \begin{eqnarray*}
 Z_k &=& \mathbbm{1}\left( Z_{T_k, k}  > 0\right)\\
  X_{t,k} &=& \logit \left[ \Phi \left(\frac{Z_{t, k}}{\sqrt{T_k- t}} \right) \right]
 \end{eqnarray*}
-Once the hidden process has been generated, the expert logit-probabilities are produced from Equation (\ref{observedpr}) by applying bias and white noise to the given sequences of $X_{t,k}$. Following the real-world data setting in Section \ref{realData}, extreme logit-probabilities are truncated to avoid overly influential observations. More specifically, any $p_{i,t,k} = \logit^{-1}(Y_{i,t,k})$ less than 0.01 (or greater than 0.99) is truncated to 0.01 (or to 0.99). 
-
-The simulation is then performed over a three-dimensional grid of values: The number of questions, $K$, varies between $20$ and $80$ with steps of 15, the bias vector changes as $$\boldsymbol{b} = [0.50, 0.75, \dots, 1.50]^T \beta,$$ where $\beta$ takes values in $1/2, 3/4, 1, 4/3$, and $2/1$ symmetrically around 1 in the log-scale, and finally the values of $\sigma^2$ vary from $0.5$ to $2.0$ with steps of size 0.5. These grid values were considered realistic based on our experience with the real-world probability forecasting data.  At each grid point the simulation runs a total of 40 times; each time measuring how well the approaches estimate the hidden process and bias vector. The average loss from the 40 runs is used as the performance measure at that grid point. 
-
-Figure \ref{Synthetic} summarizes the results in a series of plots. The first row shows each grid variable's marginal effect on the accuracy to which the \textit{Sample-Then-Calibrate} under the logarithmic loss (STC-Log) and the Brier score (STC-Bri) are able to estimate the hidden process. The second row is similar in nature but measures the accuracy of estimating the bias vector instead. The plots were computed by choosing one grid variable (e.g. $\beta$)  at a time and averaging over the remaining two variables  (e.g. $K$, and $\sigma^2$).  Therefore each value in the plots represents an average of a $40 \times 5^2 = 1,000$ values. 
-
-Based on the first row of plots, STC-Log and STC-Bri estimate the hidden process to a similar accuracy. Even though some relative differences are visible in Figure \ref{SyntheticK}, the loss values are very small in absolute terms; hence suggesting good accuracy to capture the hidden process. The main differences arise in estimating the bias vector. Based on the second row of plots, the procedures capture the bias vector rather precisely as long as the true values of $\beta$ and $\sigma^2$ are not very small. Surprisingly, even though STC-Log is more accurate at estimating the bias vector across all three grid dimensions, it is unable to outperform STC-Bri in estimating the hidden process. 
+gives a sequence of $T_k$ calibrated logit-probabilities for the event $Z_k = 1$. 
 
 
-\ville{Talk about strictly decreasing scores in beta}
+We used this procedure to generate the hidden processes for $K$ questions with $T_k = 100$. Each question involved 50 experts allocated evenly among the five expertise groups. Their reported logit-probabilities, $Y_{t,k}$, were generated from Equation (\ref{observedpr}) by applying bias and noise to the hidden process. Similarly to the real-world data setting discussed in Section \ref{realData}, extreme logit-probabilities are truncated to avoid overly influential observations; that is, any $p_{i,t,k} = \logit^{-1}(Y_{i,t,k})$ less than 0.01 (or greater than 0.99) is truncated to 0.01 (or to 0.99). The simulation was then performed over a three-dimensional grid of parameter values:
+\begin{eqnarray*}
+\beta &\in& \{1/2, 3/4, 1, 4/3, 2/1\}\\
+\sigma^2 &\in& \{0.5, 1.0, 1.5, 2.0, 2.5\}\\
+K &\in& \{20, 35, 50, 65, 80\},
+\end{eqnarray*}
+where $\beta$ generates the bias vector by  $\boldsymbol{b} = [0.50, 0.75, \dots, 1.50]^T \beta$. 
+The simulation runs a total of 40 times at every grid point. Each run records the accuracy to which the approaches are able to estimate the hidden process and bias vector. 
+
+
+%The number of questions, $K$, varies between $20$ and $80$ with increments of 15 problems, the bias vector changes as $$\boldsymbol{b} = [0.50, 0.75, \dots, 1.50]^T \beta,$$ where $\beta$ takes values in $1/2, 3/4, 1, 4/3$, and $2/1$ symmetrically around 1 in the log-scale, and finally the values of $\sigma^2$ vary from $0.5$ to $2.0$ with increments of $0.5$. 
+
+
+Figure \ref{Synthetic} summarizes the results in a series of plots. The first row shows the marginal effects of the three grid variables on the accuracy to which the \textit{Sample-Then-Calibrate} under the logarithmic loss (STC-Log) and the Brier score (STC-Bri) are able to estimate the hidden process. The accuracy is measured in terms of the average quadratic loss in the probability space, $\sum_{k=1}^K \sum_{t=1}^{T_k} (\hat{p}_{t,k} - \logit^{-1}(X_{t,k}))^2 / \sum_{k=1}^K T_k$. The second row is similar in nature but measures the accuracy of estimating the bias vector instead. The accuracy is measured in terms of the average quadratic loss, $|| \boldsymbol{b} - \hat{\boldsymbol{b}}||^2/5$. The plots were computed by choosing one grid variable (e.g. $\beta$)  at a time and averaging over the remaining two variables  (e.g. $K$, and $\sigma^2$).  Therefore each value in the plots represents an average of a $40 \times 5^2 = 1,000$ values. 
+
+Based on the first row of plots, STC-Log and STC-Bri estimate the hidden process to a similar accuracy. Even though some relative differences are visible, the loss values are very small in absolute terms; hence suggesting good overall accuracy to capture the hidden process. While increasing the number of questions improves the accuracy to a small extent, estimating the hidden process becomes more difficult as either $\sigma^2$ or $\beta$ gets larger. The latter seems more unintuitive and can be understood better by observing that larger values of $\beta$ lead to more extreme expert logit-probabilities. As a result, more logit-probabilities are modified by truncation, leading to poorer estimation accuracy. 
+
+
+Based on the second row of plots, STC-Log and STC-Bri  capture the bias vector rather precisely as long as the true values of $\beta$ and $\sigma^2$ are not very large. This behavior can be considered as being caused  to a large extent by the truncation of the extreme expert logit-probabilities. Surprisingly, even though STC-Log is more accurate in estimating the bias vector, it is unable to outperform STC-Bri in estimating the hidden process. 
+
 
 
 
 \begin{figure}[h!]
+\vspace{-5em}
 \centering
- \hspace{-5em}	\includegraphics{Figures/LegendSynthetic} % requires the graphicx package
+ \hspace{-30em}	\includegraphics{Figures/LegendSynthetic} % requires the graphicx package
+\vspace{-0.5em}
 
-\subfigure[]{
+\subfigure{
 \hspace{-1em} \includegraphics{Figures/SyntheticSigma2}
 \label{SyntheticSigma2}
 }
-\subfigure[]{
+\subfigure{
 \hspace{-1.5em} \includegraphics{Figures/SyntheticBeta}
 \label{SyntheticBeta}
 }
-\subfigure[]{
+\subfigure{
 \hspace{-1.5em} \includegraphics{Figures/SyntheticK}
 \label{SyntheticK}
 }
 
-\subfigure[]{
+\subfigure{
 \hspace{-1em}  \includegraphics{Figures/SyntheticSigma2bias}
 \label{SyntheticSigma2b}
 }
-\subfigure[]{
+\subfigure{
 \hspace{-1.5em}  \includegraphics{Figures/SyntheticBetabias}
 \label{SyntheticBetab}
 }
-\subfigure[]{
+\subfigure{
 \hspace{-1.5em}   \includegraphics{Figures/SyntheticKbias}
 \label{SyntheticKb}
 }
 
 
-\caption[Optional caption for list of figures]{Evaluating the \textit{Sample-Then-Calibrate}-model under synthetic data. (a) Performance under different values of $\sigma^2$. (b) Performance under different values of $\beta$. (c) Performance under different numbers of questions, $K$.}
+\caption[Optional caption for list of figures]{Comparing \textit{Sample-Then-Calibrate} that optimizes over the logarithmic score (STC-Log) and \textit{Sample-Then-Calibrate} that optimizes over the Brier score (STC-Bri) under synthetic data. The top row presents the accuracy to capture the hidden process. The bottom row presents the accuracy to capture the bias vector. }
 \label{Synthetic}
 \end{figure}
 
