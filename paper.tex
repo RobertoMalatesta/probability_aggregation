@@ -211,7 +211,7 @@ One such observation is related to the aggregation of multiple probabilities. Th
 
 Consequently, many areas of probability aggregation still remain rather unexplored. For instance, consider an investor aiming to assess whether a stock index will finish trading above some threshold on a given date. In order to maximize his overall predictive accuracy, he may consult a group of experts repeatedly over a period of time and adjust his estimate of the aggregate probability accordingly. Since the experts are allowed to update their probability assessments, the aggregation should be performed by taking into account the temporal correlation in their advice. Many standard time-series procedures could be used to perform this aggregation as long as the experts update their advice consistently on a daily basis. 
 
-This paper adds another layer of complexity by assuming a heterogeneous set of experts, most of whom only make one or two probability assessments over the hundred or so days before the event resolves. This means that the decision-maker faces a different group of experts  every day, with only a few experts returning later on for a second round of advice. The problem at hand is therefore strikingly different from many time-series estimation problems, where one has an observation at every time point -- or almost every time point. As a result, standard time-series procedures like ARIMA (see, e.g., \citet{mills1991time}) are not directly applicable to our setting. In response to the lack of appropriate modeling procedures, this paper introduces a time-series model that incorporates self-reported expertise and captures a sharp and well-calibrated estimate of the crowd belief. The model is highly interpretable and can be used for
+This paper adds another layer of complexity by assuming a heterogeneous set of experts, most of whom only make one or two probability assessments over the hundred or so days before the event resolves. This means that the decision-maker faces a different group of experts  every day, with only a few experts returning later on for a second round of advice. The problem at hand is therefore strikingly different from many time-series estimation problems, where one has an observation at every time point -- or almost every time point. As a result, standard time-series procedures like ARIMA (see, e.g., \citet{mills1991time}) are not directly applicable to our setting. In response to the lack of appropriate modeling procedures, this paper introduces a time-series model that incorporates self-reported expertise and captures a sharp and well-calibrated estimate of the crowd belief. The model is highly interpretable and can be used for:
 \begin{itemize}
 \item the analysis of group-level under- and overconfidence across different levels of self-reported expertise,
 %\item confidence bands for the crowd belief,
@@ -494,8 +494,8 @@ The second matter is related to the distribution of the class labels in the data
 \begin{align*}
  \tilde{Z}_k &= x\\
 \tilde{p}_{i,t,k} &=  \begin{cases} 
-1-p_{i,t,k} & \text{if } Z_k = 1-x\\
-p_{i,t,k}& \text{if } Z_k = x,
+1-p_{i,t,k}, & \text{if } Z_k = 1-x,\\
+p_{i,t,k}, & \text{if } Z_k = x,
 \end{cases}
 \end{align*}
 where $i = 1, \dots, I_k$, and $t = 1, \dots, T_k$. The resulting set $$\left\{\left(\tilde{Z}_k, \{\tilde{p}_{i,t,k} | i = 1, \dots, I_k, t = 1, \dots, T_k \}\right) \right\}_{k=1}^K$$ is a balanced version of the data. 
@@ -504,7 +504,7 @@ This procedure was used to balance our real-world dataset both in terms of event
 
 \subsection{Out-of-Sample Forecasting}
 \label{forecasting}
-This section evaluates the out-of-sample predictive performance of \textit{Sample-Then-Calibrate} against several other probability aggregation procedures. The models are allowed to utilize a training set before making predictions on an independent testing set. In order to clarify some of the upcoming notation, let $S_{train}$ and $S_{test}$ be index sets that partition the data into training and testing sets of sizes $|S_{train}| = N_{train}$ and $|S_{test}| = 166 - N_{test}$, respectively. This means that the $k$th question is in the training set if and only if $k \in S_{train}$. The competing models are as follows.
+This section evaluates the out-of-sample predictive performance of \textit{Sample-Then-Calibrate} against several other probability aggregation procedures. The models are allowed to utilize a training set before making predictions on an independent testing set. In order to clarify some of the upcoming notation, let $S_{train}$ and $S_{test}$ be index sets that partition the data into training and testing sets of sizes $|S_{train}| = N_{train}$ and $|S_{test}| = 166 - N_{test}$, respectively. This means that the $k$th question is in the training set if and only if $k \in S_{train}$. The competing models are as follows:
 
 
 \begin{enumerate}
@@ -537,8 +537,8 @@ is the average probability forecast given at time $t$ for the $k$th question, th
 \begin{eqnarray*}
 \hat{p}_{t,k}(\alpha) =
 \begin{cases}
- \bar{p}_{1,k} & \text{ for } t  = 1 \\
-\alpha \bar{p}_{t,k}  + (1-\alpha) \hat{p}_{t-1,k}(\alpha) & \text{ for } t > 1
+ \bar{p}_{1,k}, & \text{ for } t  = 1, \\
+\alpha \bar{p}_{t,k}  + (1-\alpha) \hat{p}_{t-1,k}(\alpha), & \text{ for } t > 1,
 \end{cases}
 \end{eqnarray*}
 where the input parameter $\alpha$ is learned from the training set by 
@@ -551,8 +551,8 @@ where the input parameter $\alpha$ is learned from the training set by
 \begin{eqnarray*}
 \hat{p}_{t,k}(\alpha, \boldsymbol{b}) =
 \begin{cases}
-G_{t,k}(\boldsymbol{b} ) & \text{ for } t  = 1 \\
-\alpha G_{t,k}(\boldsymbol{b} )  + (1-\alpha) \hat{p}_{t-1,k}(\alpha, \boldsymbol{b})  & \text{ for } t > 1
+G_{t,k}(\boldsymbol{b} ), & \text{ for } t  = 1, \\
+\alpha G_{t,k}(\boldsymbol{b} )  + (1-\alpha) \hat{p}_{t-1,k}(\alpha, \boldsymbol{b}),  & \text{ for } t > 1,
 \end{cases}
 \end{eqnarray*}
 where
@@ -752,7 +752,7 @@ As a final illustration of our model, consider the two questions used for illust
 This paper began with an introduction of a rather unorthodox but nonetheless realistic time-series setting where probability forecasts are made very infrequently by a heterogeneous group of experts. The resulting data is too sparse to be modeled well with standard time-series methods.  In response to this lack of appropriate modeling procedures, our work introduces an interpretable time-series model that incorporates self-reported expertise to capture a sharp and well-calibrated estimate of the crowd belief. The model estimation is performed in two steps: The first step, known as the \textit{sampling step}, samples constrained versions of the model parameters via Gibbs sampling. The sampling is done from standard distributions with fast convergence to the target distribution (see Appendix \ref{appendix} for technical details). The second step, known as the \textit{calibration step}, uses a one-dimensional optimization procedure to transforms the constrained parameter values to their unconstrained counterparts. To the best of our knowledge, this procedure extends forecasting literature towards rather unexplored areas of probability aggregation.
 
 \subsection{Summary of Findings}
-The model was applied to an unusually large dataset on expert probability forecasts. The estimated crowd belief was found to be sharp and well-calibrated under both in- and out-of-sample settings. This has direct implications  on predictive power and model interpretability. Firstly, the model was shown to outperform other probability aggregators in terms of forecasting ability. In particular, the model was deemed a well-balanced compromise that avoids over-fitting without being overly conservative. Secondly, the crowd belief was used as the no-bias reference point to study the bias among groups of experts with different levels of self-reported expertise. All the groups were found to be under-confident. The under-confidence, however, decreased as the level of self-reported expertise increased. This result is about groups of experts and hence does not conflict with the well-known result of the individuals being over-confident (see, e.g.,  \citet{lichtenstein1977calibration, morgan1992uncertainty, bier2004implications}). Besides making predictions or studying group-level bias, the model can be used to generate estimates of many problem-specific parameters. These quantities have clear interpretations and can be combined in many interesting ways to explore a range of hypotheses about different types of questions and expert behavior. 
+The model was applied to an unusually large dataset on expert probability forecasts. The estimated crowd belief was found to be sharp and well-calibrated under both in- and out-of-sample settings. This has direct implications  on predictive power and model interpretability. First, the model was shown to outperform other probability aggregators in terms of forecasting ability. In particular, the model was deemed a well-balanced compromise that avoids over-fitting without being overly conservative. Second, the crowd belief was used as the no-bias reference point to study the bias among groups of experts with different levels of self-reported expertise. All the groups were found to be under-confident. The under-confidence, however, decreased as the level of self-reported expertise increased. This result is about groups of experts and hence does not conflict with the well-known result of the individuals being over-confident (see, e.g.,  \citet{lichtenstein1977calibration, morgan1992uncertainty, bier2004implications}). Besides making predictions or studying group-level bias, the model can be used to generate estimates of many problem-specific parameters. These quantities have clear interpretations and can be combined in many interesting ways to explore a range of hypotheses about different types of questions and expert behavior. 
 
 
 \subsection{Limitations and Directions for Future Research}
