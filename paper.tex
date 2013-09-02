@@ -360,7 +360,7 @@ Since it is not clear which rule should be used for predicting geopolitical even
 \begin{eqnarray}
  \hat{X}_{t,k}&=& \hat{X}_{k,t}(1) / \hat{\beta} \nonumber\\
  \hat{\boldsymbol{b}}_{t,k}&=& \hat{\boldsymbol{b}}(1) \hat{\beta} \nonumber\\
-   \hat{\tau}_{k}^2&=& \hat{\tau}_{k}^2(1) \hat{\beta}^2\nonumber\\
+   \hat{\tau}_{k}^2&=& \hat{\tau}_{k}^2(1)/ \hat{\beta}^2\nonumber\\
   \hat{\sigma}_{k}^2&=& \hat{\sigma}_{k}^2(1)\nonumber\\
   \hat{\gamma}_{k}&=& \hat{\gamma}_{k}(1)\nonumber
 \end{eqnarray}
@@ -379,33 +379,33 @@ To understand the behavior of the coefficients $A$ and $B$, express the logistic
 \end{eqnarray*}
 with $e_{t,k} \stackrel{i.i.d.}{\sim} \mathcal{N}(0,\sigma^2)$. If the data are balanced with respect to the time points, then exactly half of the summands in Equation (\ref{platt}) have $Z_k = 1$ and the average response logit-probability $\logit(\P(Z_k = 1 | \hat{X}_{t,k})) $ is expected to be close to zero. Since the values of $\hat{X}_{t,k}$ are estimated logit-probabilities of the same $K$ events across different time points, their overall average is also expected to be around zero. Therefore both the response and explanatory variables are approximately centered. This means that the intercept term $A$ is near zero reducing Platt calibration to Equation (\ref{OSE}) under the logarithmic scoring rule. If the data are not balanced, Platt calibration can be easily incorporated into our model via an additional intercept parameter. This, however, reduces the interpretability of our model. Fortunately, compromising interpretability is rarely necessary because it is often possible to use the data in a well-balanced form. One procedure to attain this is described in the beginning of Section \ref{realData}.
 
+If the future event can take upon $M > 2$ possible outcomes, the hidden state $X_{t,k}$ must extended to a vector of size $M-1$ and one of the outcomes, e.g., the $M$th one, must be chosen as the base-case to ensure that the probabilities will sum to one at any given time point. Each of the remaining  $M-1$ possible outcomes is represented by an observed process similar to Equation (\ref{observedpr}). Since this multinomial extension is equivalent to having $M-1$ independent binary-outcome models, the estimation and properties of the model are easily extended to the multi-outcome case. This paper focuses on binary-outcomes because it is the simplest and most commonly encountered setting in practice. 
 
-
-
-\section{Extension: Polychotomous Outcomes}
-If the future event can take upon $M > 2$ possible outcomes, the hidden state $X_{t,k}$ must be extended to a vector of size $M-1$. One of the outcomes, e.g., the $M$th one, is chosen as the base-case.  This gives us a total of $M-1$ observed processes and one hidden process
-\begin{eqnarray*}
-\boldsymbol{Y}_{1,t,k} &=&  \boldsymbol{M}_k\boldsymbol{b}_{1}X_{1,t,k} + \boldsymbol{v}_{1,t,k}\\
-\boldsymbol{Y}_{2,t,k} &=&  \boldsymbol{M}_k\boldsymbol{b}_{2}X_{2,t,k} + \boldsymbol{v}_{2,t,k}\\
-&\vdots&\\
-\boldsymbol{Y}_{M-1,t,k} &=&  \boldsymbol{M}_k\boldsymbol{b}_{M-1}X_{M-1,t,k} + \boldsymbol{v}_{M-1,t, k}\\
-\boldsymbol{X}_{t,k} &=& \boldsymbol{\gamma}^T_k \boldsymbol{I}_{M-1} \boldsymbol{X}_{t-1,k} + \boldsymbol{w}_{t,k}
-\end{eqnarray*}
-where $\boldsymbol{X}_{t,k}$ is a $(M-1) \times 1$ matrix of calibrated logit-probabilities. Notice that each process has a separate bias vector. The error terms are independent and identically distributed multivariate normal random variables 
-\begin{eqnarray*}
-\boldsymbol{v}_{m, t, k} | \sigma^2_{j,k} &\stackrel{i.i.d.}{\sim}& \mathcal{N}_{I_k} \left(\boldsymbol{0}, \sigma^2_{j,k} \boldsymbol{I}_{I_k} \right)\\
-\boldsymbol{w}_{t,k} | \tau_k^2 &\stackrel{i.i.d.}{\sim}& \mathcal{N}_{M-1} \left(\boldsymbol{0}, \tau_k^2 \boldsymbol{I}_{M-1} \right)
-\end{eqnarray*}
-On the left-hand side of observed process
-\begin{eqnarray*}
-\boldsymbol{Y}_{m,t,k} &=&  \left[ \begin{matrix} Y_{m,1,t,k} & Y_{m,2,t,k} & \dots & Y_{m,I_k,t,k} \end{matrix} \right]^T\\
-&=&  \left[ \begin{matrix} \log \left( \frac{p_{m,1,t,k}}{p_{M,1,t,k}} \right) &  \log \left( \frac{p_{m,2,t,k}}{p_{M,2,t,k}} \right) & \dots &  \log \left( \frac{p_{m,I_k,t}}{p_{M,I_k,t,k}} \right) \end{matrix} \right]^T
-\end{eqnarray*}
-is a $I_k \times 1$ matrix of the expert logit-probabilities for the $m$th outcome of the $k$th question at time $t$, and on the left-hand side of the hidden process
-\begin{eqnarray*}
-\boldsymbol{X}_{t,k} &=&  \left[ \begin{matrix}X_{1,t,k} &X_{2,t,k} & \dots &X_{M-1,t,k} \end{matrix} \right]^T
-\end{eqnarray*}
-is the matrix of sharp and calibrated logit-probabilities at time $t$. Choosing one of the outcomes as the base-case, ensures that the probabilities will sum to one at any given time point. Since this multinomial extension is equivalent to having $M-1$ independent binary-outcome models (see Section \ref{model}), the estimation can be done separately for each outcome. Therefore, even though this paper focuses on modeling binary events, all the properties and discussion generalize to the multi-outcome case.
+%
+%\section{Extension: Polychotomous Outcomes}
+%If the future event can take upon $M > 2$ possible outcomes, the hidden state $X_{t,k}$ must be extended to a vector of size $M-1$. One of the outcomes, e.g., the $M$th one, is chosen as the base-case.  This gives us a total of $M-1$ observed processes and one hidden process
+%\begin{eqnarray*}
+%\boldsymbol{Y}_{1,t,k} &=&  \boldsymbol{M}_k\boldsymbol{b}_{1}X_{1,t,k} + \boldsymbol{v}_{1,t,k}\\
+%\boldsymbol{Y}_{2,t,k} &=&  \boldsymbol{M}_k\boldsymbol{b}_{2}X_{2,t,k} + \boldsymbol{v}_{2,t,k}\\
+%&\vdots&\\
+%\boldsymbol{Y}_{M-1,t,k} &=&  \boldsymbol{M}_k\boldsymbol{b}_{M-1}X_{M-1,t,k} + \boldsymbol{v}_{M-1,t, k}\\
+%\boldsymbol{X}_{t,k} &=& \boldsymbol{\gamma}^T_k \boldsymbol{I}_{M-1} \boldsymbol{X}_{t-1,k} + \boldsymbol{w}_{t,k}
+%\end{eqnarray*}
+%where $\boldsymbol{X}_{t,k}$ is a $(M-1) \times 1$ matrix of calibrated logit-probabilities. Notice that each process has a separate bias vector. The error terms are independent and identically distributed multivariate normal random variables 
+%\begin{eqnarray*}
+%\boldsymbol{v}_{m, t, k} | \sigma^2_{j,k} &\stackrel{i.i.d.}{\sim}& \mathcal{N}_{I_k} \left(\boldsymbol{0}, \sigma^2_{j,k} \boldsymbol{I}_{I_k} \right)\\
+%\boldsymbol{w}_{t,k} | \tau_k^2 &\stackrel{i.i.d.}{\sim}& \mathcal{N}_{M-1} \left(\boldsymbol{0}, \tau_k^2 \boldsymbol{I}_{M-1} \right)
+%\end{eqnarray*}
+%On the left-hand side of observed process
+%\begin{eqnarray*}
+%\boldsymbol{Y}_{m,t,k} &=&  \left[ \begin{matrix} Y_{m,1,t,k} & Y_{m,2,t,k} & \dots & Y_{m,I_k,t,k} \end{matrix} \right]^T\\
+%&=&  \left[ \begin{matrix} \log \left( \frac{p_{m,1,t,k}}{p_{M,1,t,k}} \right) &  \log \left( \frac{p_{m,2,t,k}}{p_{M,2,t,k}} \right) & \dots &  \log \left( \frac{p_{m,I_k,t}}{p_{M,I_k,t,k}} \right) \end{matrix} \right]^T
+%\end{eqnarray*}
+%is a $I_k \times 1$ matrix of the expert logit-probabilities for the $m$th outcome of the $k$th question at time $t$, and on the left-hand side of the hidden process
+%\begin{eqnarray*}
+%\boldsymbol{X}_{t,k} &=&  \left[ \begin{matrix}X_{1,t,k} &X_{2,t,k} & \dots &X_{M-1,t,k} \end{matrix} \right]^T
+%\end{eqnarray*}
+%is the matrix of sharp and calibrated logit-probabilities at time $t$. Choosing one of the outcomes as the base-case, ensures that the probabilities will sum to one at any given time point. Since this multinomial extension is equivalent to having $M-1$ independent binary-outcome models (see Section \ref{model}), the estimation can be done separately for each outcome. Therefore, even though this paper focuses on modeling binary events, all the properties and discussion generalize to the multi-outcome case.
 
 \section{Synthetic Data Results}
 \label{syntheticData}
@@ -625,7 +625,8 @@ In comparison to BSTC-Log, the baseline SDLM-model lacks sharpness and is highly
 
 \subsection{In- and Out-of-Sample Sharpness and Calibration}
 \label{calibration}
-A calibration plot is a simple tool for assessing the sharpness and calibration of a model. The idea is to plot the probability forecasts against the observed empirical frequencies. Therefore any deviation from the diagonal line suggests poor calibration. A model is considered under-confident (or over-confidence) if the points follow an S-shaped (or \reflectbox{S}-shaped) trend. In order to assess sharpness of the model, it is common practice to place a histogram of the given forecasts in the corner of the plot. Since the data were balanced, any deviation from the the baseline probability of 0.5 suggests improved sharpness.
+ \ville{Add equations of sharpness and calibration}
+A calibration plot is a simple tool for visually assessing the sharpness and calibration of a model. The idea is to plot the probability forecasts against the observed empirical frequencies. Therefore any deviation from the diagonal line suggests poor calibration. A model is considered under-confident (or over-confidence) if the points follow an S-shaped (or \reflectbox{S}-shaped) trend. In order to assess sharpness of the model, it is common practice to place a histogram of the given forecasts in the corner of the plot. Since the data were balanced, any deviation from the the baseline probability of 0.5 suggests improved sharpness.
 
 
 
@@ -745,7 +746,7 @@ One advantage of our model arises from its ability to produce estimates of inter
 
 
 
-As a final illustration of our model, consider the two questions used for illustrative purposes in Section \ref{data}. Figure \ref{ExamplePlotsFinal} is a copy of Figure \ref{ExamplePlots} with the addition of a solid line surrounded by a dashed band. The solid line represents the posterior mean of the calibrated crowd belief as estimated by STC-Log. The dashed lines connect the point-wise 95\% posterior intervals across different time points. Since $\hat{\sigma}_k^2 = 2.43$  and $\hat{\sigma}_k^2 = 1.77$ for the questions depicted in Figures \ref{Example1b} and \ref{Example2b}, respectively, the first question provokes more disagreement among the experts than the second one. Intuitively this makes sense because the target event in Figure \ref{Example1b}  is determined by several conditions that may change radically from one day to the next while the target event in Figure \ref{Example2b} is determined by a relatively steady stock market index. Therefore it is not surprising to find that the first question has $\hat{\tau}_k^2 = 1.38$ and the second one has  $\hat{\tau}_k^2 = 0.198$. We conclude that the first question can be considered inherently more difficult than the second one. 
+As a final illustration of our model, consider the two example questions introduced in Section \ref{data}. Figure \ref{ExamplePlotsFinal} is a copy of Figure \ref{ExamplePlots} with the addition of a solid line surrounded by a dashed band. The solid line represents the posterior mean of the calibrated crowd belief as estimated by STC-Log. The dashed lines connect the point-wise 95\% posterior intervals across different time points. Since $\hat{\sigma}_k^2 = 2.43$  and $\hat{\sigma}_k^2 = 1.77$ for the questions depicted in Figures \ref{Example1b} and \ref{Example2b}, respectively, the first question provokes more disagreement among the experts than the second one. Intuitively this makes sense because the target event in Figure \ref{Example1b}  is determined by several conditions that may change radically from one day to the next while the target event in Figure \ref{Example2b} is determined by a relatively steady stock market index. Therefore it is not surprising to find that the first question has $\hat{\tau}_k^2 = 1.38$ and the second one has  $\hat{\tau}_k^2 = 0.198$. \ville{Elaborate more}We conclude that the first question can be considered inherently more difficult than the second one. 
 
 
 \section{Discussion}
