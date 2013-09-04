@@ -1,4 +1,4 @@
-\begin{thebibliography}{53}
+\begin{thebibliography}{54}
 % BibTex style file: imsart-nameyear.bst, 2013-01-28
 % Default style options (sort=1,type=nameyear).
 % Used options (sort=1,type=nameyear).
@@ -472,6 +472,16 @@ In \bbooktitle{UAI}
 \bvolume{133}
 \bpages{1155--1174}.
 \end{barticle}
+\endbibitem
+
+\bibitem[\protect\citeauthoryear{Ranjan}{2009}]{ranjan2009combining}
+\begin{bphdthesis}[author]
+\bauthor{\bsnm{Ranjan},~\bfnm{Roopesh}\binits{R.}}
+(\byear{2009}).
+\btitle{Combining and Evaluating Probabilistic Forecasts}
+\btype{PhD thesis},
+\bpublisher{University of Washington}.
+\end{bphdthesis}
 \endbibitem
 
 \bibitem[\protect\citeauthoryear{Ranjan and Gneiting}{2010}]{Ranjan08}
