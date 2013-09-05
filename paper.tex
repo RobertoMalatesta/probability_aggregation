@@ -209,10 +209,10 @@ The paper begins with a description of our probability forecasting data that wer
 \begin{tabular}{c c c c c c c c }
 \hline
 Statistic & Min. & $Q_1$ & Median & Mean & $Q_3$ & Max.\\ \hline
-\# of Days a Problem is Active  & 4 &  35.6 &  72.0 & 106.3 & 145.20 & 418 \\
-\# of Experts per Problem & 212 &   543.2 &  693.5 &  783.7 &  983.2 & 1690\\ 
-\# Forecasts given by each Expert on a Problem & 1 &  1.0 &   1.0  &  1.8 &  2.0 & 131 \\
-\# Problems participated by an Expert & 1 &  14.0 &   36.0  &  55.0 &  90.0 & 166 \\ \hline
+\# of Days a Question is Active  & 4 &  35.6 &  72.0 & 106.3 & 145.20 & 418 \\
+\# of Experts per Question & 212 &   543.2 &  693.5 &  783.7 &  983.2 & 1690\\ 
+\# Forecasts given by each Expert on a Question & 1 &  1.0 &   1.0  &  1.8 &  2.0 & 131 \\
+\# Questions participated by an Expert & 1 &  14.0 &   36.0  &  55.0 &  90.0 & 166 \\ \hline
 \end{tabular}
 \caption{Five-number summaries of our real-world data.
 %: \textit{\# of Days Active} represents the number of days that the experts were given to update their forecast before the correct answer was revealed; \textit{\# of Experts per Problem } denotes the number of experts participating in a question; \textit{\# Forecasts given by each Expert on a Problem} gives the number of forecasts for a question made by an active expert; \textit{\# Problems participated by an Expert} represents the number of different questions a given expert participated in.
@@ -300,22 +300,12 @@ A probability forecast $p$ for the $k$th question is calibrated if $\P(Z_k = 1 |
 A probability forecast $p$ is sharper than a probability forecast $q$ if $\E[(p-p_0)^2] > \E[(q-p_0)^2]$, where $p_0$ is the baseline probability for the $k$th question (see, e.g., \citet{ranjan2009combining}). 
 \end{mydef}
 \noindent
-Any single expert is unlikely to have enough information to consistently report $\logit^{-1}(X_{t,k})$. He may also believe in false information, hide his true belief for ethical bases, or be biased for many other reasons. A large and diverse group of experts, on the other hand, may share a considerable portion of the available information. But if they are not collaborating and sharing information efficiently, their beliefs should be aggregated via a model that can detect potential bias, separate signal from noise, and use the collective opinion to estimate $X_{t,k}$.
+Even though it is unlikely that any single expert has access to all the available information, a large and diverse group of experts may share a considerable portion of the available information. The collective wisdom of the group therefore provides an attractive proxy for $\mathcal{F}_{t,k}$. 
 
-%A model should therefore aim to take into account the collective opinion of a group of experts. 
-%
-%By taking into account the collective opinion the group of experts may be able to 
-%
-%
-%. The collective wisdom of this group is therefore an attractive proxy for the amount of information available at any given time point. 
-%
-%The experts, however, may not be collaborating and sharing information efficiently with each other. 
 
-%Therefore, if a model is to efficiently use the collective wisdom for estimating $X_{t,k}$, it must be able to discriminate between noise and signal.
-
- In our model the experts are assumed to be, on average, a multiplicative constant $\boldsymbol{b}$ away from the calibrated crowd belief. An individual element of $\boldsymbol{b}$ can be interpreted as a group-specific \textit{systematic bias} that labels the group either as over-confident $\left( b_j \in (1, \infty)\right)$ or as under-confident $\left(b_j \in (0,1)\right)$.  Due to the high sparsity of our data, estimating a bias term and analyzing the bias separately for each expert is not possible. See Section \ref{ExpertBias} for an analysis and discussion on the bias terms. Any other deviation from the calibrated crowd belief is considered \textit{random noise}. This noise is measured in terms of $\sigma^2_k$ and can be assumed to be caused by momentary over-optimism (or pessimism), false beliefs, or other misconceptions. 
+Since the experts may believe in false information, hide their true beliefs for ethical bases, or be biased for many other reasons, their probability assessments should be aggregated via a model that can detect potential bias, separate signal from noise, and use the collective opinion to estimate $X_{t,k}$. In our model the experts are assumed to be, on average, a multiplicative constant $\boldsymbol{b}$ away from $X_{t,k}$. Therefore an individual element of $\boldsymbol{b}$ can be interpreted as a group-specific \textit{systematic bias} that labels the group either as over-confident $\left( b_j \in (1, \infty)\right)$ or as under-confident $\left(b_j \in (0,1)\right)$.  Due to the high sparsity of our data, estimating a bias term separately for each expert is not possible. See Section \ref{ExpertBias} for an analysis and discussion on the bias terms. Any other deviation from $X_{t,k}$ is considered \textit{random noise}. This noise is measured in terms of $\sigma^2_k$ and can be assumed to be caused by momentary over-optimism (or pessimism), false beliefs, or other misconceptions. 
  
- The \textit{random fluctuations} in the hidden process are measured in terms of $\tau^2_k$ and can be assumed to represent changes or shocks to the underlying circumstances that ultimately decide the outcome of the event. The \textit{systematic component} $\gamma_k$, on the other hand, allows the model to incorporate a constant signal stream that drifts the hidden process to infinity (when $\gamma_k \in (1, \infty)$) or zero (when $\gamma_k \in (0, 1)$). If the uncertainty in the question diminishes as the current time point $t$ approaches $T_k$, the hidden process drifts to infinity. Alternatively, the hidden process can drift to zero in which case any available information about the target event does not improve predictive accuracy. Since each of the $K$ questions in our dataset was resolved within a pre-specified timeframe, $\gamma_k$ is expected to fall within the interval $(1, \infty)$ for all $k = 1, \dots, K$. 
+ The \textit{random fluctuations} in the hidden process are measured in terms of $\tau^2_k$ and are assumed to represent changes or shocks to the underlying circumstances that ultimately decide the outcome of the event. The \textit{systematic component} $\gamma_k$ allows the model to incorporate a constant signal stream that drifts the hidden process to infinity (when $\gamma_k \in (1, \infty)$) or zero (when $\gamma_k \in (0, 1)$). If the uncertainty in the question diminishes as the current time point $t$ approaches $T_k$, the hidden process drifts to infinity. Alternatively, the hidden process can drift to zero in which case any available information about the target event does not improve predictive accuracy. Since each of the $K$ questions in our dataset was resolved within a pre-specified timeframe, $\gamma_k$ is expected to fall within the interval $(1, \infty)$ for all $k = 1, \dots, K$. 
  
 
 \section{Model Estimation}
@@ -363,7 +353,7 @@ S_{LOG}(Z, X) &=& Z \log\left(\logit^{-1}(X)\right) + (1-Z) \log\left(1-\logit^{
 Since it is not clear which rule should be used for predicting geopolitical events, the \textit{Sample-And-Calibrate} procedure is evaluated  separately under both rules in Sections \ref{syntheticData} and \ref{realData}. Once $\hat{\beta}$ has been computed, estimates of the unconstrained model parameters are given by
 \begin{eqnarray}
  \hat{X}_{t,k}&=& \hat{X}_{k,t}(1) / \hat{\beta} \nonumber\\
- \hat{\boldsymbol{b}}_{t,k}&=& \hat{\boldsymbol{b}}(1) \hat{\beta} \nonumber\\
+ \hat{\boldsymbol{b}}&=& \hat{\boldsymbol{b}}(1) \hat{\beta} \nonumber\\
    \hat{\tau}_{k}^2&=& \hat{\tau}_{k}^2(1)/ \hat{\beta}^2\nonumber\\
   \hat{\sigma}_{k}^2&=& \hat{\sigma}_{k}^2(1)\nonumber\\
   \hat{\gamma}_{k}&=& \hat{\gamma}_{k}(1)\nonumber
@@ -413,24 +403,27 @@ If the future event can take upon $M > 2$ possible outcomes, the hidden state $X
 
 \section{Synthetic Data Results}
 \label{syntheticData}
-The synthetic data is not generated directly from the model for two reasons: (i) showing good performance on a dataset directly generated from the model assumptions is hardly any news, and (ii) generating data from the dynamic model description does not produce well-calibrated hidden states. The latter is important for our interpretation of the hidden process as a sharp and well-calibrated version of the crowd belief. To ensure that the hidden process for question $k$ is well-calibrated, generate a path of the standard Brownian motion until time $T_k$. If $Z_{t,k}$ denotes the value of the path at time $t$, then
+
+The goal in this section is to evaluate the ability of the SAC-procedure to capture true parameter values. The synthetic data is not generated directly from the model for two reasons: (i) showing good performance on a dataset directly generated from the model assumptions is hardly any news, and (ii) generating data from the dynamic model description does not produce well-calibrated hidden states. The latter is important for our interpretation of the hidden process as a sharp and well-calibrated version of the crowd belief. 
+
+To ensure that the hidden process for question $k$ is well-calibrated, generate a path of the standard Brownian motion until time $T_k$. If $Z_{t,k}$ denotes the value of the path at time $t$, then
 \begin{eqnarray*}
 Z_k &=& \mathbbm{1}\left( Z_{T_k, k}  > 0\right)\\
  X_{t,k} &=& \logit \left[ \Phi \left(\frac{Z_{t, k}}{\sqrt{T_k- t}} \right) \right]
 \end{eqnarray*}
-gives a sequence of $T_k$ calibrated logit-probabilities for the event $Z_k = 1$. Repeating this procedure for $K$ times, we generate the hidden process for $K$ questions, each with a time horizon of $T_k = 101$. The questions involve 25 experts allocated evenly among five expertise groups. Since the event resolves at time $t = 101$, the expert logit-probabilities $Y_{i,t,k}$ are only given for times $t = 1$ to $100$. These are generated from Equation (\ref{observedpr}) by applying bias and noise to the hidden process $X_{t,k}$. The simulation then iterates over a three-dimensional grid of parameter values
+gives a sequence of $T_k$ calibrated logit-probabilities for the event $Z_k = 1$. Using this procedure we generate the hidden process for $K$ questions, each with a time horizon of $T_k = 101$. The questions involve 25 experts allocated evenly among five expertise groups. Each expert gives one probability forecast per day with the exception of time $t = 101$, when the event resolves. These are generated by applying bias and noise to the hidden process $X_{t,k}$ for $t = 1, \dots, 100$ (see Equation (\ref{observedpr})). In this fashion, the simulation iterates over a three-dimensional grid of parameter values:
 \begin{eqnarray*}
 \sigma^2 &\in& \{1/2, 1, 3/2, 2, 5/2\}\\
 \beta &\in& \{1/2, 3/4, 1, 4/3, 2/1\}\\
 K &\in& \{20, 40, 60, 80, 100\},
 \end{eqnarray*}
-where $\beta$ gives the value of the bias vector by letting $\boldsymbol{b} = [1/2, 3/4, 1, 4/3, 2/1]^T \beta$. Each grid point is used  40 times to generate a synthetic dataset. This dataset is then used to assess how accurately \textit{Sample-And-Calibrate} estimates the hidden process and bias vector. The accuracy of the estimated hidden process is measured with the average quadratic loss in the probability space, $\sum_{k=1}^K \sum_{t=1}^{T_k} ( \logit^{-1}(\hat{X}_{t,k}) - \logit^{-1}(X_{t,k}))^2 / \sum_{k=1}^K T_k$, and the accuracy of the estimated bias vector is measured with the average quadratic loss, $|| \boldsymbol{b} - \hat{\boldsymbol{b}}||^2/5$.
+where $\beta$ gives the bias vector by letting $\boldsymbol{b} = [1/2, 3/4, 1, 4/3, 2/1]^T \beta$. Every grid point is used  40 times to generate a synthetic dataset. The SAC-procedure is run on each dataset for 200 iterations of which the first 100 are used for burn-in. The accuracy of the estimated hidden process and bias vector are measured in  with the average quadratic loss in the probability space, $\sum_{k=1}^K \sum_{t=1}^{100} ( \logit^{-1}(\hat{X}_{t,k}) - \logit^{-1}(X_{t,k}))^2 / (100K)$, and the average quadratic loss, $|| \log(\boldsymbol{b}) - \log(\hat{\boldsymbol{b}})||^2/5$, respectively. The latter is measured in the log-space to allow a fair comparison of any discrepancies between under- and over-confident bias-vectors. 
 
 \begin{figure}[h!]
-\vspace{-5em}
+\vspace{-4.5em}
 \centering
- \hspace{-28em}	\includegraphics{Figures/LegendSynthetic} % requires the graphicx package
-\vspace{-0.5em}
+ \hspace{-31em}	\includegraphics{Figures/LegendSynthetic} % requires the graphicx package
+\vspace{-1.5em}
 
 \subfigure{
 \hspace{-1em} \includegraphics{Figures/SyntheticSigma2}
@@ -461,19 +454,30 @@ where $\beta$ gives the value of the bias vector by letting $\boldsymbol{b} = [1
 }
 
 
-\caption[Optional caption for list of figures]{Comparing \textit{Sample-And-Calibrate} that optimizes over the logarithmic score ($\text{SAC}_{\text{LOG}}$) and \textit{Sample-And-Calibrate} that optimizes over the Brier score (SAC-Bri) under synthetic data. The top row presents the accuracy to capture the hidden process. The bottom row presents the accuracy to capture the bias vector. }
+\caption[Optional caption for list of figures]{Comparing SAC that optimizes over the logarithmic score ($\text{SAC}_{\text{LOG}}$) and SAC that optimizes over the Brier score ($\text{SAC}_{\text{BRI}}$) under synthetic data. The top row presents the accuracy to capture the hidden process. The bottom row presents the accuracy to capture the bias vector. }
 \label{Synthetic}
 \end{figure}
 
-Figure \ref{Synthetic} summarizes the results in a series of plots. The first row shows the marginal effects of the three grid variables on the accuracy to which the \textit{Sample-And-Calibrate} under the logarithmic loss ($\text{SAC}_{\text{LOG}}$) and the Brier score (SAC-Bri) are able to estimate the hidden process.  The second row is similar in nature but measures the accuracy of estimating the bias vector instead.  Since the plots were computed by choosing one grid variable (e.g. $\beta$) at a time and averaging over the remaining two variables  (e.g. $K$, and $\sigma^2$), each value in the plots represents an average of a $40 \times 5^2 = 1,000$ values. 
+Figure \ref{Synthetic} summarizes the results in a series of plots. The first row presents the marginal effects of the three grid variables on the accuracy to which the SAC-procedure estimates the hidden process.  The second row is similar in nature but measures the accuracy in estimating the bias vector instead.  Since the plots were computed by choosing one grid variable (e.g., $\beta$) at a time and averaging over the remaining two variables  (e.g., $K$ and $\sigma^2$), each value in the plots represents an average of a $40 \times 5^2 = 1,000$ values. Based on these results, both $\text{SAC}_{\text{LOG}}$ and  $\text{SAC}_{\text{BRI}}$ estimate the hidden process and the bias vector very accurately. Apart from $\text{SAC}_{\text{LOG}}$ outperforming $\text{SAC}_{\text{BRI}}$ uniformly across all parameter values, the two approaches behave very similarly.  They make great use of the increasing number of questions, suffer slightly from the increasing level of noise in the expert logit-probabilities, and perform better when $\beta$ is large. 
 
-Based on the first row of plots, $\text{SAC}_{\text{LOG}}$ and SAC-Bri estimate the hidden process to a similar accuracy. Even though some relative differences are visible, the loss values are very small in absolute terms, hence suggesting good overall accuracy to capture the hidden process. Estimating the hidden process, however, becomes more difficult as either $\sigma^2$ or $\beta$ gets larger. The latter seems more unintuitive and can be understood better by observing that larger values of $\beta$ lead to more extreme expert logit-probabilities and hence to more frequent truncation. This causes the estimation accuracy to degrade because  a high level of truncation results to a drastic deviation from the model assumptions. Increasing the number of questions improves the estimation accuracy but only very little.
+%The latter can be seen as a side-effect of measuring the accuracy an estimated multiplicative factor in the absolute scale. The effect is actually 
 
+%
+%Since the hidden state is not explicitly engineered to maximize sharpness subject to calibration, the calibration step in our procedure tends to overestimate $\beta$; that is, the estimated hidden process tends to be a bit sharper (more extreme) than the actual hidden process. 
+%
+%When $\beta$ is large most of the experts are over-confident. As a result, the sampling step produces an estimated hidden process that is too extreme. This estimate therefore must be pulled back towards zero by the calibration step. If the 
+%
+%
+%The story for the estimating the bias vector is a bit different: the discrepancy between the estimate and the true bias vector may be the same in the log-scale when the $\beta$ is small versus when $\beta$ is large. This, however, translates into much smaller differences in the absolute scale that the differences are ultimately measured in our case. For instance, estimating 1/2 with 3/4 is the same as estimating 2 with 4/3. The difference in the first one is 0.25 while in the second 0.6666667. To make this even worse, the distance is squared which emphasizes large differences. 
 
-Based on the second row of plots, $\text{SAC}_{\text{LOG}}$ and SAC-Bri  capture the bias vector rather precisely as long as the true values of $\beta$ and $\sigma^2$ are not very large. This behavior can be again considered as being caused by the truncation of the extreme expert logit-probabilities. Surprisingly, even though $\text{SAC}_{\text{LOG}}$ is more accurate in estimating the bias vector, it is unable to outperform SAC-Bri in estimating the hidden process. 
-
-
-
+%
+%Based on the first row of plots, $\text{SAC}_{\text{LOG}}$ and $\text{SAC}_{\text{BRI}}$ estimate the hidden process to a similar accuracy. Even though some relative differences are visible, the loss values are very small in absolute terms, hence suggesting good overall accuracy to capture the hidden process. Estimating the hidden process, however, becomes more difficult as either $\sigma^2$ or $\beta$ gets larger. The latter seems more unintuitive and can be understood better by observing that larger values of $\beta$ lead to more extreme expert logit-probabilities and hence to more frequent truncation. This causes the estimation accuracy to degrade because  a high level of truncation results to a drastic deviation from the model assumptions. Increasing the number of questions improves the estimation accuracy but only very little.
+%
+%
+%Based on the second row of plots, $\text{SAC}_{\text{LOG}}$ and $\text{SAC}_{\text{BRI}}$  capture the bias vector rather precisely as long as the true values of $\beta$ and $\sigma^2$ are not very large. This behavior can be again considered as being caused by the truncation of the extreme expert logit-probabilities. Surprisingly, even though $\text{SAC}_{\text{LOG}}$ is more accurate in estimating the bias vector, it is unable to outperform $\text{SAC}_{\text{BRI}}$ in estimating the hidden process. 
+%
+%
+%
 
 
 
@@ -514,7 +518,7 @@ X_{t, k} &=& \gamma_k X_{t-1, k} + w_{t, k},
 \end{eqnarray*}
 where $X_{t,k}$ is the logit-probability used for prediction. Since this model is not hierarchical, estimates of the hidden process can be obtained directly for the questions in the testing set without fitting the model first on the training set. In order to make predictions, the sampler is run for 500 iterations of which the first 200 are used for burn-in. The remaining 300 iterations are thinned by discarding every other observation, leaving a final predictive sample of 150 observations. 
 
-\item \textit{The Sample-And-Calibrate procedure both under the Brier (SAC-Bri) and the logarithmic score ($\text{SAC}_{\text{LOG}}$)}. The model is first fit on the training set by running the sampling step for 3,000 iterations of which the first 500 iterations are used for burn-in. After thinning by only keeping every fifth observation, the calibration step is performed for the remaining 500 observations. The out-of-sample prediction is done by running the sampling step for 500 iterations with each consecutive iteration reading in and conditioning on the next value of $\beta$ and $\boldsymbol{b}$ found during the training period. The first 200 iterations are used for burn-in. The remaining 300 iterations are thinned by discarding every other observation, leaving a final predictive sample of 150 observations. 
+\item \textit{The Sample-And-Calibrate procedure both under the Brier ($\text{SAC}_{\text{BRI}}$) and the logarithmic score ($\text{SAC}_{\text{LOG}}$)}. The model is first fit on the training set by running the sampling step for 3,000 iterations of which the first 500 iterations are used for burn-in. After thinning by only keeping every fifth observation, the calibration step is performed for the remaining 500 observations. The out-of-sample prediction is done by running the sampling step for 500 iterations with each consecutive iteration reading in and conditioning on the next value of $\beta$ and $\boldsymbol{b}$ found during the training period. The first 200 iterations are used for burn-in. The remaining 300 iterations are thinned by discarding every other observation, leaving a final predictive sample of 150 observations. 
 
 
 \item \textit{A fully Bayesian version of $\text{SAC}_{\text{LOG}}$ ($\text{BSAC}_{\text{LOG}}$)}. Denote the calibrated logit-probabilities and  the event indicators across all $K$ questions with $\boldsymbol{X}(1)$ and $\boldsymbol{Z}$, respectively.  The posterior distribution of $\beta$ conditional on $\boldsymbol{X}(1)$ is given by $p(\beta | \boldsymbol{X}(1), \boldsymbol{Z}) \propto p( \boldsymbol{Z} | \beta, \boldsymbol{X}(1)) p(\beta | \boldsymbol{X}(1))$. Recall that the calibration step under $S_{LOG}$ is equivalent to fitting a logistic regression model with $Z_k$ as the response and $\hat{X}_{k,t}(1)$ as the explanatory variable. Therefore the likelihood for the Bayesian version is
@@ -611,7 +615,7 @@ EWMA & 0.104 (0.105) & 0.092 (0.081) & 0.119 (0.125) & 0.103 (0.107)\\
 \end{table}
 
 
-Overall, SAC-Bri and $\text{SAC}_{\text{LOG}}$ achieve the lowest average scores across all columns except \textit{Short}, where they are slightly outperformed by $\text{BSAC}_{\text{LOG}}$.  $\text{BSAC}_{\text{LOG}}$, however, turns out to be overconfident (see Section \ref{calibration}). This means that $\text{BSAC}_{\text{LOG}}$ underestimates the uncertainty in the events and outputs probability forecasts that are typically too near 0.0 or 1.0. As a result, the aggregate forecasts are either very close to the correct answer or very far from it.  As can be seen in Table \ref{prediction}, this results into highly variable forecasting performance. The short questions, however, involve very little uncertainty and were generally the easiest to forecast. On such easy questions, overconfidence can pay off frequently enough to compensate for a few large scores arising from the overconfident and incorrect forecasts. 
+Overall, $\text{SAC}_{\text{BRI}}$ and $\text{SAC}_{\text{LOG}}$ achieve the lowest average scores across all columns except \textit{Short}, where they are slightly outperformed by $\text{BSAC}_{\text{LOG}}$.  $\text{BSAC}_{\text{LOG}}$, however, turns out to be overconfident (see Section \ref{calibration}). This means that $\text{BSAC}_{\text{LOG}}$ underestimates the uncertainty in the events and outputs probability forecasts that are typically too near 0.0 or 1.0. As a result, the aggregate forecasts are either very close to the correct answer or very far from it.  As can be seen in Table \ref{prediction}, this results into highly variable forecasting performance. The short questions, however, involve very little uncertainty and were generally the easiest to forecast. On such easy questions, overconfidence can pay off frequently enough to compensate for a few large scores arising from the overconfident and incorrect forecasts. 
 
 In comparison to $\text{BSAC}_{\text{LOG}}$, the baseline SDLM-model lacks sharpness and is highly under-confident (see Section \ref{calibration}). This behavior is expected as the experts are under-confident at the group-level (see Section \ref{ExpertBias}) and the SDLM-procedure does not use the training set to explicitly calibrate its forecasts. Instead, it merely smooths the forecasts given by the experts. The resulting aggregate forecasts are therefore necessarily conservative, resulting into high average scores with low variability. 
 
@@ -666,13 +670,13 @@ A calibration plot is a simple tool for visually assessing the sharpness and cal
 \hspace*{-2em}\label{CalibrationBSTC-Log}
 }
 \restoregeometry
-\caption[Optional caption for list of figures]{The top and bottom rows show in- and out-of-sample calibration and sharpness, respectively. The models are Simple Dynamic Linear Model (SDLM), the \textit{Sample-And-Calibrate} approach that optimizes over the logarithmic score ($\text{SAC}_{\text{LOG}}$), the \textit{Sample-And-Calibrate} approach that optimizes over the Brier score (SAC-Bri), and the fully-Bayesian version of the \textit{Sample-And-Calibrate} approach that optimizes over the logarithmic score ($\text{BSAC}_{\text{LOG}}$).
+\caption[Optional caption for list of figures]{The top and bottom rows show in- and out-of-sample calibration and sharpness, respectively. The models are Simple Dynamic Linear Model (SDLM), the \textit{Sample-And-Calibrate} approach that optimizes over the logarithmic score ($\text{SAC}_{\text{LOG}}$), the \textit{Sample-And-Calibrate} approach that optimizes over the Brier score ($\text{SAC}_{\text{BRI}}$), and the fully-Bayesian version of the \textit{Sample-And-Calibrate} approach that optimizes over the logarithmic score ($\text{BSAC}_{\text{LOG}}$).
 }
 \label{Calibration-Out}
 \end{figure}
 
 
-The top and bottom rows of Figure \ref{Calibration-Out} present calibration plots for SDLM, $\text{SAC}_{\text{LOG}}$, SAC-Bri, and $\text{BSAC}_{\text{LOG}}$ under in- and out-of-sample probability estimation, respectively. Each setting is of interest in its own right:  Good in-sample calibration is crucial for model interpretability. In particular, if the estimated crowd belief is well-calibrated, then the elements of the bias vector $\boldsymbol{b}$ can be used to study the amount of under- or over-confidence in the different expertise groups. Good out-of-sample calibration and sharpness, on other hand, are necessary properties in predicting future events with high accuracy.  To guide our assessment, the dashed bands around the diagonal connect the point-wise, Bonferroni-corrected (\citet{bonferroni}) 95\% lower and upper critical values under the null hypothesis of calibration. These have been computed by running the bootstrap technique described in \citet{brocker2007increasing} for 10,000 iterations. The in-sample predictions were obtained by running the models for 10,200 iterations, leading to a final posterior sample of 1,000 observations after thinning and using the first 200 iterations for burn-in. The out-of-sample predictions were given by the 10-fold cross-validation discussed in Section \ref{forecasting}.
+The top and bottom rows of Figure \ref{Calibration-Out} present calibration plots for SDLM, $\text{SAC}_{\text{LOG}}$, $\text{SAC}_{\text{BRI}}$, and $\text{BSAC}_{\text{LOG}}$ under in- and out-of-sample probability estimation, respectively. Each setting is of interest in its own right:  Good in-sample calibration is crucial for model interpretability. In particular, if the estimated crowd belief is well-calibrated, then the elements of the bias vector $\boldsymbol{b}$ can be used to study the amount of under- or over-confidence in the different expertise groups. Good out-of-sample calibration and sharpness, on other hand, are necessary properties in predicting future events with high accuracy.  To guide our assessment, the dashed bands around the diagonal connect the point-wise, Bonferroni-corrected (\citet{bonferroni}) 95\% lower and upper critical values under the null hypothesis of calibration. These have been computed by running the bootstrap technique described in \citet{brocker2007increasing} for 10,000 iterations. The in-sample predictions were obtained by running the models for 10,200 iterations, leading to a final posterior sample of 1,000 observations after thinning and using the first 200 iterations for burn-in. The out-of-sample predictions were given by the 10-fold cross-validation discussed in Section \ref{forecasting}.
 
 Overall, the \textit{Sample-And-Calibrate}-procedure is sharp and well-calibrated both in- and out-of-sample with only a few points barely falling outside the \textit{point-wise} critical values. Since the calibration does not change drastically from the top to the bottom row, the \textit{Sample-And-Calibrate}-procedure can be considered to present robustness against over-fitting. This is, however, not the case with $\text{BSAC}_{\text{LOG}}$ that is well-calibrated in-sample but presents over-confidence out-of-sample. Figures \ref{CalibrationNONEa} and \ref{CalibrationNONEb} serve as baselines by showing the reliability plots for the SDLM-model. Since this model does not perform any explicit calibration, it is not surprising to see most points outside the critical values. The pattern in the deviations suggests drastic under-confidence. Furthermore, the inset histogram reveals drastic lack of sharpness. Therefore the \textit{Sample-And-Calibrate}-model can be viewed as a well-performing compromise between SDLM and $\text{BSAC}_{\text{LOG}}$ that avoids over-confidence without being too conservative. 
  
