@@ -1,0 +1,20 @@
+\BOOKMARK [1][-]{section.1}{Introduction}{}% 1
+\BOOKMARK [1][-]{table.2}{Geopolitical Forecasting Data}{}% 2
+\BOOKMARK [1][-]{section.3}{Model}{}% 3
+\BOOKMARK [1][-]{section.4}{Model Estimation}{}% 4
+\BOOKMARK [2][-]{subsection.4.1}{Sampling Step}{section.4}% 5
+\BOOKMARK [2][-]{subsection.4.2}{Calibration Step}{section.4}% 6
+\BOOKMARK [2][-]{subsection.4.3}{Discussion}{section.4}% 7
+\BOOKMARK [1][-]{section.5}{Synthetic Data Results}{}% 8
+\BOOKMARK [1][-]{section.6}{Geopolitical Data Results}{}% 9
+\BOOKMARK [2][-]{subsection.6.1}{Incoherent and Imbalanced Data}{section.6}% 10
+\BOOKMARK [2][-]{subsection.6.2}{Out-of-Sample Forecasting}{section.6}% 11
+\BOOKMARK [2][-]{subsection.6.3}{In- and Out-of-Sample Sharpness and Calibration}{section.6}% 12
+\BOOKMARK [2][-]{figure.4}{Group-Level Expertise Bias}{section.6}% 13
+\BOOKMARK [2][-]{subsection.6.5}{Question Difficulty and Other Measures}{section.6}% 14
+\BOOKMARK [1][-]{section.7}{Discussion}{}% 15
+\BOOKMARK [2][-]{subsection.7.1}{Summary of Findings}{section.7}% 16
+\BOOKMARK [2][-]{subsection.7.2}{Limitations and Directions for Future Research}{section.7}% 17
+\BOOKMARK [1][-]{appendix.A}{Technical Details of the Sampling Step}{}% 18
+\BOOKMARK [1][-]{section*.2}{References}{}% 19
+\BOOKMARK [1][-]{section*.3}{Author's addresses}{}% 20

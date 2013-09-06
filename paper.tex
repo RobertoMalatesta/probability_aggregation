@@ -1,5 +1,4 @@
 \documentclass[aoas, preprint]{imsart}
-\RequirePackage{natbib}
 
 %\long\def\authornote#1{%
 %        \leavevmode\unskip\raisebox{-3.5pt}{\rlap{$\scriptstyle\diamond$}}%
@@ -25,35 +24,45 @@
 %    \mymarginpar{\raggedright\hbadness=10000\tiny\it #1\par}}
 
 %\usepackage[section]{placeins}
-\usepackage{amsmath} 
+%\usepackage{amsmath} 
 \usepackage{times}
 \usepackage{amsmath,amsthm,amssymb}
 \usepackage{fancyhdr}
 \usepackage{moreverb}
 \usepackage{graphicx}
 \usepackage{amssymb}
+\usepackage{array}
 \usepackage{url}
 \usepackage{multirow} 
 \usepackage[boxed, section]{algorithm}
 %\usepackage{algorithm}
-\usepackage{algorithmic}
+%\usepackage{algorithmic}
 %\usepackage{cite}
 \usepackage{multirow} 
 \usepackage{rotating}
 %\usepackage[margin=1.2in]{geometry}
-\usepackage{geometry}
-\usepackage{fix-cm}
+%\usepackage{geometry}
+%\usepackage{fix-cm}
 \usepackage{subfigure}
 \usepackage{bbm}
 \usepackage{color} 
-\usepackage{natbib}
+%\usepackage{natbib}
 \usepackage{xcolor,xparse}
 \usepackage{xparse}
 %\usepackage{setspace}
-\usepackage{booktabs}
+%\usepackage{booktabs}
 %\usepackage{subfig}
 %\usepackage{caption, subcaption}
+\usepackage[OT1]{fontenc}
+\usepackage[colorlinks,citecolor=blue,urlcolor=blue]{hyperref}
+\usepackage{natbib}
 
+
+\startlocaldefs
+\numberwithin{equation}{section}
+\theoremstyle{plain}
+\newtheorem{thm}{Theorem}[section]
+\endlocaldefs
 
 
 %\renewcommand{\baselinestretch}{1.2}
@@ -96,14 +105,11 @@
    {\fcolorbox{#3}{#4}{#5}}%
  }
 
-
-
 \newcommand{\myfunction}[3]
 {${#1} : {#2} \rightarrow {#3}$ }
 
 \newcommand{\myzrfunction}[1]
 {\myfunction{#1}{{\myZ}}{{\myR}}}
-
 
 \newcommand{\mysection}[1]
 {\noindent {\bf {#1}}}
@@ -204,9 +210,10 @@ The paper begins with a description of our probability forecasting data that wer
 \section{Geopolitical Forecasting Data}
 \label{data}
 
-\begin{table}
-\begin{center}
-\begin{tabular}{c c c c c c c c }
+\begin{table*}
+\caption{Five-number summaries of our real-world data.}
+\label{DataStats}
+\begin{tabular}{m{2in}	lllllll }
 \hline
 Statistic & Min. & $Q_1$ & Median & Mean & $Q_3$ & Max.\\ \hline
 \# of Days a Question is Active  & 4 &  35.6 &  72.0 & 106.3 & 145.20 & 418 \\
@@ -214,24 +221,20 @@ Statistic & Min. & $Q_1$ & Median & Mean & $Q_3$ & Max.\\ \hline
 \# Forecasts given by each Expert on a Question & 1 &  1.0 &   1.0  &  1.8 &  2.0 & 131 \\
 \# Questions participated by an Expert & 1 &  14.0 &   36.0  &  55.0 &  90.0 & 166 \\ \hline
 \end{tabular}
-\caption{Five-number summaries of our real-world data.
-%: \textit{\# of Days Active} represents the number of days that the experts were given to update their forecast before the correct answer was revealed; \textit{\# of Experts per Problem } denotes the number of experts participating in a question; \textit{\# Forecasts given by each Expert on a Problem} gives the number of forecasts for a question made by an active expert; \textit{\# Problems participated by an Expert} represents the number of different questions a given expert participated in.
-}
-\label{DataStats}
-\end{center}
-\end{table}
+\end{table*}
 
-\begin{table}
+
+\begin{table*}
+\caption{Frequencies of the self-reported expertise (1 = Not At All Expert and 5 = Extremely Expert) levels across all the 166 questions in our real-world data.}
+\label{ExpertiseTable}
 \begin{center}
-\begin{tabular}{c c c c c c c c }
+\begin{tabular}{llllllll }
 \hline
 Expertise Level & 1 & 2 & 3 & 4 & 5\\
 Frequency (\%) & 25.3 & 30.7 & 33.6 &  8.2 &  2.1 \\\hline
 \end{tabular}
-\caption{Frequencies of the self-reported expertise (1 = Not At All Expert and 5 = Extremely Expert) levels across all the 166 questions in our real-world data.}
-\label{ExpertiseTable}
 \end{center}
-\end{table}
+\end{table*}
 
 
 
@@ -243,7 +246,7 @@ The experts made updates on a very infrequent basis. An expert gave, on average,
 \begin{figure}[h!]
 \vspace{-2em}
 \centering
-\hspace*{0em} 	\includegraphics{Figures/LegendExamplePlot} % requires the graphicx package
+\hspace*{-3.5em} 	\includegraphics{Figures/LegendExamplePlot} % requires the graphicx package
 \vspace{-3.5em}
 
 \hspace{-0.5em}
@@ -426,30 +429,30 @@ where $\beta$ gives the bias vector by letting $\boldsymbol{b} = [1/2, 3/4, 1, 4
 \vspace{-1.5em}
 
 \subfigure{
-\hspace{-1em} \includegraphics{Figures/SyntheticSigma2}
+\hspace{-1em} \includegraphics[width = 0.32\textwidth]{Figures/SyntheticSigma2}
 \label{SyntheticSigma2}
 }
 \subfigure{
-\hspace{-1.5em} \includegraphics{Figures/SyntheticBeta}
+\hspace{-1.5em} \includegraphics[width = 0.32\textwidth]{Figures/SyntheticBeta}
 \label{SyntheticBeta}
 }
 \subfigure{
-\hspace{-1.5em} \includegraphics{Figures/SyntheticK}
+\hspace{-1.5em} \includegraphics[width = 0.32\textwidth]{Figures/SyntheticK}
 \label{SyntheticK}
 }
 
 \vspace{-1em}
 
 \subfigure{
-\hspace{-1em}  \includegraphics{Figures/SyntheticSigma2bias}
+\hspace{-1em}  \includegraphics[width = 0.32\textwidth]{Figures/SyntheticSigma2bias}
 \label{SyntheticSigma2b}
 }
 \subfigure{
-\hspace{-1.5em}  \includegraphics{Figures/SyntheticBetabias}
+\hspace{-1.5em}  \includegraphics[width = 0.32\textwidth]{Figures/SyntheticBetabias}
 \label{SyntheticBetab}
 }
 \subfigure{
-\hspace{-1.5em}   \includegraphics{Figures/SyntheticKbias}
+\hspace{-1.5em}   \includegraphics[width = 0.32\textwidth]{Figures/SyntheticKbias}
 \label{SyntheticKb}
 }
 
@@ -587,9 +590,12 @@ The competing models are evaluated via a 10-fold cross-validation\footnote{A 5-f
 
 Table \ref{prediction} summarizes different ways to aggregate these scores. The first option, denoted by \textit{Scores by Day}, weighs each question by the number of days the question remained open. This is performed by computing the average of the 17,475 scores. The second option, denoted by \textit{Scores by Problem}, gives each question an equal weight regardless how long the question remained open. This is done by first averaging the scores within a question and then averaging the average scores across all the questions. Both scores can be further broken down into subcategories by considering the length of the questions. The final three columns of Table \ref{prediction} divide the questions into \textit{Short} questions (30 days or fewer), \textit{Medium} questions (between 31 and 59 days), and \textit{Long} Problems (60 days or more). The number of questions in these subcategories were 36, 32 and 98, respectively. The bolded scores indicate the lowest score in each column. The values in the parenthesis quantify the variability in the scores: Under \textit{Scores by Day} the values give the standard errors of all the scores. Under \textit{Scores by Problem}, on other hand, the values represent the standard errors of the average scores of the different questions. 
 
-\begin{table}[htbp]
+\begin{table*}
+   \caption{Brier Scores based on 10-fold cross-validation. \textit{Scores by Day} weighs a question by the number of days the question remained open. \textit{Scores by Problem} gives each question an equal weight regardless how long the question remained open. The bolded values indicate the lowest scores in each column. The values in the parenthesis represent standard errors in the scores. }
+   \label{prediction}
    \centering
       \begin{tabular}{l llll} % Column formatting, @{} suppresses leading/trailing space
+      \hline
  \multicolumn{5}{ c }{Scores by Day}\\
 Model & \multicolumn{1}{ c }{All} & \multicolumn{1}{ c }{Short} & \multicolumn{1}{ c }{Medium} & \multicolumn{1}{ c }{Long}\\ \hline
 SDLM & 0.100 (0.156) & 0.066 (0.116) & 0.098 (0.154) & 0.102 (0.157)\\ 
@@ -599,7 +605,7 @@ $\text{SAC}_{\text{LOG}}$ & \textbf{0.096} (0.191) & 0.056 (0.134) & \textbf{0.0
 EWMBA & 0.102 (0.203) & 0.060 (0.124) & 0.110 (0.201) & 0.103 (0.206)\\ 
 EWMLA & 0.102 (0.199) & 0.061 (0.130) & 0.111 (0.214) & 0.103 (0.200)\\ 
 EWMA & 0.111 (0.142) & 0.089 (0.100) & 0.111 (0.136) & 0.112 (0.144)\\ 
-&&&&\\
+\hline
 \multicolumn{5}{ c }{Scores by Problem}\\
 Model & \multicolumn{1}{ c }{All} & \multicolumn{1}{ c }{Short} & \multicolumn{1}{ c }{Medium} & \multicolumn{1}{ c }{Long}\\ \hline
 SDLM & 0.089 (0.116) & 0.064 (0.085) & 0.106 (0.141) & 0.092 (0.117)\\ 
@@ -609,10 +615,9 @@ $\text{SAC}_{\text{LOG}}$ & \textbf{0.082} (0.142) & 0.055 (0.096) & \textbf{0.1
 EWMBA & 0.090 (0.156) & 0.063 (0.101) & 0.118 (0.186) & 0.091 (0.161)\\ 
 EWMLA & 0.090 (0.159) & 0.064 (0.109) & 0.120 (0.200) & 0.090 (0.159)\\ 
 EWMA & 0.104 (0.105) & 0.092 (0.081) & 0.119 (0.125) & 0.103 (0.107)\\ 
+\hline
    \end{tabular}
-   \caption{Brier Scores based on 10-fold cross-validation. \textit{Scores by Day} weighs a question by the number of days the question remained open. \textit{Scores by Problem} gives each question an equal weight regardless how long the question remained open. The bolded values indicate the lowest scores in each column. The values in the parenthesis represent standard errors in the scores. }
-   \label{prediction}
-\end{table}
+\end{table*}
 
 
 Overall, $\text{SAC}_{\text{BRI}}$ and $\text{SAC}_{\text{LOG}}$ achieve the lowest average scores across all columns except \textit{Short}, where they are slightly outperformed by $\text{BSAC}_{\text{LOG}}$.  $\text{BSAC}_{\text{LOG}}$, however, turns out to be overconfident (see Section \ref{calibration}). This means that $\text{BSAC}_{\text{LOG}}$ underestimates the uncertainty in the events and outputs probability forecasts that are typically too near 0.0 or 1.0. As a result, the aggregate forecasts are either very close to the correct answer or very far from it.  As can be seen in Table \ref{prediction}, this results into highly variable forecasting performance. The short questions, however, involve very little uncertainty and were generally the easiest to forecast. On such easy questions, overconfidence can pay off frequently enough to compensate for a few large scores arising from the overconfident and incorrect forecasts. 
@@ -630,46 +635,44 @@ In comparison to $\text{BSAC}_{\text{LOG}}$, the baseline SDLM-model lacks sharp
 \label{calibration}
 A calibration plot is a simple tool for visually assessing the sharpness and calibration of a model. The idea is to plot the probability forecasts against the observed empirical frequencies. Therefore any deviation from the diagonal line suggests poor calibration. A model is considered under-confident (or over-confidence) if the points follow an S-shaped (or \reflectbox{S}-shaped) trend. In order to assess sharpness of the model, it is common practice to place a histogram of the given forecasts in the corner of the plot. Since the data were balanced, any deviation from the the baseline probability of 0.5 suggests improved sharpness.
 
-
-
 \begin{figure}[h!]
-\newgeometry{left=5cm, right = 1cm, bottom=0.1cm}
+%\newgeometry{left=5cm, right = 1cm, bottom=0.1cm}
 
 \subfigure[\scriptsize SDLM In-Sample]{
-\hspace*{-3em}  \includegraphics{Figures/CalibrationNONE10}
+\hspace*{-2em}  \includegraphics[width = 0.286\textwidth]{Figures/CalibrationNONE10}
 \label{CalibrationNONEa}
 }
 \subfigure[\scriptsize $\text{SAC}_{\text{LOG}}$ In-Sample]{
-\hspace*{-1.15em} \includegraphics{Figures/CalibrationLOG10}
+\hspace*{-1.15em} \includegraphics[width = 0.235\textwidth]{Figures/CalibrationLOG10}
 \label{CalibrationPLATTLOG10}
 }
 \subfigure[\scriptsize $\text{SAC}_{\text{BRI}}$ In-Sample]{
-\hspace*{-1.15em} \includegraphics{Figures/CalibrationBRI10}
+\hspace*{-1.15em} \includegraphics[width = 0.235\textwidth]{Figures/CalibrationBRI10}
 \label{CalibrationPLATTBRI10}
 }
 \subfigure[\scriptsize $\text{BSAC}_{\text{LOG}}$ In-Sample]{
-\hspace*{-1.15em} \includegraphics{Figures/CalibrationFULL10}
+\hspace*{-1.15em} \includegraphics[width = 0.286\textwidth]{Figures/CalibrationFULL10}
 \hspace*{-2em} \label{CalibrationPLATTFULL10}
 }
 
 
 \subfigure[ \scriptsize SDLM Out-of-Sample]{
-\hspace*{-3em} \includegraphics{Figures/CalibrationNONE}
+ \hspace*{-2em} \includegraphics[width = 0.286\textwidth]{Figures/CalibrationNONE}
 \label{CalibrationNONEb}
 }
-\subfigure[ \scriptsize $\text{SAC}_{\text{LOG}}$ Out-of-Sample]{
-\hspace*{-1.15em} \includegraphics{Figures/CalibrationSTO-Log}
+\subfigure[\scriptsize $\text{SAC}_{\text{LOG}}$ Out-of-Sample]{
+\hspace*{-1.15em} \includegraphics[width = 0.235\textwidth]{Figures/CalibrationSTO-Log}
 \label{CalibrationSTC-Log}
 }
 \subfigure[ \scriptsize $\text{SAC}_{\text{BRI}}$ Out-of-Sample]{
-\hspace*{-1.15em} \includegraphics{Figures/CalibrationSTO-Bri}
+\hspace*{-1.15em} \includegraphics[width = 0.235\textwidth]{Figures/CalibrationSTO-Bri}
 \label{CalibrationSTC-Bri}
 }
 \subfigure[\scriptsize  $\text{BSAC}_{\text{LOG}}$ Out-of-Sample]{
-\hspace*{-1.15em} \includegraphics{Figures/CalibrationSO}
+\hspace*{-1.15em} \includegraphics[width = 0.286\textwidth]{Figures/CalibrationSO}
 \hspace*{-2em}\label{CalibrationBSTC-Log}
 }
-\restoregeometry
+%\restoregeometry
 \caption[Optional caption for list of figures]{The top and bottom rows show in- and out-of-sample calibration and sharpness, respectively. The models are Simple Dynamic Linear Model (SDLM), the \textit{Sample-And-Calibrate} approach that optimizes over the logarithmic score ($\text{SAC}_{\text{LOG}}$), the \textit{Sample-And-Calibrate} approach that optimizes over the Brier score ($\text{SAC}_{\text{BRI}}$), and the fully-Bayesian version of the \textit{Sample-And-Calibrate} approach that optimizes over the logarithmic score ($\text{BSAC}_{\text{LOG}}$).
 }
 \label{Calibration-Out}
@@ -687,7 +690,8 @@ Overall, the \textit{Sample-And-Calibrate}-procedure is sharp and well-calibrate
 
 \begin{figure}[!ht]
 \vspace*{-1em} 
-\includegraphics{Figures/BiasesBoxplots}
+%\includegraphics[width = \textwidth]{Figures/BiasesBoxplots}
+\includegraphics[width = \textwidth]{Figures/BiasesBoxplots}
 \label{BiasesLOGBoxplots}
 \vspace*{-2em} 
 
@@ -726,24 +730,25 @@ One advantage of our model arises from its ability to produce estimates of inter
 
 
 \begin{figure}[h!]
-\vspace{-1em}
+\vspace{-2em}
 \centering
-\hspace*{0em} 	\includegraphics{Figures/LegendExamplePlot} % requires the graphicx package
+\hspace*{-3.5em} 	\includegraphics{Figures/LegendExamplePlot} % requires the graphicx package
 \vspace{-3.5em}
 
 \hspace{-0.5em}
 \subfigure[\textit{Will the expansion of the European bailout fund be ratified by all 17 Eurozone nations before 1 November 2011?}]{
-\hspace*{-1em}  \includegraphics{Figures/ExamplePlot1b}
+\hspace*{-1em}  \includegraphics[width= 0.49\textwidth]{Figures/ExamplePlot1b}
 \label{Example1b}
 } \hspace{0.5em}
 \subfigure[\textit{Will the Nikkei 225 index finish trading at or above 9,500 on 30 September 2011?}]{
-\hspace*{-1em}  \includegraphics{Figures/ExamplePlot2b}
+\hspace*{-1em}  \includegraphics[width= 0.49\textwidth]{Figures/ExamplePlot2b}
 \label{Example2b}
 }
 
 \caption[Optional caption for list of figures]{Scatterplots of the probability forecasts given for two questions in our dataset. The shadings represents the self-reported expertise of the expert who provided the probability forecast. The solid line gives the posterior mean of the calibrated crowd belief as estimated by $\text{SAC}_{\text{LOG}}$. The surrounding dashed lines connect the point-wise 95\% posterior intervals.}
 \label{ExamplePlotsFinal}
 \end{figure}
+
 
 
 As a final illustration of our model, we return to the two example questions introduced in Section \ref{data}. Figure \ref{ExamplePlotsFinal} is a copy of Figure \ref{ExamplePlots} with the addition of a solid line surrounded by a dashed band. The solid line represents the posterior mean of the calibrated crowd belief as estimated by $\text{SAC}_{\text{LOG}}$. The dashed lines connect the point-wise 95\% posterior intervals across different time points. Since $\hat{\sigma}_k^2 = 2.43$  and $\hat{\sigma}_k^2 = 1.77$ for the questions depicted in Figures \ref{Example1b} and \ref{Example2b}, respectively, the first question provokes more disagreement among the experts than the second one. Intuitively this makes sense because the target event in Figure \ref{Example1b}  is determined by several conditions that may change radically from one day to the next while the target event in Figure \ref{Example2b} is determined by a relatively steady stock market index. Therefore it is not surprising to find that in Figure \ref{Example1b} $\hat{\tau}_k^2 = 0.269$, which is much higher than $\hat{\tau}_k^2 = 0.039$ in Figure \ref{Example2b}. We may conclude that the first question is inherently more difficult than the second one. 
@@ -759,7 +764,10 @@ The model was applied to an unusually large dataset on expert probability foreca
 \subsection{Limitations and Directions for Future Research}
 Our model pertains model parsimony while addressing the main challenges that arise from modeling sparse probability forecasting data. Therefore it can be viewed as a basis for many future extensions. To give some ideas, recall that most of the model parameters were assumed constant over time. It is intuitively reasonable, however, that these parameters behave differently during different time intervals of the question.  For instance, the level of disagreement (represented by $\sigma^2_k$ in our model) among the experts can be expected to decrease towards the final time point when the question  resolves. This hypothesis could be explored by letting $\sigma^2_{t,k}$ evolve dynamically as a function of the previous term $\sigma^2_{t-1,k}$ and random noise. 
 
-If the experts were asked to provide personal information during the data collection process, it may be of interest to study the forecasting behavior of different kinds of experts. For instance, this paper modeled the bias separately within each expertise group. This, however, is by no means restricted to the study of bias or its relation to self-reported expertise. Different parameter dependencies could be constructed based on many other expert characteristic, such as gender, education, or specialty, to produce a range of novel insight on the forecasting behavior across different groups of experts. Furthermore, expert characteristics could be interacted with question types, such as economic, domestic, or international, to learn about the kind of experts who generally perform well on certain types of questions. This would be of interest to the decision-maker who could use the information as a basis for consulting only a high-performing subset of the available experts. 
+If the experts were asked to provide personal information during the data collection process, it may be of interest to study the forecasting behavior of different kinds of experts. For instance, this paper modeled the bias separately within each expertise group. This is by no means restricted to the study of bias or its relation to self-reported expertise. Different parameter dependencies could be constructed based on many other expert characteristic, such as gender, education, or specialty, to produce a range of novel insight on the forecasting behavior across different groups of experts. Furthermore, expert characteristics could be interacted with question types, such as economic, domestic, or international, to learn about the kind of experts who generally perform well on certain types of questions. This would be of interest to the decision-maker who could use the information as a basis for consulting only a high-performing subset of the available experts. 
+ 
+%It may also be of interest to study hidden processes with other goals besides maximizing sharpness subject to calibration. This can be easily achieved by changing the optimization criterion in Equation (\ref{OSE}) to an appropriate function that meets the new goal. 
+
  
 Other future directions could aim to remove some of the obvious limitations of our model. For instance, recall that the random components are assumed to follow a normal distribution. This is a strong assumption that may not always be justified. Logit-probabilities, however, have been modeled with the normal distribution before (see, e.g., \citet{Erev1994}). Furthermore, the normal distribution is a rather standard assumption in psychological models (see, e.g.,  signal-detection theory  in \citet{tanner1954decision}). A second limitation resides in the assumption that both the observed and hidden processes are expected to grow linearly. This assumption could be relaxed, for instance, by adding higher order terms to the model. A more complex model, however, is likely to sacrifice interpretability. Given that our model is able to detect very intricate patterns in the crowd belief  (see Figure \ref{ExamplePlotsFinal}), compromising interpretability for the sake of facilitating non-linear growth is hardly necessary. 
 
