@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.3-1.40.12 (TeX Live 2011) (format=pdflatex 2011.7.3)  5 SEP 2013 21:05
+This is pdfTeX, Version 3.1415926-2.3-1.40.12 (TeX Live 2011) (format=pdflatex 2011.7.3)  11 SEP 2013 14:50
 entering extended mode
  \write18 enabled.
  file:line:error style messages enabled.
@@ -722,23 +722,23 @@ File: umsb.fd 2009/06/22 v3.00 AMS symbols B
  [1{/usr/local/texlive/2011/texmf-var/fonts/map/pdftex/updmap/pdftex.map}
 
 ] [2]
-LaTeX Font Info:    Try loading font information for OMS+ptm on input line 202.
+LaTeX Font Info:    Try loading font information for OMS+ptm on input line 203.
 
 
 (/usr/local/texlive/2011/texmf-dist/tex/latex/psnfss/omsptm.fd
 File: omsptm.fd 
 )
 LaTeX Font Info:    Font shape `OMS/ptm/m/n' in size <10.95> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 202.
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 203.
  [3]
 <Figures/LegendExamplePlot.pdf, id=185, 433.62pt x 72.27pt>
 File: Figures/LegendExamplePlot.pdf Graphic file (type pdf)
 
 <use Figures/LegendExamplePlot.pdf>
-Package pdftex.def Info: Figures/LegendExamplePlot.pdf used on input line 249.
+Package pdftex.def Info: Figures/LegendExamplePlot.pdf used on input line 250.
 (pdftex.def)             Requested size: 433.61894pt x 72.2698pt.
 
-Overfull \hbox (43.82896pt too wide) in paragraph at lines 249--251
+Overfull \hbox (43.82896pt too wide) in paragraph at lines 250--252
  []|  [] 
  []
 
@@ -746,14 +746,14 @@ Overfull \hbox (43.82896pt too wide) in paragraph at lines 249--251
 File: Figures/ExamplePlot1.pdf Graphic file (type pdf)
 
 <use Figures/ExamplePlot1.pdf>
-Package pdftex.def Info: Figures/ExamplePlot1.pdf used on input line 256.
+Package pdftex.def Info: Figures/ExamplePlot1.pdf used on input line 257.
 (pdftex.def)             Requested size: 176.40198pt x 176.40479pt.
 
 <Figures/ExamplePlot2.pdf, id=187, 201.75375pt x 201.75375pt>
 File: Figures/ExamplePlot2.pdf Graphic file (type pdf)
 
 <use Figures/ExamplePlot2.pdf>
-Package pdftex.def Info: Figures/ExamplePlot2.pdf used on input line 260.
+Package pdftex.def Info: Figures/ExamplePlot2.pdf used on input line 261.
 (pdftex.def)             Requested size: 176.40198pt x 176.40479pt.
 
 
@@ -765,261 +765,263 @@ same identifier (name{equation.4.2}) has been already used, duplicate ignored
 
 \AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
                                                   \fi \fi 
-l.378 
+l.379 
       ]
-LaTeX Font Info:    Try loading font information for U+bbm on input line 414.
+LaTeX Font Info:    Try loading font information for U+bbm on input line 415.
  (/usr/local/texlive/2011/texmf-dist/tex/latex/bbm-macros/ubbm.fd
 File: ubbm.fd 1999/03/15 V 1.2 Font definition for bbm font - TH
 )
-[10] <Figures/LegendSynthetic.pdf, id=308, 433.62pt x 72.27pt>
+[10] <Figures/LegendSynthetic.pdf, id=306, 433.62pt x 72.27pt>
 File: Figures/LegendSynthetic.pdf Graphic file (type pdf)
 
 <use Figures/LegendSynthetic.pdf>
-Package pdftex.def Info: Figures/LegendSynthetic.pdf used on input line 428.
+Package pdftex.def Info: Figures/LegendSynthetic.pdf used on input line 429.
 (pdftex.def)             Requested size: 433.61894pt x 72.2698pt.
 
-<Figures/SyntheticSigma2.pdf, id=309, 144.54pt x 129.48375pt>
+<Figures/SyntheticSigma2.pdf, id=307, 144.54pt x 129.48375pt>
 File: Figures/SyntheticSigma2.pdf Graphic file (type pdf)
 
 <use Figures/SyntheticSigma2.pdf>
-Package pdftex.def Info: Figures/SyntheticSigma2.pdf used on input line 434.
+Package pdftex.def Info: Figures/SyntheticSigma2.pdf used on input line 435.
 (pdftex.def)             Requested size: 115.20264pt x 103.20184pt.
 
-<Figures/SyntheticBeta.pdf, id=310, 144.54pt x 129.48375pt>
+<Figures/SyntheticBeta.pdf, id=308, 144.54pt x 129.48375pt>
 File: Figures/SyntheticBeta.pdf Graphic file (type pdf)
 
 <use Figures/SyntheticBeta.pdf>
-Package pdftex.def Info: Figures/SyntheticBeta.pdf used on input line 438.
+Package pdftex.def Info: Figures/SyntheticBeta.pdf used on input line 439.
 (pdftex.def)             Requested size: 115.20264pt x 103.20184pt.
 
-<Figures/SyntheticK.pdf, id=311, 144.54pt x 129.48375pt>
+<Figures/SyntheticK.pdf, id=309, 144.54pt x 129.48375pt>
 File: Figures/SyntheticK.pdf Graphic file (type pdf)
 
 <use Figures/SyntheticK.pdf>
-Package pdftex.def Info: Figures/SyntheticK.pdf used on input line 442.
+Package pdftex.def Info: Figures/SyntheticK.pdf used on input line 443.
 (pdftex.def)             Requested size: 115.20264pt x 103.20184pt.
 
-<Figures/SyntheticSigma2bias.pdf, id=312, 144.54pt x 129.48375pt>
+<Figures/SyntheticSigma2bias.pdf, id=310, 144.54pt x 129.48375pt>
 File: Figures/SyntheticSigma2bias.pdf Graphic file (type pdf)
 
 <use Figures/SyntheticSigma2bias.pdf>
-Package pdftex.def Info: Figures/SyntheticSigma2bias.pdf used on input line 449
+Package pdftex.def Info: Figures/SyntheticSigma2bias.pdf used on input line 450
 .
 (pdftex.def)             Requested size: 115.20264pt x 103.20184pt.
 
-<Figures/SyntheticBetabias.pdf, id=313, 144.54pt x 129.48375pt>
+<Figures/SyntheticBetabias.pdf, id=311, 144.54pt x 129.48375pt>
 File: Figures/SyntheticBetabias.pdf Graphic file (type pdf)
 
 <use Figures/SyntheticBetabias.pdf>
-Package pdftex.def Info: Figures/SyntheticBetabias.pdf used on input line 453.
+Package pdftex.def Info: Figures/SyntheticBetabias.pdf used on input line 454.
 (pdftex.def)             Requested size: 115.20264pt x 103.20184pt.
 
-<Figures/SyntheticKbias.pdf, id=314, 144.54pt x 129.48375pt>
+<Figures/SyntheticKbias.pdf, id=312, 144.54pt x 129.48375pt>
 File: Figures/SyntheticKbias.pdf Graphic file (type pdf)
 
 <use Figures/SyntheticKbias.pdf>
-Package pdftex.def Info: Figures/SyntheticKbias.pdf used on input line 457.
+Package pdftex.def Info: Figures/SyntheticKbias.pdf used on input line 458.
 (pdftex.def)             Requested size: 115.20264pt x 103.20184pt.
  [11 <./Figures/LegendSynthetic.pdf> <./Figures/SyntheticSigma2.pdf> <./Figures
 /SyntheticBeta.pdf> <./Figures/SyntheticK.pdf> <./Figures/SyntheticSigma2bias.p
 df> <./Figures/SyntheticBetabias.pdf> <./Figures/SyntheticKbias.pdf>] [12]
-Overfull \hbox (2.51938pt too wide) in paragraph at lines 511--514
+Overfull \hbox (2.51938pt too wide) in paragraph at lines 512--515
  \OT1/ptm/m/n/10.95 6.2.\OT1/ptm/m/it/10.95 Out-of-Sample Fore-cast-ing.[][] \O
 T1/ptm/m/n/10.95 This sec-tion is mo-ti-vated by decision-making.
  []
 
 [13]
-Overfull \hbox (30.78954pt too wide) in alignment at lines 528--530
- [][][] []
+Overfull \hbox (4.69608pt too wide) in paragraph at lines 532--534
+\OT1/ptm/m/n/10.95 As in [][]Gel-man et al.[][] ([][]2003[][]), the prior is ch
+o-sen to be lo-cally uni-form, $\OML/cmm/m/it/10.95 p\OT1/cmr/m/n/10.95 (1\OML/
+cmm/m/it/10.95 =^^L\OT1/cmr/m/n/10.95 ) \OMS/cmsy/m/n/10.95 /
  []
 
 [14]
-Overfull \hbox (23.21698pt too wide) in alignment at lines 565--567
+Overfull \hbox (2.77461pt too wide) in alignment at lines 568--570
  [][][] []
  []
 
 
-Overfull \hbox (11.0818pt too wide) in paragraph at lines 574--575
+Overfull \hbox (11.0818pt too wide) in paragraph at lines 578--579
 []\OT1/ptm/m/it/10.95 Exponentially Weighted Mov-ing Beta-transformed Ag-gre-ga
 -tor (EWMBA)\OT1/ptm/m/n/10.95 .
  []
 
 [15]
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <9> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 602.
- [16]
-Overfull \hbox (9.7502pt too wide) in paragraph at lines 623--624
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 606.
+
+Overfull \hbox (9.7502pt too wide) in paragraph at lines 627--628
 []\OT1/ptm/m/n/10.95 Overall, $[][]$ and $[][]$ achieve the low-est av-er-age s
 cores across all columns
  []
 
-[17] <Figures/CalibrationNONE10.pdf, id=459, 122.4575pt x 115.43124pt>
+[16] [17] <Figures/CalibrationNONE10.pdf, id=462, 122.4575pt x 115.43124pt>
 File: Figures/CalibrationNONE10.pdf Graphic file (type pdf)
 
 <use Figures/CalibrationNONE10.pdf>
-Package pdftex.def Info: Figures/CalibrationNONE10.pdf used on input line 644.
+Package pdftex.def Info: Figures/CalibrationNONE10.pdf used on input line 648.
 (pdftex.def)             Requested size: 102.95837pt x 97.05316pt.
 
-<Figures/CalibrationLOG10.pdf, id=460, 100.375pt x 115.43124pt>
+<Figures/CalibrationLOG10.pdf, id=463, 100.375pt x 115.43124pt>
 File: Figures/CalibrationLOG10.pdf Graphic file (type pdf)
 
 <use Figures/CalibrationLOG10.pdf>
-Package pdftex.def Info: Figures/CalibrationLOG10.pdf used on input line 648.
+Package pdftex.def Info: Figures/CalibrationLOG10.pdf used on input line 652.
 (pdftex.def)             Requested size: 84.60022pt x 97.29622pt.
 
-<Figures/CalibrationBRI10.pdf, id=461, 100.375pt x 115.43124pt>
+<Figures/CalibrationBRI10.pdf, id=464, 100.375pt x 115.43124pt>
 File: Figures/CalibrationBRI10.pdf Graphic file (type pdf)
 
 <use Figures/CalibrationBRI10.pdf>
-Package pdftex.def Info: Figures/CalibrationBRI10.pdf used on input line 652.
+Package pdftex.def Info: Figures/CalibrationBRI10.pdf used on input line 656.
 (pdftex.def)             Requested size: 84.60022pt x 97.29622pt.
 
-<Figures/CalibrationFULL10.pdf, id=462, 122.4575pt x 115.43124pt>
+<Figures/CalibrationFULL10.pdf, id=465, 122.4575pt x 115.43124pt>
 File: Figures/CalibrationFULL10.pdf Graphic file (type pdf)
 
 <use Figures/CalibrationFULL10.pdf>
-Package pdftex.def Info: Figures/CalibrationFULL10.pdf used on input line 656.
+Package pdftex.def Info: Figures/CalibrationFULL10.pdf used on input line 660.
 (pdftex.def)             Requested size: 102.95837pt x 97.05316pt.
 
-<Figures/CalibrationNONE.pdf, id=463, 122.4575pt x 115.43124pt>
+<Figures/CalibrationNONE.pdf, id=466, 122.4575pt x 115.43124pt>
 File: Figures/CalibrationNONE.pdf Graphic file (type pdf)
 
 <use Figures/CalibrationNONE.pdf>
-Package pdftex.def Info: Figures/CalibrationNONE.pdf used on input line 662.
+Package pdftex.def Info: Figures/CalibrationNONE.pdf used on input line 666.
 (pdftex.def)             Requested size: 102.95837pt x 97.05316pt.
 
-<Figures/CalibrationSTO-Log.pdf, id=464, 100.375pt x 115.43124pt>
+<Figures/CalibrationSTO-Log.pdf, id=467, 100.375pt x 115.43124pt>
 File: Figures/CalibrationSTO-Log.pdf Graphic file (type pdf)
 
 <use Figures/CalibrationSTO-Log.pdf>
-Package pdftex.def Info: Figures/CalibrationSTO-Log.pdf used on input line 666.
-
-(pdftex.def)             Requested size: 84.60022pt x 97.29622pt.
-
-Underfull \hbox (badness 10000) in paragraph at lines 666--666
-[]\OT1/ptm/m/n/9 (f) $[][]$ \OT1/ptm/m/n/8 Out-of-
- []
-
-<Figures/CalibrationSTO-Bri.pdf, id=465, 100.375pt x 115.43124pt>
-File: Figures/CalibrationSTO-Bri.pdf Graphic file (type pdf)
-
-<use Figures/CalibrationSTO-Bri.pdf>
-Package pdftex.def Info: Figures/CalibrationSTO-Bri.pdf used on input line 670.
+Package pdftex.def Info: Figures/CalibrationSTO-Log.pdf used on input line 670.
 
 (pdftex.def)             Requested size: 84.60022pt x 97.29622pt.
 
 Underfull \hbox (badness 10000) in paragraph at lines 670--670
+[]\OT1/ptm/m/n/9 (f) $[][]$ \OT1/ptm/m/n/8 Out-of-
+ []
+
+<Figures/CalibrationSTO-Bri.pdf, id=468, 100.375pt x 115.43124pt>
+File: Figures/CalibrationSTO-Bri.pdf Graphic file (type pdf)
+
+<use Figures/CalibrationSTO-Bri.pdf>
+Package pdftex.def Info: Figures/CalibrationSTO-Bri.pdf used on input line 674.
+
+(pdftex.def)             Requested size: 84.60022pt x 97.29622pt.
+
+Underfull \hbox (badness 10000) in paragraph at lines 674--674
 []\OT1/ptm/m/n/9 (g) $[][]$ \OT1/ptm/m/n/8 Out-of-
  []
 
-<Figures/CalibrationSO.pdf, id=466, 122.4575pt x 115.43124pt>
+<Figures/CalibrationSO.pdf, id=469, 122.4575pt x 115.43124pt>
 File: Figures/CalibrationSO.pdf Graphic file (type pdf)
 
 <use Figures/CalibrationSO.pdf>
-Package pdftex.def Info: Figures/CalibrationSO.pdf used on input line 674.
+Package pdftex.def Info: Figures/CalibrationSO.pdf used on input line 678.
 (pdftex.def)             Requested size: 102.95837pt x 97.05316pt.
 
-Underfull \hbox (badness 10000) in paragraph at lines 674--674
+Underfull \hbox (badness 10000) in paragraph at lines 678--678
 []\OT1/ptm/m/n/9 (h) $[][]$ \OT1/ptm/m/n/8 Out-of-
  []
 
 
-LaTeX Warning: `!h' float specifier changed to `!ht'.
-
-
-Overfull \hbox (7.32448pt too wide) in paragraph at lines 682--683
+Overfull \hbox (7.32448pt too wide) in paragraph at lines 686--687
 []\OT1/ptm/m/n/10.95 The top and bot-tom rows of Fig-ure [][]3[][] present cal-
 i-bra-tion plots for SDLM, $[][]$,
  []
 
-[18] <Figures/BiasesBoxplots.pdf, id=483, 361.35pt x 252.945pt>
+[18 <./Figures/CalibrationNONE10.pdf> <./Figures/CalibrationLOG10.pdf> <./Figur
+es/CalibrationBRI10.pdf> <./Figures/CalibrationFULL10.pdf> <./Figures/Calibrati
+onNONE.pdf> <./Figures/CalibrationSTO-Log.pdf> <./Figures/CalibrationSTO-Bri.pd
+f> <./Figures/CalibrationSO.pdf>]
+<Figures/BiasesBoxplots.pdf, id=539, 361.35pt x 252.945pt>
 File: Figures/BiasesBoxplots.pdf Graphic file (type pdf)
 
 <use Figures/BiasesBoxplots.pdf>
-Package pdftex.def Info: Figures/BiasesBoxplots.pdf used on input line 694.
+Package pdftex.def Info: Figures/BiasesBoxplots.pdf used on input line 698.
 (pdftex.def)             Requested size: 360.0pt x 252.00262pt.
- [19 <./Figures/CalibrationNONE10.pdf> <./Figures/CalibrationLOG10.pdf> <./Figu
-res/CalibrationBRI10.pdf> <./Figures/CalibrationFULL10.pdf> <./Figures/Calibrat
-ionNONE.pdf> <./Figures/CalibrationSTO-Log.pdf> <./Figures/CalibrationSTO-Bri.p
-df> <./Figures/CalibrationSO.pdf>] [20 <./Figures/BiasesBoxplots.pdf>]
+ [19] [20 <./Figures/BiasesBoxplots.pdf>]
 Missing character: There is no ﬁ in font ptmr7t!
 File: Figures/LegendExamplePlot.pdf Graphic file (type pdf)
- <use Figures/LegendExamplePlot.pdf>
-Package pdftex.def Info: Figures/LegendExamplePlot.pdf used on input line 735.
+
+<use Figures/LegendExamplePlot.pdf>
+Package pdftex.def Info: Figures/LegendExamplePlot.pdf used on input line 739.
 (pdftex.def)             Requested size: 433.61894pt x 72.2698pt.
 
-Overfull \hbox (43.82896pt too wide) in paragraph at lines 735--737
+Overfull \hbox (43.82896pt too wide) in paragraph at lines 739--741
  []|  [] 
  []
 
-<Figures/ExamplePlot1b.pdf, id=571, 201.75375pt x 201.75375pt>
+<Figures/ExamplePlot1b.pdf, id=574, 201.75375pt x 201.75375pt>
 File: Figures/ExamplePlot1b.pdf Graphic file (type pdf)
 
 <use Figures/ExamplePlot1b.pdf>
-Package pdftex.def Info: Figures/ExamplePlot1b.pdf used on input line 742.
+Package pdftex.def Info: Figures/ExamplePlot1b.pdf used on input line 746.
 (pdftex.def)             Requested size: 176.40198pt x 176.40479pt.
 
-<Figures/ExamplePlot2b.pdf, id=572, 201.75375pt x 201.75375pt>
+<Figures/ExamplePlot2b.pdf, id=575, 201.75375pt x 201.75375pt>
 File: Figures/ExamplePlot2b.pdf Graphic file (type pdf)
 
 <use Figures/ExamplePlot2b.pdf>
-Package pdftex.def Info: Figures/ExamplePlot2b.pdf used on input line 746.
+Package pdftex.def Info: Figures/ExamplePlot2b.pdf used on input line 750.
 (pdftex.def)             Requested size: 176.40198pt x 176.40479pt.
 
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
 [21] [22 <./Figures/ExamplePlot1b.pdf> <./Figures/ExamplePlot2b.pdf>]
-Overfull \hbox (2.85922pt too wide) in paragraph at lines 761--762
+Overfull \hbox (2.85922pt too wide) in paragraph at lines 765--766
  \OT1/ptm/m/n/10.95 7.1.\OT1/ptm/m/it/10.95 Summary of Find-ings.[][] \OT1/ptm/
 m/n/10.95 The model was ap-plied to an un-usu-ally large dataset
  []
 
 
-Overfull \hbox (4.22736pt too wide) in paragraph at lines 765--766
+Overfull \hbox (4.22736pt too wide) in paragraph at lines 769--770
  \OT1/ptm/m/n/10.95 7.2.\OT1/ptm/m/it/10.95 Limitations and Di-rec-tions for Fu
 -ture Re-search.[][] \OT1/ptm/m/n/10.95 Our model per-tains model
  []
 
 [23]
-Overfull \hbox (6.79999pt too wide) in paragraph at lines 782--783
+Overfull \hbox (6.79999pt too wide) in paragraph at lines 786--787
  [][][] 
  []
 
 
-Overfull \hbox (9.20793pt too wide) in paragraph at lines 784--785
+Overfull \hbox (9.20793pt too wide) in paragraph at lines 788--789
 \OT1/ptm/m/n/10.95 The hid-den states are sam-pled via the \OT1/ptm/m/it/10.95 
 Forward-Filtering-Backward-Sampling \OT1/ptm/m/n/10.95 (FFBS)
  []
 
 [24]
-Overfull \hbox (6.79999pt too wide) in paragraph at lines 811--812
+Overfull \hbox (6.79999pt too wide) in paragraph at lines 815--816
  [][][] 
  []
 
 
-Overfull \hbox (21.52512pt too wide) in paragraph at lines 813--814
+Overfull \hbox (21.52512pt too wide) in paragraph at lines 817--818
 \OT1/ptm/m/n/10.95 can form a $\OMS/cmsy/m/n/10.95 j[][]j ^^B \OML/cmm/m/it/10.
 95 J$ \OT1/ptm/m/n/10.95 design-matrix by let-ting $[][] \OT1/cmr/m/n/10.95 = [
 ][]$\OT1/ptm/m/n/10.95 .
  []
 
 [25]
-Overfull \hbox (6.79999pt too wide) in paragraph at lines 825--826
+Overfull \hbox (6.79999pt too wide) in paragraph at lines 829--830
  [][][] 
  []
 
 
-Overfull \hbox (13.6672pt too wide) in paragraph at lines 827--828
+Overfull \hbox (13.6672pt too wide) in paragraph at lines 831--832
 \OT1/ptm/m/n/10.95 sion setup. More specif-i-cally, af-ter adopt-ing the non-in
 formative prior $\OML/cmm/m/it/10.95 p\OT1/cmr/m/n/10.95 (\OML/cmm/m/it/10.95 ^
 ^M[]; ^^\[]\OMS/cmsy/m/n/10.95 j[][]\OT1/cmr/m/n/10.95 ) \OMS/cmsy/m/n/10.95 /
  []
 
-(./paper.bbl [26] [27] [28]
+(./paper.bbl [26] [27]
 Missing character: There is no ‚ in font ptmrc7t!
 Missing character: There is no Ä in font ptmrc7t!
 Missing character: There is no ô in font ptmrc7t!
+ [28]
 Missing character: There is no ‚ in font ptmr7t!
 Missing character: There is no Ä in font ptmr7t!
 Missing character: There is no ú in font ptmr7t!
@@ -1027,50 +1029,57 @@ Missing character: There is no ‚ in font ptmr7t!
 Missing character: There is no Ä in font ptmr7t!
 Missing character: There is no ù in font ptmr7t!
 )
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 839.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 843.
  [29]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 839.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 843.
  (./paper.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 839.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 839.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 843.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 843.
 Package rerunfilecheck Info: File `paper.out' has not changed.
 (rerunfilecheck)             Checksum: 01480AB3259C0D152DDEF1AE244969CA;1301.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 839.
+
+
+LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
+
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 843.
  ) 
 Here is how much of TeX's memory you used:
- 12955 strings out of 493633
- 198291 string characters out of 3143378
- 277562 words of memory out of 3000000
- 15832 multiletter control sequences out of 15000+200000
- 38853 words of font info for 87 fonts, out of 3000000 for 9000
+ 12978 strings out of 493633
+ 198541 string characters out of 3143378
+ 276592 words of memory out of 3000000
+ 15848 multiletter control sequences out of 15000+200000
+ 42928 words of font info for 103 fonts, out of 3000000 for 9000
  831 hyphenation exceptions out of 8191
- 38i,16n,43p,1932b,562s stack positions out of 5000i,500n,10000p,200000b,50000s
+ 38i,16n,43p,1906b,571s stack positions out of 5000i,500n,10000p,200000b,50000s
  </Users/ville/Library/texlive/2011/texmf-var/fonts/pk/ljfour/public/bbm/bbm1
 0.657pk>{/usr/local/texlive/2011/texmf-dist/fonts/enc/dvips/base/8r.enc}</usr/l
 ocal/texlive/2011/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/lo
 cal/texlive/2011/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/loc
 al/texlive/2011/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/loca
-l/texlive/2011/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi6.pfb></usr/local/
-texlive/2011/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></usr/local/te
-xlive/2011/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi9.pfb></usr/local/texl
-ive/2011/texmf-dist/fonts/type1/public/amsfonts/cm/cmmib10.pfb></usr/local/texl
-ive/2011/texmf-dist/fonts/type1/public/amsfonts/cmextra/cmmib6.pfb></usr/local/
-texlive/2011/texmf-dist/fonts/type1/public/amsfonts/cmextra/cmmib8.pfb></usr/lo
-cal/texlive/2011/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/loca
-l/texlive/2011/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb></usr/local/t
-exlive/2011/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/local/texl
-ive/2011/texmf-dist/fonts/type1/public/amsfonts/cm/cmr9.pfb></usr/local/texlive
-/2011/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texlive/
-2011/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy6.pfb></usr/local/texlive/20
-11/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/local/texlive/2011
-/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb></usr/local/texlive/
-2011/texmf-dist/fonts/type1/urw/times/utmb8a.pfb></usr/local/texlive/2011/texmf
--dist/fonts/type1/urw/times/utmr8a.pfb></usr/local/texlive/2011/texmf-dist/font
-s/type1/urw/times/utmri8a.pfb>
-Output written on paper.pdf (29 pages, 437266 bytes).
+l/texlive/2011/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi5.pfb></usr/local/
+texlive/2011/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi6.pfb></usr/local/te
+xlive/2011/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></usr/local/texl
+ive/2011/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></usr/local/texliv
+e/2011/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi9.pfb></usr/local/texlive/
+2011/texmf-dist/fonts/type1/public/amsfonts/cm/cmmib10.pfb></usr/local/texlive/
+2011/texmf-dist/fonts/type1/public/amsfonts/cmextra/cmmib5.pfb></usr/local/texl
+ive/2011/texmf-dist/fonts/type1/public/amsfonts/cmextra/cmmib8.pfb></usr/local/
+texlive/2011/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/local/te
+xlive/2011/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb></usr/local/texli
+ve/2011/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/local/texlive/
+2011/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/local/texlive/201
+1/texmf-dist/fonts/type1/public/amsfonts/cm/cmr9.pfb></usr/local/texlive/2011/t
+exmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texlive/2011/te
+xmf-dist/fonts/type1/public/amsfonts/cm/cmsy5.pfb></usr/local/texlive/2011/texm
+f-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/local/texlive/2011/texmf-
+dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb></usr/local/texlive/2011/te
+xmf-dist/fonts/type1/urw/times/utmb8a.pfb></usr/local/texlive/2011/texmf-dist/f
+onts/type1/urw/times/utmr8a.pfb></usr/local/texlive/2011/texmf-dist/fonts/type1
+/urw/times/utmri8a.pfb>
+Output written on paper.pdf (29 pages, 461332 bytes).
 PDF statistics:
- 774 PDF objects out of 1000 (max. 8388607)
- 673 compressed objects within 7 object streams
+ 786 PDF objects out of 1000 (max. 8388607)
+ 682 compressed objects within 7 object streams
  146 named destinations out of 1000 (max. 500000)
  266 words of extra memory for PDF output out of 10000 (max. 10000000)
 

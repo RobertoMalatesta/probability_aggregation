@@ -1,0 +1,1706 @@
+hist(logp[,1])
+mean(logp)
+max(logp)
+M = max(logp)
+M
+length(logp)
+nrow(logp)
+N = 1000
+M + log(sum(exp(logp - M))) - log(N)
+log(N)
+log(sum(exp(logp - M)))
+logp
+logp-M
+min(logp-M)
+M
+logp-M
+max(logp-M)
+exp(logp - M )
+sum(exp(logp - M))
+M = mean(logp)#
+M + log(sum(exp(logp - M))) - log(N)
+mean(logp)
+M = mean(logp[,1])
+M + log(sum(exp(logp - M))) - log(N)
+M = median(logp[,1])
+M
+M + log(sum(exp(logp - M))) - log(N)
+M = max(logp)#
+M + log(sum(exp(logp - M))) - log(N)
+M
+log(sum(exp(logp - M)))
+ss = sd(logp[,1])
+ss
+log(sum(exp( (logp - M)/ss )))
+log(sum( (exp( (logp - M)/ss ) )^ss))
+(exp( (logp - M)/ss ) )^ss
+exp( (logp - M)/ss )
+ss
+exp( (logp - M)/ss )
+M = min(logp)#
+ss = sd(logp[,1])#
+M + log(sum(exp(logp - M))) - log(N)
+M = max(logp)#
+ss = sd(logp[,1])#
+M + log(sum(exp(logp - M))) - log(N)
+mean(M)
+mean(logp)
+mean(logp[,1])
+exp(logp - M)
+logp-M
+hist(logp)
+hist(logp[,1])
+Dynamic Logit Model:#
+require(MASS)#
+require(geoR)#
+require(dlm)#
+require(msm)#
+#
+simulate.data = function(#
+  tau2,#
+  sigma2,#
+  x0,#
+  gamma,#
+  exp.levels,#
+  b,#
+  T){#
+  require(MASS)#
+  N = length(exp.levels)#
+#
+  ## Generate the hidden process:#
+  X = x0#
+  for(i in 2:(T+1)) X[i] = rnorm(1, gamma*X[i-1], sqrt(tau2))#
+  X = X[-1]#
+  ## Generate the observed process:#
+  Y = sapply(exp.levels, function(suba) rnorm(T, X*b[suba], sqrt(sigma2)))#
+  return(list(Y=Y, X=X))#
+}#
+#
+N = 1#
+exp.levels = sort(sample(1:2, N, replace = TRUE))#
+b = runif(2, 0, 5)#
+b = c(1.5, 2.5)#
+sim.data = simulate.data(tau2 = 2, sigma2 = 2, x0 = 0, gamma = 1.01, exp.levels = exp.levels, b = b, T = 100)#
+X.true = sim.data$X#
+Y = sim.data$Y
+FFBS = function(y,F,V,G,W,theta0,Sigma0,nd=1){#
+  if(is.matrix(y)) {#
+    y = rbind(NA, y)#
+  } else {#
+    y = append(y, NA, after = 0)#
+  }#
+  n = ifelse(is.matrix(y), nrow(y), length(y))#
+#
+  theta.prior = vector("list", n)#
+  theta = vector("list", n)#
+  theta.post = vector("list", n)#
+#
+  Sigma.prior = vector("list", n)#
+  Sigma = vector("list", n)#
+  Sigma.post = vector("list", n)#
+#
+  R = vector("list", n)#
+#
+  ## time t=0#
+  theta[[1]] = theta0 # First value given#
+  Sigma[[1]] = Sigma0 # First value given#
+#
+  ## Filtering:#
+  for(t in 2:(T+1)){#
+    theta.prior[[t]] = G * theta[[t-1]]#
+    Sigma.prior[[t]] = G * Sigma[[t-1]] * G + W#
+#
+    if(is.matrix(y)){#
+      e = y[t,] - F %*% theta.prior[[t]]#
+      S = F %*% Sigma.prior[[t]] %*% t(F) + diag(rep(V, nrow(F)))#
+    } else {#
+      e = y[t] - F * theta.prior[[t]]#
+      S = F^2 * Sigma.prior[[t]] + V#
+    }#
+    K = Sigma.prior[[t]] %*% t(F) %*% solve(S)#
+#
+    theta[[t]] = theta.prior[[t]] + K %*% e#
+    Sigma[[t]] = (1 - K %*% F) %*% Sigma.prior[[t]]      #
+  }#
+#
+  ## Smoothing:#
+  theta.post[[T+1]] = theta[[T+1]]#
+  Sigma.post[[T+1]] = Sigma[[T+1]]#
+  for(t in T:2){#
+    Sigma.post[[t]] = 1/(G * G / W +1/Sigma[[t]])#
+    theta.post[[t]] = Sigma.post[[t]] * (G * theta.post[[t+1]]/ W + theta[[t]]/Sigma[[t]])#
+  }#
+  ## Sampling:#
+  X = rnorm(length(unlist(theta.post)), unlist(theta.post), unlist(Sigma.post))#
+  return(X)#
+}
+Y#
+  num.sims = 1000#
+  sigma20 = 1#
+  tau20 = 1#
+  gamma0 = 1#
+  m0 = 0#
+  V0 = 1#
+  exp.levels
+if(is.matrix(Y)){    #
+    N = ncol(Y)#
+    T = nrow(Y)#
+    Y = Y[,order(exp.levels)]#
+    Z = model.matrix(~-1+factor(exp.levels))#
+    Y.vec = c(Y)#
+  } else {#
+    N = 1#
+    T = length(Y)#
+    Z = 1#
+    Y.vec = Y#
+  }#
+#
+  gamma.sim = gamma0#
+  sigma2.sim = sigma20#
+  tau2.sim = tau20#
+  X.sim = matrix(NA, T, num.sims)#
+#
+  exp.levels = sort(exp.levels)#
+  exp.counts = c(table(exp.levels))#
+  b.sim = matrix(1, num.sims+1, length(exp.counts))#
+#
+  a0 = 0.001#
+  b0 = 0.001#
+  mu0 = rep(0, length(exp.counts))#
+  Lambda0 = (1/100)*diag(length(exp.counts))#
+  for(k in 1:num.sims){#
+    if(verbose) print(k)#
+    ## STEP 1: Sample X:#
+    X = FFBS(#
+      Y,#
+      F = Z %*% b.sim[k,],#
+      V=sigma2.sim[k],#
+      G=gamma.sim[k],#
+      W=tau2.sim[k],#
+      theta0=0,#
+      Sigma0=1,#
+      nd=1)#
+    X.sim[,k] = X#
+#
+    ## STEP 2: Sample sigma2 and bias b:  #
+    X.bd = bdiag(lapply(exp.counts, function(ii) rep(X, ii)))#
+    Lambdan = (t(X.bd) %*% X.bd + Lambda0)#
+    mun = solve(Lambdan) %*% t(X.bd) %*% Y.vec#
+    an = a0 + length(Y.vec)/2#
+    bn = b0 + 0.5*(t(Y.vec)%*%Y.vec - t(mun) %*% Lambdan %*% mun)#
+#
+    require(MCMCpack)#
+    sigma2.sim[k+1] = rinvgamma(1, shape = an, scale = bn)#
+    b.sim[k+1,] = mvrnorm(1, mun, solve(Lambdan)* sigma2.sim[k+1])#
+    ##res = (Y.vec - X.bd %*% bhat)#
+    ##n.minus.k = length(Y.vec)-length(bhat)#
+    #sigma2.sim[k+1] = rinvchisq(1, df = n.minus.k, scale = (t(res) %*% res)/n.minus.k)#
+    #sigma2.sim[k+1] = 2#
+    ##b.sim[k+1,] = mvrnorm(1, bhat, Vbeta * sigma2.sim[k+1])#
+    #b.sim[k+1,] = 2.5#
+    ## STEP 3: Sample gamma:#
+    XY = X[-1]#
+    XX = X[-T]#
+    Vgamma = solve(t(XX) %*% XX)#
+    gammahat =  Vgamma %*% t(XX) %*% XY#
+    res = (XY - XX*gammahat)#
+#
+    n.minus.k = length(XX)-length(gammahat)#
+    tau2.sim[k+1] = rinvchisq(1, df = n.minus.k, scale = (t(res) %*% res)/n.minus.k)  #
+    gamma.sim[k+1] = rnorm(1, gammahat, sqrt(Vgamma * tau2.sim[k+1]))#
+#
+    tau2.sim[k+1] = 2#
+    gamma.sim[k+1] = 1.01#
+#
+  }
+verbose = TRUE
+if(is.matrix(Y)){    #
+    N = ncol(Y)#
+    T = nrow(Y)#
+    Y = Y[,order(exp.levels)]#
+    Z = model.matrix(~-1+factor(exp.levels))#
+    Y.vec = c(Y)#
+  } else {#
+    N = 1#
+    T = length(Y)#
+    Z = 1#
+    Y.vec = Y#
+  }#
+#
+  gamma.sim = gamma0#
+  sigma2.sim = sigma20#
+  tau2.sim = tau20#
+  X.sim = matrix(NA, T, num.sims)#
+#
+  exp.levels = sort(exp.levels)#
+  exp.counts = c(table(exp.levels))#
+  b.sim = matrix(1, num.sims+1, length(exp.counts))#
+#
+  a0 = 0.001#
+  b0 = 0.001#
+  mu0 = rep(0, length(exp.counts))#
+  Lambda0 = (1/100)*diag(length(exp.counts))#
+  for(k in 1:num.sims){#
+    if(verbose) print(k)#
+    ## STEP 1: Sample X:#
+    X = FFBS(#
+      Y,#
+      F = Z %*% b.sim[k,],#
+      V=sigma2.sim[k],#
+      G=gamma.sim[k],#
+      W=tau2.sim[k],#
+      theta0=0,#
+      Sigma0=1,#
+      nd=1)#
+    X.sim[,k] = X#
+#
+    ## STEP 2: Sample sigma2 and bias b:  #
+    X.bd = bdiag(lapply(exp.counts, function(ii) rep(X, ii)))#
+    Lambdan = (t(X.bd) %*% X.bd + Lambda0)#
+    mun = solve(Lambdan) %*% t(X.bd) %*% Y.vec#
+    an = a0 + length(Y.vec)/2#
+    bn = b0 + 0.5*(t(Y.vec)%*%Y.vec - t(mun) %*% Lambdan %*% mun)#
+#
+    require(MCMCpack)#
+    sigma2.sim[k+1] = rinvgamma(1, shape = an, scale = bn)#
+    b.sim[k+1,] = mvrnorm(1, mun, solve(Lambdan)* sigma2.sim[k+1])#
+    ##res = (Y.vec - X.bd %*% bhat)#
+    ##n.minus.k = length(Y.vec)-length(bhat)#
+    #sigma2.sim[k+1] = rinvchisq(1, df = n.minus.k, scale = (t(res) %*% res)/n.minus.k)#
+    #sigma2.sim[k+1] = 2#
+    ##b.sim[k+1,] = mvrnorm(1, bhat, Vbeta * sigma2.sim[k+1])#
+    #b.sim[k+1,] = 2.5#
+    ## STEP 3: Sample gamma:#
+    XY = X[-1]#
+    XX = X[-T]#
+    Vgamma = solve(t(XX) %*% XX)#
+    gammahat =  Vgamma %*% t(XX) %*% XY#
+    res = (XY - XX*gammahat)#
+#
+    n.minus.k = length(XX)-length(gammahat)#
+    tau2.sim[k+1] = rinvchisq(1, df = n.minus.k, scale = (t(res) %*% res)/n.minus.k)  #
+    gamma.sim[k+1] = rnorm(1, gammahat, sqrt(Vgamma * tau2.sim[k+1]))#
+#
+    tau2.sim[k+1] = 2#
+    gamma.sim[k+1] = 1.01#
+#
+  }
+sigma2.sim
+plot(sigma2.sim)
+b.sim
+expert.levels
+exp.levels
+b
+y
+y=Y#
+      F = Z %*% b.sim[k,]#
+      V=sigma2.sim[k]#
+      G=gamma.sim[k]#
+      W=tau2.sim[k]#
+      theta0=0#
+      Sigma0=1#
+      nd=1
+y = ifelse(is.matrix(y), rbind(NA, y), append(y, NA, after = 0))#
+  n = ifelse(is.matrix(y), nrow(y), length(y))
+y
+y = Y
+ifelse(is.matrix(y)#
+    y = rbind(NA, y)#
+  } else {#
+    y = append(y, NA, after = 0)#
+  }
+if(is.matrix(y)#
+    y = rbind(NA, y)#
+  } else {#
+    y = append(y, NA, after = 0)#
+  }#
+  n = ifelse(is.matrix(y), nrow(y), length(y))
+if(is.matrix(y)){#
+    y = rbind(NA, y)#
+  } else {#
+    y = append(y, NA, after = 0)#
+  }#
+  n = ifelse(is.matrix(y), nrow(y), length(y))
+y
+y = Y
+y
+if(is.matrix(y)){#
+    y = rbind(NA, y)#
+  } else {#
+    y = append(y, NA, after = 0)#
+  }#
+  n = ifelse(is.matrix(y), nrow(y), length(y))
+y
+n
+n = ifelse(is.matrix(y), nrow(y), length(y))#
+  if(is.matrix(y)){#
+    y = rbind(NA, y)#
+  } else {#
+    y = append(y, NA, after = 0)#
+  }
+y
+y = Y
+n = ifelse(is.matrix(y), nrow(y), length(y))#
+  if(is.matrix(y)){#
+    y = rbind(NA, y)#
+  } else {#
+    y = append(y, NA, after = 0)#
+  }
+y
+n
+T = ifelse(is.matrix(y), nrow(y), length(y))#
+  if(is.matrix(y)){#
+    y = rbind(NA, y)#
+  } else {#
+    y = append(y, NA, after = 0)#
+  }
+y = Y
+T = ifelse(is.matrix(y), nrow(y), length(y))#
+  if(is.matrix(y)){#
+    y = rbind(NA, y)#
+  } else {#
+    y = append(y, NA, after = 0)#
+  }
+T
+y
+theta.prior = vector("list", T+1)#
+  theta = vector("list", T+1)#
+  theta.post = vector("list", T+1)#
+#
+  Sigma.prior = vector("list", T+1)#
+  Sigma = vector("list", T+1)#
+  Sigma.post = vector("list", T+1)#
+#
+  R = vector("list", T+1)#
+#
+  ## time t=0#
+  theta[[1]] = theta0 # First value given#
+  Sigma[[1]] = Sigma0 # First value given
+time t=0#
+  theta[[1]] = theta0 # First value given#
+  Sigma[[1]] = Sigma0 # First value given#
+#
+  ## Filtering:#
+  for(t in 2:(T+1)){#
+    theta.prior[[t]] = G * theta[[t-1]]#
+    Sigma.prior[[t]] = G * Sigma[[t-1]] * G + W#
+#
+    if(is.matrix(y)){#
+      e = y[t,] - F %*% theta.prior[[t]]#
+      S = F %*% Sigma.prior[[t]] %*% t(F) + diag(rep(V, nrow(F)))#
+    } else {#
+      e = y[t] - F * theta.prior[[t]]#
+      S = F^2 * Sigma.prior[[t]] + V#
+    }#
+    K = Sigma.prior[[t]] %*% t(F) %*% solve(S)#
+#
+    theta[[t]] = theta.prior[[t]] + K %*% e#
+    Sigma[[t]] = (1 - K %*% F) %*% Sigma.prior[[t]]      #
+  }
+theta.prior
+theta
+Smoothing:#
+  theta.post[[T+1]] = theta[[T+1]]#
+  Sigma.post[[T+1]] = Sigma[[T+1]]
+theta.post
+Sigma.post
+theta.post
+X.true
+Smoothing:#
+  theta.post[[T+1]] = theta[[T+1]]#
+  Sigma.post[[T+1]] = Sigma[[T+1]]#
+  for(t in T:2){#
+    Sigma.post[[t]] = 1/(G * G / W +1/Sigma[[t]])#
+    theta.post[[t]] = Sigma.post[[t]] * (G * theta.post[[t+1]]/ W + theta[[t]]/Sigma[[t]])#
+  }
+unlist(theta.post)
+sqrt(unlist(Sigma.post))
+length(unlist(theta.post))
+T
+X = rnorm(T, unlist(theta.post), sqrt(unlist(Sigma.post)))
+X
+FFBS = function(y,F,V,G,W,theta0,Sigma0,nd=1){#
+  T = ifelse(is.matrix(y), nrow(y), length(y))#
+  if(is.matrix(y)){#
+    y = rbind(NA, y)#
+  } else {#
+    y = append(y, NA, after = 0)#
+  }#
+#
+  theta.prior = vector("list", T+1)#
+  theta = vector("list", T+1)#
+  theta.post = vector("list", T+1)#
+#
+  Sigma.prior = vector("list", T+1)#
+  Sigma = vector("list", T+1)#
+  Sigma.post = vector("list", T+1)#
+#
+  R = vector("list", T+1)#
+#
+  ## time t=0#
+  theta[[1]] = theta0 # First value given#
+  Sigma[[1]] = Sigma0 # First value given#
+#
+  ## Filtering:#
+  for(t in 2:(T+1)){#
+    theta.prior[[t]] = G * theta[[t-1]]#
+    Sigma.prior[[t]] = G * Sigma[[t-1]] * G + W#
+#
+    if(is.matrix(y)){#
+      e = y[t,] - F %*% theta.prior[[t]]#
+      S = F %*% Sigma.prior[[t]] %*% t(F) + diag(rep(V, nrow(F)))#
+    } else {#
+      e = y[t] - F * theta.prior[[t]]#
+      S = F^2 * Sigma.prior[[t]] + V#
+    }#
+    K = Sigma.prior[[t]] %*% t(F) %*% solve(S)#
+#
+    theta[[t]] = theta.prior[[t]] + K %*% e#
+    Sigma[[t]] = (1 - K %*% F) %*% Sigma.prior[[t]]      #
+  }#
+#
+  ## Smoothing:#
+  theta.post[[T+1]] = theta[[T+1]]#
+  Sigma.post[[T+1]] = Sigma[[T+1]]#
+  for(t in T:2){#
+    Sigma.post[[t]] = 1/(G * G / W +1/Sigma[[t]])#
+    theta.post[[t]] = Sigma.post[[t]] * (G * theta.post[[t+1]]/ W + theta[[t]]/Sigma[[t]])#
+  }#
+  ## Sampling:#
+  X = rnorm(T, unlist(theta.post), sqrt(unlist(Sigma.post)))#
+  return(X)#
+}
+if(is.matrix(Y)){    #
+    N = ncol(Y)#
+    T = nrow(Y)#
+    Y = Y[,order(exp.levels)]#
+    Z = model.matrix(~-1+factor(exp.levels))#
+    Y.vec = c(Y)#
+  } else {#
+    N = 1#
+    T = length(Y)#
+    Z = 1#
+    Y.vec = Y#
+  }#
+#
+  gamma.sim = gamma0#
+  sigma2.sim = sigma20#
+  tau2.sim = tau20#
+  X.sim = matrix(NA, T, num.sims)#
+#
+  exp.levels = sort(exp.levels)#
+  exp.counts = c(table(exp.levels))#
+  b.sim = matrix(1, num.sims+1, length(exp.counts))#
+#
+  a0 = 0.001#
+  b0 = 0.001#
+  mu0 = rep(0, length(exp.counts))#
+  Lambda0 = (1/100)*diag(length(exp.counts))#
+  for(k in 1:num.sims){#
+    if(verbose) print(k)#
+    ## STEP 1: Sample X:#
+    X = FFBS(#
+      y=Y,#
+      F = Z %*% b.sim[k,],#
+      V=sigma2.sim[k],#
+      G=gamma.sim[k],#
+      W=tau2.sim[k],#
+      theta0=0,#
+      Sigma0=1,#
+      nd=1)#
+    X.sim[,k] = X#
+#
+    ## STEP 2: Sample sigma2 and bias b:  #
+    X.bd = bdiag(lapply(exp.counts, function(ii) rep(X, ii)))#
+    Lambdan = (t(X.bd) %*% X.bd + Lambda0)#
+    mun = solve(Lambdan) %*% t(X.bd) %*% Y.vec#
+    an = a0 + length(Y.vec)/2#
+    bn = b0 + 0.5*(t(Y.vec)%*%Y.vec - t(mun) %*% Lambdan %*% mun)#
+#
+    require(MCMCpack)#
+    sigma2.sim[k+1] = rinvgamma(1, shape = an, scale = bn)#
+    b.sim[k+1,] = mvrnorm(1, mun, solve(Lambdan)* sigma2.sim[k+1])#
+    ##res = (Y.vec - X.bd %*% bhat)#
+    ##n.minus.k = length(Y.vec)-length(bhat)#
+    #sigma2.sim[k+1] = rinvchisq(1, df = n.minus.k, scale = (t(res) %*% res)/n.minus.k)#
+    #sigma2.sim[k+1] = 2#
+    ##b.sim[k+1,] = mvrnorm(1, bhat, Vbeta * sigma2.sim[k+1])#
+    #b.sim[k+1,] = 2.5#
+    ## STEP 3: Sample gamma:#
+    XY = X[-1]#
+    XX = X[-T]#
+    Vgamma = solve(t(XX) %*% XX)#
+    gammahat =  Vgamma %*% t(XX) %*% XY#
+    res = (XY - XX*gammahat)#
+#
+    n.minus.k = length(XX)-length(gammahat)#
+    tau2.sim[k+1] = rinvchisq(1, df = n.minus.k, scale = (t(res) %*% res)/n.minus.k)  #
+    gamma.sim[k+1] = rnorm(1, gammahat, sqrt(Vgamma * tau2.sim[k+1]))#
+#
+    tau2.sim[k+1] = 2#
+    gamma.sim[k+1] = 1.01#
+#
+  }
+sigma2.sim
+plot(sigma2.sim)
+b.sim
+exp.levels
+num.sims = 5000
+if(is.matrix(Y)){    #
+    N = ncol(Y)#
+    T = nrow(Y)#
+    Y = Y[,order(exp.levels)]#
+    Z = model.matrix(~-1+factor(exp.levels))#
+    Y.vec = c(Y)#
+  } else {#
+    N = 1#
+    T = length(Y)#
+    Z = 1#
+    Y.vec = Y#
+  }#
+#
+  gamma.sim = gamma0#
+  sigma2.sim = sigma20#
+  tau2.sim = tau20#
+  X.sim = matrix(NA, T, num.sims)#
+#
+  exp.levels = sort(exp.levels)#
+  exp.counts = c(table(exp.levels))#
+  b.sim = matrix(1, num.sims+1, length(exp.counts))#
+#
+  a0 = 0.001#
+  b0 = 0.001#
+  mu0 = rep(0, length(exp.counts))#
+  Lambda0 = (1/100)*diag(length(exp.counts))#
+  for(k in 1:num.sims){#
+    if(verbose) print(k)#
+    ## STEP 1: Sample X:#
+    X = FFBS(#
+      y=Y,#
+      F = Z %*% b.sim[k,],#
+      V=sigma2.sim[k],#
+      G=gamma.sim[k],#
+      W=tau2.sim[k],#
+      theta0=0,#
+      Sigma0=1,#
+      nd=1)#
+    X.sim[,k] = X#
+#
+    ## STEP 2: Sample sigma2 and bias b:  #
+    X.bd = bdiag(lapply(exp.counts, function(ii) rep(X, ii)))#
+    Lambdan = (t(X.bd) %*% X.bd + Lambda0)#
+    mun = solve(Lambdan) %*% t(X.bd) %*% Y.vec#
+    an = a0 + length(Y.vec)/2#
+    bn = b0 + 0.5*(t(Y.vec)%*%Y.vec - t(mun) %*% Lambdan %*% mun)#
+#
+    require(MCMCpack)#
+    sigma2.sim[k+1] = rinvgamma(1, shape = an, scale = bn)#
+    b.sim[k+1,] = mvrnorm(1, mun, solve(Lambdan)* sigma2.sim[k+1])#
+    ##res = (Y.vec - X.bd %*% bhat)#
+    ##n.minus.k = length(Y.vec)-length(bhat)#
+    #sigma2.sim[k+1] = rinvchisq(1, df = n.minus.k, scale = (t(res) %*% res)/n.minus.k)#
+    #sigma2.sim[k+1] = 2#
+    ##b.sim[k+1,] = mvrnorm(1, bhat, Vbeta * sigma2.sim[k+1])#
+    #b.sim[k+1,] = 2.5#
+    ## STEP 3: Sample gamma:#
+    XY = X[-1]#
+    XX = X[-T]#
+    Vgamma = solve(t(XX) %*% XX)#
+    gammahat =  Vgamma %*% t(XX) %*% XY#
+    res = (XY - XX*gammahat)#
+#
+    n.minus.k = length(XX)-length(gammahat)#
+    tau2.sim[k+1] = rinvchisq(1, df = n.minus.k, scale = (t(res) %*% res)/n.minus.k)  #
+    gamma.sim[k+1] = rnorm(1, gammahat, sqrt(Vgamma * tau2.sim[k+1]))#
+#
+    tau2.sim[k+1] = 2#
+    gamma.sim[k+1] = 1.01#
+#
+  }
+plot(sigma2.sim)
+mean(sigma2.sim)
+b.sim
+mean(b.sim)
+plot(b.sim)
+mean(sigma2.sim)
+plot(sigma2.sim)
+mean(sigma2.sim)
+theta.post
+unlist(theta.post)
+X.bd
+X.bd %*% b.sim[k+1,]
+gamma
+if(is.matrix(Y)){    #
+    N = ncol(Y)#
+    T = nrow(Y)#
+    Y = Y[,order(exp.levels)]#
+    Z = model.matrix(~-1+factor(exp.levels))#
+    Y.vec = c(Y)#
+  } else {#
+    N = 1#
+    T = length(Y)#
+    Z = 1#
+    Y.vec = Y#
+  }#
+#
+  gamma.sim = gamma0#
+  sigma2.sim = sigma20#
+  tau2.sim = tau20#
+  X.sim = matrix(NA, T, num.sims)#
+#
+  exp.levels = sort(exp.levels)#
+  exp.counts = c(table(exp.levels))#
+  b.sim = matrix(1, num.sims+1, length(exp.counts))#
+#
+  a0 = 0.001#
+  b0 = 0.001#
+  mu0 = rep(0, length(exp.counts))#
+  Lambda0 = (1/100)*diag(length(exp.counts))#
+  for(k in 1:num.sims){#
+    if(verbose) print(k)#
+    ## STEP 1: Sample X:#
+    X = FFBS(#
+      y=Y,#
+      F = Z %*% b.sim[k,],#
+      V=sigma2.sim[k],#
+      G=gamma.sim[k],#
+      W=tau2.sim[k],#
+      theta0=0,#
+      Sigma0=1,#
+      nd=1)#
+    X.sim[,k] = X#
+#
+    ## STEP 2: Sample sigma2 and bias b:  #
+    X.bd = bdiag(lapply(exp.counts, function(ii) rep(X, ii)))#
+    Lambdan = (t(X.bd) %*% X.bd + Lambda0)#
+    mun = solve(Lambdan) %*% t(X.bd) %*% Y.vec#
+    b.sim[k+1,] = mvrnorm(1, mun, solve(Lambdan)*sigma2.sim[k])#
+    an = a0 + length(Y.vec)/2#
+    bn = b0 + sum( (Y.vec - X.bd %*% b.sim[k+1,])^2)/2#
+    sigma2.sim[k+1] = 1/gamma(1, shape = an, scale = bn)#
+    ##res = (Y.vec - X.bd %*% bhat)#
+    ##n.minus.k = length(Y.vec)-length(bhat)#
+    #sigma2.sim[k+1] = rinvchisq(1, df = n.minus.k, scale = (t(res) %*% res)/n.minus.k)#
+    #sigma2.sim[k+1] = 2#
+    ##b.sim[k+1,] = mvrnorm(1, bhat, Vbeta * sigma2.sim[k+1])#
+    #b.sim[k+1,] = 2.5#
+    ## STEP 3: Sample gamma:#
+    XY = X[-1]#
+    XX = X[-T]#
+    Vgamma = solve(t(XX) %*% XX)#
+    gammahat =  Vgamma %*% t(XX) %*% XY#
+    res = (XY - XX*gammahat)#
+#
+    n.minus.k = length(XX)-length(gammahat)#
+    tau2.sim[k+1] = rinvchisq(1, df = n.minus.k, scale = (t(res) %*% res)/n.minus.k)  #
+    gamma.sim[k+1] = rnorm(1, gammahat, sqrt(Vgamma * tau2.sim[k+1]))#
+#
+    tau2.sim[k+1] = 2#
+    gamma.sim[k+1] = 1.01#
+#
+  }
+if(is.matrix(Y)){    #
+    N = ncol(Y)#
+    T = nrow(Y)#
+    Y = Y[,order(exp.levels)]#
+    Z = model.matrix(~-1+factor(exp.levels))#
+    Y.vec = c(Y)#
+  } else {#
+    N = 1#
+    T = length(Y)#
+    Z = 1#
+    Y.vec = Y#
+  }#
+#
+  gamma.sim = gamma0#
+  sigma2.sim = sigma20#
+  tau2.sim = tau20#
+  X.sim = matrix(NA, T, num.sims)#
+#
+  exp.levels = sort(exp.levels)#
+  exp.counts = c(table(exp.levels))#
+  b.sim = matrix(1, num.sims+1, length(exp.counts))#
+#
+  a0 = 0.001#
+  b0 = 0.001#
+  mu0 = rep(0, length(exp.counts))#
+  Lambda0 = (1/100)*diag(length(exp.counts))#
+  for(k in 1:num.sims){#
+    if(verbose) print(k)#
+    ## STEP 1: Sample X:#
+    X = FFBS(#
+      y=Y,#
+      F = Z %*% b.sim[k,],#
+      V=sigma2.sim[k],#
+      G=gamma.sim[k],#
+      W=tau2.sim[k],#
+      theta0=0,#
+      Sigma0=1,#
+      nd=1)#
+    X.sim[,k] = X#
+#
+    ## STEP 2: Sample sigma2 and bias b:  #
+    X.bd = bdiag(lapply(exp.counts, function(ii) rep(X, ii)))#
+    Lambdan = (t(X.bd) %*% X.bd + Lambda0)#
+    mun = solve(Lambdan) %*% t(X.bd) %*% Y.vec#
+    b.sim[k+1,] = mvrnorm(1, mun, solve(Lambdan)*sigma2.sim[k])#
+    an = a0 + length(Y.vec)/2#
+    bn = b0 + sum( (Y.vec - X.bd %*% b.sim[k+1,])^2)/2#
+    sigma2.sim[k+1] = 1/rgamma(1, shape = an, scale = bn)#
+    ##res = (Y.vec - X.bd %*% bhat)#
+    ##n.minus.k = length(Y.vec)-length(bhat)#
+    #sigma2.sim[k+1] = rinvchisq(1, df = n.minus.k, scale = (t(res) %*% res)/n.minus.k)#
+    #sigma2.sim[k+1] = 2#
+    ##b.sim[k+1,] = mvrnorm(1, bhat, Vbeta * sigma2.sim[k+1])#
+    #b.sim[k+1,] = 2.5#
+    ## STEP 3: Sample gamma:#
+    XY = X[-1]#
+    XX = X[-T]#
+    Vgamma = solve(t(XX) %*% XX)#
+    gammahat =  Vgamma %*% t(XX) %*% XY#
+    res = (XY - XX*gammahat)#
+#
+    n.minus.k = length(XX)-length(gammahat)#
+    tau2.sim[k+1] = rinvchisq(1, df = n.minus.k, scale = (t(res) %*% res)/n.minus.k)  #
+    gamma.sim[k+1] = rnorm(1, gammahat, sqrt(Vgamma * tau2.sim[k+1]))#
+#
+    tau2.sim[k+1] = 2#
+    gamma.sim[k+1] = 1.01#
+#
+  }
+sigma2.sim
+plot(sigma2.sim)
+b.sim
+mean(b.sim)
+plot(b.sim)
+X
+X.true
+STEP 2: Sample sigma2 and bias b:  #
+    X.bd = bdiag(lapply(exp.counts, function(ii) rep(X, ii)))#
+    Lambdan = (t(X.bd) %*% X.bd + Lambda0)#
+    mun = solve(Lambdan) %*% t(X.bd) %*% Y.vec#
+    b.sim[k+1,] = mvrnorm(1, mun, solve(Lambdan)*sigma2.sim[k])
+an = a0 + length(Y.vec)/2#
+    bn = b0 + sum( (Y.vec - X.bd %*% b.sim[k+1,])^2)/2
+a
+an
+bn
+mean(rgamma(1000, shape = an, scale = bn))
+mean(1/rgamma(1000, shape = an, scale = bn))
+an/bn
+an*bn
+mean(1/rgamma(1000, shape = an, scale = bn))
+mean(1/rgamma(1000, shape = an, rate = bn))
+?gamma
+?rgamma
+if(is.matrix(Y)){    #
+    N = ncol(Y)#
+    T = nrow(Y)#
+    Y = Y[,order(exp.levels)]#
+    Z = model.matrix(~-1+factor(exp.levels))#
+    Y.vec = c(Y)#
+  } else {#
+    N = 1#
+    T = length(Y)#
+    Z = 1#
+    Y.vec = Y#
+  }#
+#
+  gamma.sim = gamma0#
+  sigma2.sim = sigma20#
+  tau2.sim = tau20#
+  X.sim = matrix(NA, T, num.sims)#
+#
+  exp.levels = sort(exp.levels)#
+  exp.counts = c(table(exp.levels))#
+  b.sim = matrix(1, num.sims+1, length(exp.counts))#
+#
+  a0 = 0.001#
+  b0 = 0.001#
+  mu0 = rep(0, length(exp.counts))#
+  Lambda0 = (1/100)*diag(length(exp.counts))#
+  for(k in 1:num.sims){#
+    if(verbose) print(k)#
+    ## STEP 1: Sample X:#
+    X = FFBS(#
+      y=Y,#
+      F = Z %*% b.sim[k,],#
+      V=sigma2.sim[k],#
+      G=gamma.sim[k],#
+      W=tau2.sim[k],#
+      theta0=0,#
+      Sigma0=1,#
+      nd=1)#
+    X.sim[,k] = X#
+#
+    ## STEP 2: Sample sigma2 and bias b:  #
+    X.bd = bdiag(lapply(exp.counts, function(ii) rep(X, ii)))#
+    Lambdan = (t(X.bd) %*% X.bd + Lambda0)#
+    mun = solve(Lambdan) %*% t(X.bd) %*% Y.vec#
+    b.sim[k+1,] = mvrnorm(1, mun, solve(Lambdan)*sigma2.sim[k])#
+    an = a0 + length(Y.vec)/2#
+    bn = b0 + sum( (Y.vec - X.bd %*% b.sim[k+1,])^2)/2#
+    sigma2.sim[k+1] = 1/rgamma(1, shape = an, rate = bn)#
+    ##res = (Y.vec - X.bd %*% bhat)#
+    ##n.minus.k = length(Y.vec)-length(bhat)#
+    #sigma2.sim[k+1] = rinvchisq(1, df = n.minus.k, scale = (t(res) %*% res)/n.minus.k)#
+    #sigma2.sim[k+1] = 2#
+    ##b.sim[k+1,] = mvrnorm(1, bhat, Vbeta * sigma2.sim[k+1])#
+    #b.sim[k+1,] = 2.5#
+    ## STEP 3: Sample gamma:#
+    XY = X[-1]#
+    XX = X[-T]#
+    Vgamma = solve(t(XX) %*% XX)#
+    gammahat =  Vgamma %*% t(XX) %*% XY#
+    res = (XY - XX*gammahat)#
+#
+    n.minus.k = length(XX)-length(gammahat)#
+    tau2.sim[k+1] = rinvchisq(1, df = n.minus.k, scale = (t(res) %*% res)/n.minus.k)  #
+    gamma.sim[k+1] = rnorm(1, gammahat, sqrt(Vgamma * tau2.sim[k+1]))#
+#
+    tau2.sim[k+1] = 2#
+    gamma.sim[k+1] = 1.01#
+#
+  }
+sigma2.sim
+plot(sigma2.sim)
+b.sim
+plot(b.sim)
+plot(sigma2.sim)
+colMeans(X.sim)
+rowMeans(X.sim)
+plot(rowMeans(X.sim))
+points(X.true, col = 2)
+N = 1#
+exp.levels = sort(sample(1:2, N, replace = TRUE))#
+b = runif(2, 0, 5)#
+b = c(1.5, 2.5)#
+sim.data = simulate.data(tau2 = 2, sigma2 = 2, x0 = 0, gamma = 1.01, exp.levels = exp.levels, b = b, T = 500)#
+X.true = sim.data$X#
+Y = sim.data$Y#
+#
+plot(X.true)
+if(is.matrix(Y)){    #
+    N = ncol(Y)#
+    T = nrow(Y)#
+    Y = Y[,order(exp.levels)]#
+    Z = model.matrix(~-1+factor(exp.levels))#
+    Y.vec = c(Y)#
+  } else {#
+    N = 1#
+    T = length(Y)#
+    Z = 1#
+    Y.vec = Y#
+  }#
+#
+  gamma.sim = gamma0#
+  sigma2.sim = sigma20#
+  tau2.sim = tau20#
+  X.sim = matrix(NA, T, num.sims)#
+#
+  exp.levels = sort(exp.levels)#
+  exp.counts = c(table(exp.levels))#
+  b.sim = matrix(1, num.sims+1, length(exp.counts))#
+#
+  a0 = 0.001#
+  b0 = 0.001#
+  mu0 = rep(0, length(exp.counts))#
+  Lambda0 = (1/100)*diag(length(exp.counts))#
+  for(k in 1:num.sims){#
+    if(verbose) print(k)#
+    ## STEP 1: Sample X:#
+    X = FFBS(#
+      y=Y,#
+      F = Z %*% b.sim[k,],#
+      V=sigma2.sim[k],#
+      G=gamma.sim[k],#
+      W=tau2.sim[k],#
+      theta0=0,#
+      Sigma0=1,#
+      nd=1)#
+    X.sim[,k] = X#
+#
+    ## STEP 2: Sample sigma2 and bias b:  #
+    X.bd = bdiag(lapply(exp.counts, function(ii) rep(X, ii)))#
+    Lambdan = (t(X.bd) %*% X.bd + Lambda0)#
+    mun = solve(Lambdan) %*% t(X.bd) %*% Y.vec#
+    b.sim[k+1,] = mvrnorm(1, mun, solve(Lambdan)*sigma2.sim[k])#
+    an = a0 + length(Y.vec)/2#
+    bn = b0 + sum( (Y.vec - X.bd %*% b.sim[k+1,])^2)/2#
+    sigma2.sim[k+1] = 1/rgamma(1, shape = an, rate = bn)#
+    ##res = (Y.vec - X.bd %*% bhat)#
+    ##n.minus.k = length(Y.vec)-length(bhat)#
+    #sigma2.sim[k+1] = rinvchisq(1, df = n.minus.k, scale = (t(res) %*% res)/n.minus.k)#
+    #sigma2.sim[k+1] = 2#
+    ##b.sim[k+1,] = mvrnorm(1, bhat, Vbeta * sigma2.sim[k+1])#
+    #b.sim[k+1,] = 2.5#
+    ## STEP 3: Sample gamma:#
+    XY = X[-1]#
+    XX = X[-T]#
+    Vgamma = solve(t(XX) %*% XX)#
+    gammahat =  Vgamma %*% t(XX) %*% XY#
+    res = (XY - XX*gammahat)#
+#
+    n.minus.k = length(XX)-length(gammahat)#
+    tau2.sim[k+1] = rinvchisq(1, df = n.minus.k, scale = (t(res) %*% res)/n.minus.k)  #
+    gamma.sim[k+1] = rnorm(1, gammahat, sqrt(Vgamma * tau2.sim[k+1]))#
+#
+    tau2.sim[k+1] = 2#
+    gamma.sim[k+1] = 1.01#
+#
+  }
+Y
+is.matrix(Y)
+if(is.matrix(Y)){    #
+    N = ncol(Y)#
+    T = nrow(Y)#
+    Y = Y[,order(exp.levels)]#
+    Z = model.matrix(~-1+factor(exp.levels))#
+    Y.vec = c(Y)#
+  } else {#
+    N = 1#
+    T = length(Y)#
+    Z = 1#
+    Y.vec = Y#
+  }
+gamma.sim = gamma0#
+  sigma2.sim = sigma20#
+  tau2.sim = tau20#
+  X.sim = matrix(NA, T, num.sims)#
+#
+  exp.levels = sort(exp.levels)#
+  exp.counts = c(table(exp.levels))#
+  b.sim = matrix(1, num.sims+1, length(exp.counts))#
+#
+  a0 = 0.001#
+  b0 = 0.001#
+  mu0 = rep(0, length(exp.counts))#
+  Lambda0 = (1/100)*diag(length(exp.counts))
+for(k in 1:num.sims){#
+    if(verbose) print(k)#
+    ## STEP 1: Sample X:#
+    X = FFBS(#
+      y=Y,#
+      F = Z %*% b.sim[k,],#
+      V=sigma2.sim[k],#
+      G=gamma.sim[k],#
+      W=tau2.sim[k],#
+      theta0=0,#
+      Sigma0=1,#
+      nd=1)#
+    X.sim[,k] = X#
+#
+    ## STEP 2: Sample sigma2 and bias b:  #
+    X.bd = bdiag(lapply(exp.counts, function(ii) rep(X, ii)))#
+    Lambdan = (t(X.bd) %*% X.bd + Lambda0)#
+    mun = solve(Lambdan) %*% t(X.bd) %*% Y.vec#
+    b.sim[k+1,] = mvrnorm(1, mun, solve(Lambdan)*sigma2.sim[k])#
+    an = a0 + length(Y.vec)/2#
+    bn = b0 + sum( (Y.vec - X.bd %*% b.sim[k+1,])^2)/2#
+    sigma2.sim[k+1] = 1/rgamma(1, shape = an, rate = bn)#
+    ##res = (Y.vec - X.bd %*% bhat)#
+    ##n.minus.k = length(Y.vec)-length(bhat)#
+    #sigma2.sim[k+1] = rinvchisq(1, df = n.minus.k, scale = (t(res) %*% res)/n.minus.k)#
+    #sigma2.sim[k+1] = 2#
+    ##b.sim[k+1,] = mvrnorm(1, bhat, Vbeta * sigma2.sim[k+1])#
+    #b.sim[k+1,] = 2.5#
+    ## STEP 3: Sample gamma:#
+    XY = X[-1]#
+    XX = X[-T]#
+    Vgamma = solve(t(XX) %*% XX)#
+    gammahat =  Vgamma %*% t(XX) %*% XY#
+    res = (XY - XX*gammahat)#
+#
+    n.minus.k = length(XX)-length(gammahat)#
+    tau2.sim[k+1] = rinvchisq(1, df = n.minus.k, scale = (t(res) %*% res)/n.minus.k)  #
+    gamma.sim[k+1] = rnorm(1, gammahat, sqrt(Vgamma * tau2.sim[k+1]))#
+#
+    tau2.sim[k+1] = 2#
+    gamma.sim[k+1] = 1.01#
+#
+  }
+sigma2.sim
+plot(sigma2.sim)
+b.sim
+plot(b.sim)
+b
+exp.levels
+plot(b.sim)
+plot(rowMeans(X.sim))
+points(X.true, col = 2)
+for(k in 1:num.sims){#
+    if(verbose) print(k)#
+    ## STEP 1: Sample X:#
+    X = FFBS(#
+      y=Y,#
+      F = Z %*% b.sim[k,],#
+      V=sigma2.sim[k],#
+      G=gamma.sim[k],#
+      W=tau2.sim[k],#
+      theta0=0,#
+      Sigma0=1,#
+      nd=1)#
+    X.sim[,k] = X#
+#
+    ## STEP 2: Sample sigma2 and bias b:  #
+    X.bd = bdiag(lapply(exp.counts, function(ii) rep(X, ii)))#
+    Lambdan = (t(X.bd) %*% X.bd + Lambda0)#
+    mun = solve(Lambdan) %*% t(X.bd) %*% Y.vec#
+    b.sim[k+1,] = mvrnorm(1, mun, solve(Lambdan)*sigma2.sim[k])#
+    an = a0 + length(Y.vec)/2#
+    bn = b0 + sum( (Y.vec - X.bd %*% b.sim[k+1,])^2)/2#
+    sigma2.sim[k+1] = 1/rgamma(1, shape = an, rate = bn)#
+    ##res = (Y.vec - X.bd %*% bhat)#
+    ##n.minus.k = length(Y.vec)-length(bhat)#
+    #sigma2.sim[k+1] = rinvchisq(1, df = n.minus.k, scale = (t(res) %*% res)/n.minus.k)#
+    #sigma2.sim[k+1] = 2#
+    ##b.sim[k+1,] = mvrnorm(1, bhat, Vbeta * sigma2.sim[k+1])#
+    #b.sim[k+1,] = 2.5#
+    ## STEP 3: Sample gamma:#
+    XY = X[-1]#
+    XX = X[-T]#
+    Vgamma = solve(t(XX) %*% XX)#
+    gammahat =  Vgamma %*% t(XX) %*% XY#
+    res = (XY - XX*gammahat)#
+#
+    n.minus.k = length(XX)-length(gammahat)#
+    tau2.sim[k+1] = rinvchisq(1, df = n.minus.k, scale = (t(res) %*% res)/n.minus.k)  #
+    gamma.sim[k+1] = rnorm(1, gammahat, sqrt(Vgamma * tau2.sim[k+1]))#
+#
+    tau2.sim[k+1] = 2#
+    gamma.sim[k+1] = 1.01#
+#
+  }
+N = 3#
+exp.levels = sort(sample(1:2, N, replace = TRUE))#
+b = runif(2, 0, 5)#
+b = c(1.5, 2.5)#
+sim.data = simulate.data(tau2 = 2, sigma2 = 2, x0 = 0, gamma = 1.01, exp.levels = exp.levels, b = b, T = 500)#
+X.true = sim.data$X#
+Y = sim.data$Y
+if(is.matrix(Y)){    #
+    N = ncol(Y)#
+    T = nrow(Y)#
+    Y = Y[,order(exp.levels)]#
+    Z = model.matrix(~-1+factor(exp.levels))#
+    Y.vec = c(Y)#
+  } else {#
+    N = 1#
+    T = length(Y)#
+    Z = 1#
+    Y.vec = Y#
+  }#
+#
+  gamma.sim = gamma0#
+  sigma2.sim = sigma20#
+  tau2.sim = tau20#
+  X.sim = matrix(NA, T, num.sims)#
+#
+  exp.levels = sort(exp.levels)#
+  exp.counts = c(table(exp.levels))#
+  b.sim = matrix(1, num.sims+1, length(exp.counts))#
+#
+  a0 = 0.001#
+  b0 = 0.001#
+  mu0 = rep(0, length(exp.counts))#
+  Lambda0 = (1/100)*diag(length(exp.counts))#
+  for(k in 1:num.sims){#
+    if(verbose) print(k)#
+    ## STEP 1: Sample X:#
+    X = FFBS(#
+      y=Y,#
+      F = Z %*% b.sim[k,],#
+      V=sigma2.sim[k],#
+      G=gamma.sim[k],#
+      W=tau2.sim[k],#
+      theta0=0,#
+      Sigma0=1,#
+      nd=1)#
+    X.sim[,k] = X#
+#
+    ## STEP 2: Sample sigma2 and bias b:  #
+    X.bd = bdiag(lapply(exp.counts, function(ii) rep(X, ii)))#
+    Lambdan = (t(X.bd) %*% X.bd + Lambda0)#
+    mun = solve(Lambdan) %*% t(X.bd) %*% Y.vec#
+    b.sim[k+1,] = mvrnorm(1, mun, solve(Lambdan)*sigma2.sim[k])#
+    an = a0 + length(Y.vec)/2#
+    bn = b0 + sum( (Y.vec - X.bd %*% b.sim[k+1,])^2)/2#
+    sigma2.sim[k+1] = 1/rgamma(1, shape = an, rate = bn)#
+    ##res = (Y.vec - X.bd %*% bhat)#
+    ##n.minus.k = length(Y.vec)-length(bhat)#
+    #sigma2.sim[k+1] = rinvchisq(1, df = n.minus.k, scale = (t(res) %*% res)/n.minus.k)#
+    #sigma2.sim[k+1] = 2#
+    ##b.sim[k+1,] = mvrnorm(1, bhat, Vbeta * sigma2.sim[k+1])#
+    #b.sim[k+1,] = 2.5#
+    ## STEP 3: Sample gamma:#
+    XY = X[-1]#
+    XX = X[-T]#
+    Vgamma = solve(t(XX) %*% XX)#
+    gammahat =  Vgamma %*% t(XX) %*% XY#
+    res = (XY - XX*gammahat)#
+#
+    n.minus.k = length(XX)-length(gammahat)#
+    tau2.sim[k+1] = rinvchisq(1, df = n.minus.k, scale = (t(res) %*% res)/n.minus.k)  #
+    gamma.sim[k+1] = rnorm(1, gammahat, sqrt(Vgamma * tau2.sim[k+1]))#
+#
+    tau2.sim[k+1] = 2#
+    gamma.sim[k+1] = 1.01#
+#
+  }
+N = 3#
+exp.levels = sort(sample(1:2, N, replace = TRUE))#
+b = runif(2, 0, 5)#
+b = c(1.5, 2.5)#
+sim.data = simulate.data(tau2 = 2, sigma2 = 2, x0 = 0, gamma = 1.01, exp.levels = exp.levels, b = b, T = 100)#
+X.true = sim.data$X#
+Y = sim.data$Y
+if(is.matrix(Y)){    #
+    N = ncol(Y)#
+    T = nrow(Y)#
+    Y = Y[,order(exp.levels)]#
+    Z = model.matrix(~-1+factor(exp.levels))#
+    Y.vec = c(Y)#
+  } else {#
+    N = 1#
+    T = length(Y)#
+    Z = 1#
+    Y.vec = Y#
+  }#
+#
+  gamma.sim = gamma0#
+  sigma2.sim = sigma20#
+  tau2.sim = tau20#
+  X.sim = matrix(NA, T, num.sims)#
+#
+  exp.levels = sort(exp.levels)#
+  exp.counts = c(table(exp.levels))#
+  b.sim = matrix(1, num.sims+1, length(exp.counts))#
+#
+  a0 = 0.001#
+  b0 = 0.001#
+  mu0 = rep(0, length(exp.counts))#
+  Lambda0 = (1/100)*diag(length(exp.counts))#
+  for(k in 1:num.sims){#
+    if(verbose) print(k)#
+    ## STEP 1: Sample X:#
+    X = FFBS(#
+      y=Y,#
+      F = Z %*% b.sim[k,],#
+      V=sigma2.sim[k],#
+      G=gamma.sim[k],#
+      W=tau2.sim[k],#
+      theta0=0,#
+      Sigma0=1,#
+      nd=1)#
+    X.sim[,k] = X#
+#
+    ## STEP 2: Sample sigma2 and bias b:  #
+    X.bd = bdiag(lapply(exp.counts, function(ii) rep(X, ii)))#
+    Lambdan = (t(X.bd) %*% X.bd + Lambda0)#
+    mun = solve(Lambdan) %*% t(X.bd) %*% Y.vec#
+    b.sim[k+1,] = mvrnorm(1, mun, solve(Lambdan)*sigma2.sim[k])#
+    an = a0 + length(Y.vec)/2#
+    bn = b0 + sum( (Y.vec - X.bd %*% b.sim[k+1,])^2)/2#
+    sigma2.sim[k+1] = 1/rgamma(1, shape = an, rate = bn)#
+    ##res = (Y.vec - X.bd %*% bhat)#
+    ##n.minus.k = length(Y.vec)-length(bhat)#
+    #sigma2.sim[k+1] = rinvchisq(1, df = n.minus.k, scale = (t(res) %*% res)/n.minus.k)#
+    #sigma2.sim[k+1] = 2#
+    ##b.sim[k+1,] = mvrnorm(1, bhat, Vbeta * sigma2.sim[k+1])#
+    #b.sim[k+1,] = 2.5#
+    ## STEP 3: Sample gamma:#
+    XY = X[-1]#
+    XX = X[-T]#
+    Vgamma = solve(t(XX) %*% XX)#
+    gammahat =  Vgamma %*% t(XX) %*% XY#
+    res = (XY - XX*gammahat)#
+#
+    n.minus.k = length(XX)-length(gammahat)#
+    tau2.sim[k+1] = rinvchisq(1, df = n.minus.k, scale = (t(res) %*% res)/n.minus.k)  #
+    gamma.sim[k+1] = rnorm(1, gammahat, sqrt(Vgamma * tau2.sim[k+1]))#
+#
+    tau2.sim[k+1] = 2#
+    gamma.sim[k+1] = 1.01#
+#
+  }
+Z
+b.sim
+exp.counts
+exp.lvels
+exp.levels
+N = 5#
+exp.levels = sort(sample(1:2, N, replace = TRUE))#
+b = runif(2, 0, 5)#
+b = c(1.5, 2.5)#
+sim.data = simulate.data(tau2 = 2, sigma2 = 2, x0 = 0, gamma = 1.01, exp.levels = exp.levels, b = b, T = 100)#
+X.true = sim.data$X#
+Y = sim.data$Y
+exp.levels
+if(is.matrix(Y)){    #
+    N = ncol(Y)#
+    T = nrow(Y)#
+    Y = Y[,order(exp.levels)]#
+    Z = model.matrix(~-1+factor(exp.levels))#
+    Y.vec = c(Y)#
+  } else {#
+    N = 1#
+    T = length(Y)#
+    Z = 1#
+    Y.vec = Y#
+  }#
+#
+  gamma.sim = gamma0#
+  sigma2.sim = sigma20#
+  tau2.sim = tau20#
+  X.sim = matrix(NA, T, num.sims)#
+#
+  exp.levels = sort(exp.levels)#
+  exp.counts = c(table(exp.levels))#
+  b.sim = matrix(1, num.sims+1, length(exp.counts))#
+#
+  a0 = 0.001#
+  b0 = 0.001#
+  mu0 = rep(0, length(exp.counts))#
+  Lambda0 = (1/100)*diag(length(exp.counts))#
+  for(k in 1:num.sims){#
+    if(verbose) print(k)#
+    ## STEP 1: Sample X:#
+    X = FFBS(#
+      y=Y,#
+      F = Z %*% b.sim[k,],#
+      V=sigma2.sim[k],#
+      G=gamma.sim[k],#
+      W=tau2.sim[k],#
+      theta0=0,#
+      Sigma0=1,#
+      nd=1)#
+    X.sim[,k] = X#
+#
+    ## STEP 2: Sample sigma2 and bias b:  #
+    X.bd = bdiag(lapply(exp.counts, function(ii) rep(X, ii)))#
+    Lambdan = (t(X.bd) %*% X.bd + Lambda0)#
+    mun = solve(Lambdan) %*% t(X.bd) %*% Y.vec#
+    b.sim[k+1,] = mvrnorm(1, mun, solve(Lambdan)*sigma2.sim[k])#
+    an = a0 + length(Y.vec)/2#
+    bn = b0 + sum( (Y.vec - X.bd %*% b.sim[k+1,])^2)/2#
+    sigma2.sim[k+1] = 1/rgamma(1, shape = an, rate = bn)#
+    ##res = (Y.vec - X.bd %*% bhat)#
+    ##n.minus.k = length(Y.vec)-length(bhat)#
+    #sigma2.sim[k+1] = rinvchisq(1, df = n.minus.k, scale = (t(res) %*% res)/n.minus.k)#
+    #sigma2.sim[k+1] = 2#
+    ##b.sim[k+1,] = mvrnorm(1, bhat, Vbeta * sigma2.sim[k+1])#
+    #b.sim[k+1,] = 2.5#
+    ## STEP 3: Sample gamma:#
+    XY = X[-1]#
+    XX = X[-T]#
+    Vgamma = solve(t(XX) %*% XX)#
+    gammahat =  Vgamma %*% t(XX) %*% XY#
+    res = (XY - XX*gammahat)#
+#
+    n.minus.k = length(XX)-length(gammahat)#
+    tau2.sim[k+1] = rinvchisq(1, df = n.minus.k, scale = (t(res) %*% res)/n.minus.k)  #
+    gamma.sim[k+1] = rnorm(1, gammahat, sqrt(Vgamma * tau2.sim[k+1]))#
+#
+    tau2.sim[k+1] = 2#
+    gamma.sim[k+1] = 1.01#
+#
+  }
+sigma2.sim
+plot(sigma2.sim)
+b.sim
+colMeans(b.sim)
+plot(b.sim[,1])
+plot(b.sim[,2])
+num.sims
+num.sims = 10000
+if(is.matrix(Y)){    #
+    N = ncol(Y)#
+    T = nrow(Y)#
+    Y = Y[,order(exp.levels)]#
+    Z = model.matrix(~-1+factor(exp.levels))#
+    Y.vec = c(Y)#
+  } else {#
+    N = 1#
+    T = length(Y)#
+    Z = 1#
+    Y.vec = Y#
+  }#
+#
+  gamma.sim = gamma0#
+  sigma2.sim = sigma20#
+  tau2.sim = tau20#
+  X.sim = matrix(NA, T, num.sims)#
+#
+  exp.levels = sort(exp.levels)#
+  exp.counts = c(table(exp.levels))#
+  b.sim = matrix(1, num.sims+1, length(exp.counts))#
+#
+  a0 = 0.001#
+  b0 = 0.001#
+  mu0 = rep(0, length(exp.counts))#
+  Lambda0 = (1/100)*diag(length(exp.counts))#
+  for(k in 1:num.sims){#
+    if(verbose) print(k)#
+    ## STEP 1: Sample X:#
+    X = FFBS(#
+      y=Y,#
+      F = Z %*% b.sim[k,],#
+      V=sigma2.sim[k],#
+      G=gamma.sim[k],#
+      W=tau2.sim[k],#
+      theta0=0,#
+      Sigma0=1,#
+      nd=1)#
+    X.sim[,k] = X#
+#
+    ## STEP 2: Sample sigma2 and bias b:  #
+    X.bd = bdiag(lapply(exp.counts, function(ii) rep(X, ii)))#
+    Lambdan = (t(X.bd) %*% X.bd + Lambda0)#
+    mun = solve(Lambdan) %*% t(X.bd) %*% Y.vec#
+    b.sim[k+1,] = mvrnorm(1, mun, solve(Lambdan)*sigma2.sim[k])#
+    an = a0 + length(Y.vec)/2#
+    bn = b0 + sum( (Y.vec - X.bd %*% b.sim[k+1,])^2)/2#
+    sigma2.sim[k+1] = 1/rgamma(1, shape = an, rate = bn)#
+    ##res = (Y.vec - X.bd %*% bhat)#
+    ##n.minus.k = length(Y.vec)-length(bhat)#
+    #sigma2.sim[k+1] = rinvchisq(1, df = n.minus.k, scale = (t(res) %*% res)/n.minus.k)#
+    #sigma2.sim[k+1] = 2#
+    ##b.sim[k+1,] = mvrnorm(1, bhat, Vbeta * sigma2.sim[k+1])#
+    #b.sim[k+1,] = 2.5#
+    ## STEP 3: Sample gamma:#
+    XY = X[-1]#
+    XX = X[-T]#
+    Vgamma = solve(t(XX) %*% XX)#
+    gammahat =  Vgamma %*% t(XX) %*% XY#
+    res = (XY - XX*gammahat)#
+#
+    n.minus.k = length(XX)-length(gammahat)#
+    tau2.sim[k+1] = rinvchisq(1, df = n.minus.k, scale = (t(res) %*% res)/n.minus.k)  #
+    gamma.sim[k+1] = rnorm(1, gammahat, sqrt(Vgamma * tau2.sim[k+1]))#
+#
+    tau2.sim[k+1] = 2#
+    gamma.sim[k+1] = 1.01#
+#
+  }
+plot(sigma.2sim)
+plot(sigma2.sim)
+plot(b.sim[,1])
+plot(b.sim[,2])
+dim(X)
+dim(X.sim)
+plot(X.sim[1,])
+plot(X.sim[2,])
+plot(X.sim[5,])
+plot(X.sim[10,])
+rowMeans(X.sim[,9900:10000])
+plot(rowMeans(X.sim[,9900:10000]))
+points(X.true, col = 2)
+load("/Users/ville/Desktop/Reports/Write-Up/deltas.bri.RData")
+load("/Users/ville/Desktop/Reports/Write-Up/deltas.log.RData")
+load("/Users/ville/Desktop/Reports/Write-Up/deltas.bri.RData")#
+load("/Users/ville/Desktop/Reports/Write-Up/deltas.log.RData")#
+bias = read.csv("/Users/ville/Desktop/Dynamic_Logit_Model/ExpertAnalysis/results/bias_sim_shared.csv", header = FALSE)#
+bb.log = bias/deltas.log#
+bb.bri = bias/deltas.bri#
+colnames(bb.log) = 1:5#
+colnames(bb.bri) = 1:5
+dd = data.frame(values = append(unlist(c(bb.log)),unlist(c(bb.bri))))#
+dd$method = factor(c(rep("STC-Log", nrow(dd)/2), rep("STC-Bri", nrow(dd)/2)))#
+dd$expertise = factor(c(rep(1:5, rep(nrow(bb.log),5)), rep(1:5, rep(nrow(bb.log),5))))#
+ library(ggplot2)#
+pl <- qplot(expertise, values, fill=method, data=dd, geom="boxplot", position="dodge", xlab = "Self-Reported Expertise", ylab = "Multiplicative Bias")+geom_boxplot() +#
+  theme_bw() +#
+  opts(axis.text.x=theme_text(size=10)) +#
+  opts(axis.text.y=theme_text(size=10)) +#
+  opts(legend.title=theme_blank()) +#
+  opts(legend.position="top") +#
+  guides(col = guide_legend(ncol = 2))
+library(EMVS)
+ls()
+helloworld()
+rcpparma_hello_world
+rcpparma_hello_world()
+library(EMVS)
+rcpparma_hello_world()
+detach("package:EMVSpackage", unload = TRUE)#
+library("EMVSpackage")#
+EMVS(2)
+delogi
+exp(2)/(1+exp(2))
+detach("package:EMVSpackage", unload = TRUE)#
+library("EMVSpackage")#
+EMVS(2)
+detach("package:EMVSpackage", unload = TRUE)#
+library("EMVSpackage")#
+EMVS(3)
+detach("package:EMVSpackage", unload = TRUE)#
+library("EMVSpackage")#
+EMVS(2)
+beta
+?beta
+detach("package:EMVSpackage", unload = TRUE)#
+library("EMVSpackage")#
+EMVS(2)
+detach("package:EMVSpackage", unload = TRUE)#
+library("EMVSpackage")#
+EMVS(2)detach("package:EMVSpackage", unload = TRUE)#
+library("EMVSpackage")#
+EMVS(2)
+detach("package:EMVSpackage", unload = TRUE)#
+library("EMVSpackage")#
+EMVS(2)
+beta(1, 4)
+detach("package:EMVSpackage", unload = TRUE)#
+library("EMVSpackage")#
+EMVS(2)
+detach("package:EMVSpackage", unload = TRUE)
+library("EMVSpackage")#
+EMVS(2)
+detach("package:EMVSpackage", unload = TRUE)#
+library("EMVSpackage")#
+EMVS(2)
+dnorm(0.2, 1, 0.5)
+E_v0v1<-function(beta_k,sigma_k,v0,v1,p,t){#
+	p_star<-(p*dnorm(beta_k,0,sd=sigma_k*sqrt(v1)))^t/((p*dnorm(beta_k,0,sd=sigma_k*sqrt(v1)))^t+((1-p)*dnorm(beta_k,0,sd=sigma_k*sqrt(v0)))^t)#
+	list(inv_var=p_star/v1+(1-p_star)/v0,prob=p_star)		#
+#
+}
+E_v0v1(1, 1, 0.1, 1, 0.4, 0.5)
+detach("package:EMVSpackage", unload = TRUE)#
+library("EMVSpackage")#
+EMVS(2)
+\
+detach("package:EMVSpackage", unload = TRUE)#
+library("EMVSpackage")#
+EMVS(2)
+T = 100#
+Ks = c(20, 40, 60, 80, 100) ## Number of problems#
+betas = c(0.5, 0.75, 1, 1/0.75, 1/0.5) ## Expected bias mean: same effect around 1.0#
+sigma2s = c(0.5, 1.0, 1.5, 2.0, 2.5)#
+load("/Users/ville/Desktop/Dynamic_Logit_Model/ExpertAnalysis/X.losses.RData")#
+load("/Users/ville/Desktop/Dynamic_Logit_Model/ExpertAnalysis/b.losses.RData")#
+######## XXXXXXXXX#
+wsize = 2#
+hsize = 1.8#
+font = 8#
+#
+setwd("/Users/ville/probability_aggregation/Figures/")#
+#CairoPDF(file = "SyntheticSigma2.pdf", width = size, height = size, onefile = TRUE, family = "Times", pointsize = font)#
+pdf("SyntheticSigma2.pdf", width = wsize, height = hsize, family = "Times", pointsize = font)#
+par(mgp = c(1.5,.5,0), mar=c(2.4,2.8,0.8,0.2))#
+BRI = apply(X.losses[[1]], 1, mean)#
+LOG = apply(X.losses[[2]], 1, mean)#
+#FULL = apply(X.losses[[3]], 1, mean)#
+plot(BRI~sigma2s, type = "l", col = 1, lwd = 2, ylim = range(BRI, LOG), xlab = expression(paste(sigma^2)), ylab = "Quadratic Loss: hidden process", axes = FALSE)#
+box()#
+axis(1, at = round(sigma2s,1))#
+axis(2)#
+#axis(2, at = signif(seq(min(BRI,LOG), max(BRI,LOG), length = 5)[2:4], 2))#
+lines(LOG~sigma2s, lty = 2, lwd = 2)#
+#lines(FULL~sigma2s, col = 3, lwd = 2)#
+dev.off()#
+#
+setwd("/Users/ville/probability_aggregation/Figures/")#
+#CairoPDF(file = "SyntheticBeta.pdf", width = size, height = size, onefile = TRUE, family = "Times", pointsize = font)#
+pdf(file = "SyntheticBeta.pdf", width = wsize, height = hsize, onefile = TRUE, family = "Times", pointsize = font)#
+par(mgp = c(1.5,.5,0), mar=c(2.4,2.8,0.8,0.2))#
+BRI = apply(X.losses[[1]], 2, mean)#
+LOG = apply(X.losses[[2]], 2, mean)#
+#FULL = apply(X.losses[[3]], 2, mean)#
+plot(BRI~betas, type = "l", col = 1, lwd = 2, ylim = range(BRI, LOG), xlab = expression(paste(beta)), ylab = "Quadratic Loss: hidden process", axes = FALSE)#
+box()#
+axis(1, at = round(betas,1))#
+#axis(2, at = signif(seq(min(BRI,LOG), max(BRI,LOG), length = 5)[2:4], 2))#
+axis(2)#
+lines(LOG~betas, lty = 2, lwd = 2)#
+#lines(FULL~betas, col = 3, lwd = 2)#
+dev.off()#
+#
+setwd("/Users/ville/probability_aggregation/Figures/")#
+#CairoPDF(file = "SyntheticK.pdf", width = size, height = size, onefile = TRUE, family = "Times", pointsize = font)#
+pdf(file = "SyntheticK.pdf", width = wsize, height = hsize, onefile = TRUE, family = "Times", pointsize = font)#
+par(mgp = c(1.5,.5,0), mar=c(2.4,2.8,0.8,0.2))#
+BRI = apply(X.losses[[1]], 3, mean)#
+LOG = apply(X.losses[[2]], 3, mean)#
+#FULL = apply(X.losses[[3]], 3, mean)#
+plot(BRI~Ks, type = "l", col = 1, lwd = 2, ylim = range(BRI, LOG), xlab = "K", ylab = "Quadratic Loss: hidden process", axes = FALSE)#
+box()#
+axis(1, at = round(Ks, 1))#
+axis(2)#
+#axis(2, at = signif(seq(min(BRI,LOG), max(BRI,LOG), length = 5)[2:4], 2))#
+lines(LOG~Ks, lwd = 2, lty = 2)#
+#lines(FULL~Ks, col = 3, lwd = 2)#
+dev.off()#
+######## BBBBBBBBBBBB#
+setwd("/Users/ville/probability_aggregation/Figures/")#
+pdf("SyntheticSigma2bias.pdf", width = wsize, height = hsize, onefile = TRUE, family = "Times", pointsize = font)#
+par(mgp = c(1.5,.5,0), mar=c(2.4,2.8,0.8,0.2))#
+BRI = apply(b.losses[[1]], 1, mean)#
+LOG = apply(b.losses[[2]], 1, mean)#
+#FULL = apply(b.losses[[3]], 1, mean)#
+plot(BRI~sigma2s, type = "l", col = 1, lwd = 2, ylim = range(BRI, LOG), xlab = expression(paste(sigma^2)), ylab = "Quadratic Loss: bias vector", axes = FALSE)#
+box()#
+axis(1, at = round(sigma2s, 1))#
+#axis(2, at = signif(seq(min(BRI,LOG), max(BRI,LOG), length = 5)[2:4], 2))#
+axis(2)#
+lines(LOG~sigma2s, lwd = 2, lty = 2)#
+#lines(FULL~sigma2s, col = 3, lwd = 2)#
+dev.off()#
+#
+setwd("/Users/ville/probability_aggregation/Figures/")#
+pdf("SyntheticBetabias.pdf", width = wsize, height = hsize, onefile = TRUE, family = "Times", pointsize = font)#
+par(mgp = c(1.5,.5,0), mar=c(2.4,2.8,0.8,0.2))#
+BRI = apply(b.losses[[1]], 2, mean)#
+LOG = apply(b.losses[[2]], 2, mean)#
+#FULL = apply(b.losses[[3]], 2, mean)#
+plot(BRI~betas, type = "l", col = 1, lwd = 2, ylim = range(BRI, LOG), xlab = expression(paste(beta)), ylab = "Quadratic Loss: bias vector", axes = FALSE)#
+box()#
+axis(1, at = round(betas, 1))#
+axis(2)#
+#axis(2, at = signif(seq(min(BRI,LOG), max(BRI,LOG), length = 5)[2:4], 2))#
+lines(LOG~betas, lwd = 2, lty = 2)#
+#lines(FULL~betas, col = 3, lwd = 2)#
+dev.off()#
+#
+setwd("/Users/ville/probability_aggregation/Figures/")#
+pdf("SyntheticKbias.pdf", width = wsize, height = hsize, onefile = TRUE, family = "Times", pointsize = font)#
+par(mgp = c(1.5,.5,0), mar=c(2.4,2.8,0.8,0.2))#
+BRI = apply(b.losses[[1]], 3, mean)#
+LOG = apply(b.losses[[2]], 3, mean)#
+#FULL = apply(b.losses[[3]], 3, mean)#
+plot(BRI~Ks, type = "l", col = 1, lwd = 2, ylim = range(BRI, LOG), xlab = "K", ylab = "Quadratic Loss: bias vector", axes = FALSE)#
+box()#
+axis(1, at = round(Ks, 1))#
+axis(2)#
+#axis(2, at = signif(seq(min(BRI,LOG), max(BRI,LOG), length = 5)[2:4], 2))#
+lines(LOG~Ks,  lwd = 2, lty = 2)#
+#lines(FULL~Ks, col = 3, lwd = 2)#
+dev.off()
+T = 100#
+Ks = c(20, 40, 60, 80, 100) ## Number of problems#
+betas = c(0.5, 0.75, 1, 1/0.75, 1/0.5) ## Expected bias mean: same effect around 1.0#
+sigma2s = c(0.5, 1.0, 1.5, 2.0, 2.5)#
+load("/Users/ville/Desktop/Dynamic_Logit_Model/ExpertAnalysis/X.losses.RData")#
+load("/Users/ville/Desktop/Dynamic_Logit_Model/ExpertAnalysis/b.losses.RData")#
+######## XXXXXXXXX#
+wsize = 2#
+hsize = 1.8#
+font = 8#
+#
+setwd("/Users/ville/probability_aggregation/Figures/")#
+#CairoPDF(file = "SyntheticSigma2.pdf", width = size, height = size, onefile = TRUE, family = "Times", pointsize = font)#
+pdf("SyntheticSigma2.pdf", width = wsize, height = hsize, family = "Times", pointsize = font)#
+par(mgp = c(1.5,.5,0), mar=c(2.4,2.8,0.8,0.2))#
+BRI = apply(X.losses[[1]], 1, mean)#
+LOG = apply(X.losses[[2]], 1, mean)#
+#FULL = apply(X.losses[[3]], 1, mean)#
+plot(BRI~sigma2s, type = "l", col = 1, lwd = 2, ylim = range(BRI, LOG), xlab = expression(paste(sigma^2)), ylab = "Quadratic Loss: hidden process", axes = FALSE)#
+box()#
+axis(1, at = round(sigma2s,1))#
+axis(2)#
+#axis(2, at = signif(seq(min(BRI,LOG), max(BRI,LOG), length = 5)[2:4], 2))#
+lines(LOG~sigma2s, lty = 2, lwd = 2)#
+#lines(FULL~sigma2s, col = 3, lwd = 2)#
+dev.off()#
+#
+setwd("/Users/ville/probability_aggregation/Figures/")#
+#CairoPDF(file = "SyntheticBeta.pdf", width = size, height = size, onefile = TRUE, family = "Times", pointsize = font)#
+pdf(file = "SyntheticBeta.pdf", width = wsize, height = hsize, onefile = TRUE, family = "Times", pointsize = font)#
+par(mgp = c(1.5,.5,0), mar=c(2.4,2.8,0.8,0.2))#
+BRI = apply(X.losses[[1]], 2, mean)#
+LOG = apply(X.losses[[2]], 2, mean)#
+#FULL = apply(X.losses[[3]], 2, mean)#
+plot(BRI~betas, type = "l", col = 1, lwd = 2, ylim = range(BRI, LOG), xlab = expression(paste(beta)), ylab = "Quadratic Loss: hidden process", axes = FALSE)#
+box()#
+axis(1, at = round(betas,1))#
+#axis(2, at = signif(seq(min(BRI,LOG), max(BRI,LOG), length = 5)[2:4], 2))#
+axis(2)#
+lines(LOG~betas, lty = 2, lwd = 2)#
+#lines(FULL~betas, col = 3, lwd = 2)#
+dev.off()#
+#
+setwd("/Users/ville/probability_aggregation/Figures/")#
+#CairoPDF(file = "SyntheticK.pdf", width = size, height = size, onefile = TRUE, family = "Times", pointsize = font)#
+pdf(file = "SyntheticK.pdf", width = wsize, height = hsize, onefile = TRUE, family = "Times", pointsize = font)#
+par(mgp = c(1.5,.5,0), mar=c(2.4,2.8,0.8,0.2))#
+BRI = apply(X.losses[[1]], 3, mean)#
+LOG = apply(X.losses[[2]], 3, mean)#
+#FULL = apply(X.losses[[3]], 3, mean)#
+plot(BRI~Ks, type = "l", col = 1, lwd = 2, ylim = range(BRI, LOG), xlab = "K", ylab = "Quadratic Loss: hidden process", axes = FALSE)#
+box()#
+axis(1, at = round(Ks, 1))#
+axis(2)#
+#axis(2, at = signif(seq(min(BRI,LOG), max(BRI,LOG), length = 5)[2:4], 2))#
+lines(LOG~Ks, lwd = 2, lty = 2)#
+#lines(FULL~Ks, col = 3, lwd = 2)#
+dev.off()#
+######## BBBBBBBBBBBB#
+setwd("/Users/ville/probability_aggregation/Figures/")#
+pdf("SyntheticSigma2bias.pdf", width = wsize, height = hsize, onefile = TRUE, family = "Times", pointsize = font)#
+par(mgp = c(1.5,.5,0), mar=c(2.4,2.8,0.8,0.2))#
+BRI = apply(b.losses[[1]], 1, mean)#
+LOG = apply(b.losses[[2]], 1, mean)#
+#FULL = apply(b.losses[[3]], 1, mean)#
+plot(BRI~sigma2s, type = "l", col = 1, lwd = 2, ylim = range(BRI, LOG), xlab = expression(paste(sigma^2)), ylab = "Quadratic Loss: bias vector", axes = FALSE)#
+box()#
+axis(1, at = round(sigma2s, 1))#
+#axis(2, at = signif(seq(min(BRI,LOG), max(BRI,LOG), length = 5)[2:4], 2))#
+axis(2)#
+lines(LOG~sigma2s, lwd = 2, lty = 2)#
+#lines(FULL~sigma2s, col = 3, lwd = 2)#
+dev.off()#
+#
+setwd("/Users/ville/probability_aggregation/Figures/")#
+pdf("SyntheticBetabias.pdf", width = wsize, height = hsize, onefile = TRUE, family = "Times", pointsize = font)#
+par(mgp = c(1.5,.5,0), mar=c(2.4,2.8,0.8,0.2))#
+BRI = apply(b.losses[[1]], 2, mean)#
+LOG = apply(b.losses[[2]], 2, mean)#
+#FULL = apply(b.losses[[3]], 2, mean)#
+plot(BRI~betas, type = "l", col = 1, lwd = 2, ylim = range(BRI, LOG), xlab = expression(paste(beta)), ylab = "Quadratic Loss: bias vector", axes = FALSE)#
+box()#
+axis(1, at = round(betas, 1))#
+axis(2)#
+#axis(2, at = signif(seq(min(BRI,LOG), max(BRI,LOG), length = 5)[2:4], 2))#
+lines(LOG~betas, lwd = 2, lty = 2)#
+#lines(FULL~betas, col = 3, lwd = 2)#
+dev.off()#
+#
+setwd("/Users/ville/probability_aggregation/Figures/")#
+pdf("SyntheticKbias.pdf", width = wsize, height = hsize, onefile = TRUE, family = "Times", pointsize = font)#
+par(mgp = c(1.5,.5,0), mar=c(2.4,2.8,0.8,0.2))#
+BRI = apply(b.losses[[1]], 3, mean)#
+LOG = apply(b.losses[[2]], 3, mean)#
+#FULL = apply(b.losses[[3]], 3, mean)#
+plot(BRI~Ks, type = "l", col = 1, lwd = 2, ylim = range(BRI, LOG), xlab = "K", ylab = "Quadratic Loss: bias vector", axes = FALSE)#
+box()#
+axis(1, at = round(Ks, 1))#
+axis(2)#
+#axis(2, at = signif(seq(min(BRI,LOG), max(BRI,LOG), length = 5)[2:4], 2))#
+lines(LOG~Ks,  lwd = 2, lty = 2)#
+#lines(FULL~Ks, col = 3, lwd = 2)#
+dev.off()
+1000/40
+100/40
+L = 2
+numeric(2)
+library()
+library()
+Testing:#
+library(EVMSpackage)#
+#
+n = 10#
+p = 5#
+Y = runif(n)
+Testing:#
+library(EMVSpackage)#
+#
+n = 10#
+p = 5#
+Y = runif(n)
+Y
+n = 10#
+p = 5#
+Y = runif(n)#
+X = matrix(runif(n*p), n, p)
+X
+Y
