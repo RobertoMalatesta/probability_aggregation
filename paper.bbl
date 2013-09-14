@@ -1,4 +1,4 @@
-\begin{thebibliography}{54}
+\begin{thebibliography}{55}
 % BibTex style file: imsart-nameyear.bst, 2013-01-28
 % Default style options (sort=1,type=nameyear).
 % Used options (sort=1,type=nameyear).
@@ -342,6 +342,25 @@ In \bbooktitle{ECAI}
 \end{barticle}
 \endbibitem
 
+\bibitem[\protect\citeauthoryear{Mellers et~al.}{2013}]{mellers}
+\begin{barticle}[author]
+\bauthor{\bsnm{Mellers},~\bfnm{B.~A.}\binits{B.~A.}},
+  \bauthor{\bsnm{Ungar},~\bfnm{L.}\binits{L.}},
+  \bauthor{\bsnm{Baron},~\bfnm{J.}\binits{J.}},
+  \bauthor{\bsnm{Ramos},~\bfnm{J.}\binits{J.}},
+  \bauthor{\bsnm{Gurcay},~\bfnm{B.}\binits{B.}},
+  \bauthor{\bsnm{Fincher},~\bfnm{K.}\binits{K.}},
+  \bauthor{\bsnm{Scott},~\bfnm{S.}\binits{S.}},
+  \bauthor{\bsnm{Moore},~\bfnm{D.}\binits{D.}},
+  \bauthor{\bsnm{Atanasov},~\bfnm{P.}\binits{P.}},
+  \bauthor{\bsnm{Swift},~\bfnm{S.}\binits{S.}},
+  \bauthor{\bsnm{Murray},~\bfnm{T.}\binits{T.}} \AND
+  \bauthor{\bsnm{Tetlock},~\bfnm{P.}\binits{P.}}
+(\byear{2013}).
+\btitle{Improving predictions in a political forecasting tournament}.
+\end{barticle}
+\endbibitem
+
 \bibitem[\protect\citeauthoryear{Metropolis
   et~al.}{1953}]{metropolis1953equation}
 \begin{barticle}[author]
@@ -518,7 +537,7 @@ In \bbooktitle{UAI}
   \bauthor{\bsnm{Ungar},~\bfnm{L.~H.}\binits{L.~H.}}
 (\byear{2013}).
 \btitle{Combining Multiple Probability Predictions Using a Simple Logit Model}.
-\bjournal{submitted}.
+\bjournal{Under review}.
 \end{barticle}
 \endbibitem
 
