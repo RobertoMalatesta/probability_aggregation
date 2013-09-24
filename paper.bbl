@@ -49,15 +49,16 @@
 \endbibitem
 
 \bibitem[\protect\citeauthoryear{Baron et~al.}{2013}]{Baron}
-\begin{barticle}[author]
+\begin{bunpublished}[author]
 \bauthor{\bsnm{Baron},~\bfnm{J.}\binits{J.}},
   \bauthor{\bsnm{Ungar},~\bfnm{L.~H.}\binits{L.~H.}},
   \bauthor{\bsnm{Mellers},~\bfnm{B.~A.}\binits{B.~A.}} \AND
-  \bauthor{\bsnm{E.},~\bfnm{Tetlock~P.}\binits{T.~P.}}
+  \bauthor{\bsnm{Tetlock},~\bfnm{P.~E.}\binits{P.~E.}}
 (\byear{2013}).
 \btitle{Two reasons to make aggregated probability forecasts more extreme}.
-\bjournal{submitted}.
-\end{barticle}
+\bnote{Manuscript submitted for publication (A copy can be requested by
+  emailing Lyle Ungar at ungar@cis.upenn.edu)}.
+\end{bunpublished}
 \endbibitem
 
 \bibitem[\protect\citeauthoryear{Bier}{2004}]{bier2004implications}
@@ -108,15 +109,15 @@
 \endbibitem
 
 \bibitem[\protect\citeauthoryear{Buja, Stuetzle and Shen}{2005}]{buja2005loss}
-\begin{barticle}[author]
-\bauthor{\bsnm{Buja},~\bfnm{Andreas}\binits{A.}},
-  \bauthor{\bsnm{Stuetzle},~\bfnm{Werner}\binits{W.}} \AND
-  \bauthor{\bsnm{Shen},~\bfnm{Yi}\binits{Y.}}
+\begin{bunpublished}[author]
+\bauthor{\bsnm{Buja},~\bfnm{A.}\binits{A.}},
+  \bauthor{\bsnm{Stuetzle},~\bfnm{W}\binits{W.}} \AND
+  \bauthor{\bsnm{Shen},~\bfnm{Y.}\binits{Y.}}
 (\byear{2005}).
-\btitle{Loss functions for binary class probability estimation and
-  classification: Structure and applications}.
-\bjournal{Working draft, November}.
-\end{barticle}
+\btitle{Loss Functions for Binary Class Probability Estimation and
+  Classification: Structure and Applications}.
+\bnote{Manuscript available at www-stat.wharton.upenn.edu/~buja}.
+\end{bunpublished}
 \endbibitem
 
 \bibitem[\protect\citeauthoryear{Carter and Kohn}{1994}]{carter1994gibbs}
@@ -233,7 +234,7 @@
   \bauthor{\bsnm{Walsh},~\bfnm{Toby}\binits{T.}}
 (\byear{1996}).
 \btitle{Phase transitions and annealed theories: Number partitioning as a case
-  study'}.
+  study}.
 In \bbooktitle{ECAI}
 \bpages{170--174}.
 \bpublisher{Citeseer}.
@@ -343,7 +344,7 @@ In \bbooktitle{ECAI}
 \endbibitem
 
 \bibitem[\protect\citeauthoryear{Mellers et~al.}{2013}]{mellers}
-\begin{barticle}[author]
+\begin{bunpublished}[author]
 \bauthor{\bsnm{Mellers},~\bfnm{B.~A.}\binits{B.~A.}},
   \bauthor{\bsnm{Ungar},~\bfnm{L.}\binits{L.}},
   \bauthor{\bsnm{Baron},~\bfnm{J.}\binits{J.}},
@@ -358,7 +359,8 @@ In \bbooktitle{ECAI}
   \bauthor{\bsnm{Tetlock},~\bfnm{P.}\binits{P.}}
 (\byear{2013}).
 \btitle{Improving predictions in a political forecasting tournament}.
-\end{barticle}
+\bnote{Manuscript under review}.
+\end{bunpublished}
 \endbibitem
 
 \bibitem[\protect\citeauthoryear{Metropolis
@@ -528,7 +530,7 @@ In \bbooktitle{UAI}
 \endbibitem
 
 \bibitem[\protect\citeauthoryear{Satop\"a\"a et~al.}{2013}]{satopaa}
-\begin{barticle}[author]
+\begin{bunpublished}[author]
 \bauthor{\bsnm{Satop\"a\"a},~\bfnm{V.~A.}\binits{V.~A.}},
   \bauthor{\bsnm{Baron},~\bfnm{J.}\binits{J.}},
   \bauthor{\bsnm{Foster},~\bfnm{D.~P.}\binits{D.~P.}},
@@ -537,8 +539,7 @@ In \bbooktitle{UAI}
   \bauthor{\bsnm{Ungar},~\bfnm{L.~H.}\binits{L.~H.}}
 (\byear{2013}).
 \btitle{Combining Multiple Probability Predictions Using a Simple Logit Model}.
-\bjournal{Under review}.
-\end{barticle}
+\end{bunpublished}
 \endbibitem
 
 \bibitem[\protect\citeauthoryear{Shlyakhter
@@ -677,7 +678,7 @@ In \bbooktitle{Data Mining (ICDM), 2012 IEEE 12th International Conference on}
 \bauthor{\bsnm{Winkler},~\bfnm{Robert~L}\binits{R.~L.}} \AND
   \bauthor{\bsnm{Murphy},~\bfnm{Allan~H}\binits{A.~H.}}
 (\byear{1968}).
-\btitle{“Good” Probability Assessors1}.
+\btitle{“Good” Probability Assessors}.
 \end{barticle}
 \endbibitem
 
