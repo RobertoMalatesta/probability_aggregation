@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.3-1.40.12 (TeX Live 2011) (format=pdflatex 2011.7.3)  23 SEP 2013 21:01
+This is pdfTeX, Version 3.1415926-2.3-1.40.12 (TeX Live 2011) (format=pdflatex 2011.7.3)  28 SEP 2013 20:26
 entering extended mode
  \write18 enabled.
  file:line:error style messages enabled.
@@ -765,7 +765,7 @@ same identifier (name{equation.4.2}) has been already used, duplicate ignored
 
 \AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
                                                   \fi \fi 
-l.379 
+l.381 
       ]
 LaTeX Font Info:    Try loading font information for U+bbm on input line 415.
  (/usr/local/texlive/2011/texmf-dist/tex/latex/bbm-macros/ubbm.fd
@@ -834,14 +834,14 @@ Overfull \hbox (2.51938pt too wide) in paragraph at lines 524--527
 T1/ptm/m/n/10.95 This sec-tion is mo-ti-vated by decision-making.
  []
 
-[13] [14]
+[13]
 Overfull \hbox (4.69608pt too wide) in paragraph at lines 544--546
 \OT1/ptm/m/n/10.95 As in [][]Gel-man et al.[][] ([][]2003[][]), the prior is ch
 o-sen to be lo-cally uni-form, $\OML/cmm/m/it/10.95 p\OT1/cmr/m/n/10.95 (1\OML/
 cmm/m/it/10.95 =^^L\OT1/cmr/m/n/10.95 ) \OMS/cmsy/m/n/10.95 /
  []
 
-
+[14]
 Overfull \hbox (2.77461pt too wide) in alignment at lines 580--582
  [][][] []
  []
@@ -862,6 +862,12 @@ cores across all columns
  []
 
 
+Overfull \hbox (12.57153pt too wide) in paragraph at lines 639--640
+\OT1/ptm/m/n/10.95 ex-cept \OT1/ptm/m/it/10.95 Short\OT1/ptm/m/n/10.95 , where 
+they are slightly out-per-formed by $[][]$. How-ever, $[][]$
+ []
+
+[17]
 Overfull \hbox (1.91463pt too wide) in paragraph at lines 641--642
 []\OT1/ptm/m/n/10.95 In con-trast to $[][]$, the base-line SDLM-model lacks sha
 rp-ness and is highly
@@ -873,13 +879,7 @@ Overfull \hbox (2.03455pt too wide) in paragraph at lines 641--642
 re-casts. In-stead, it merely smooths
  []
 
-
-Overfull \hbox (1.91527pt too wide) in paragraph at lines 643--644
-\OT1/ptm/m/n/10.95 mod-er-ate fore-cast-ing per-for-mance in most columns of Ta
--ble [][]3[][]. Re-call that EWMBA
- []
-
-[17] <Figures/CalibrationNONE10.pdf, id=466, 122.4575pt x 115.43124pt>
+<Figures/CalibrationNONE10.pdf, id=466, 122.4575pt x 115.43124pt>
 File: Figures/CalibrationNONE10.pdf Graphic file (type pdf)
 
 <use Figures/CalibrationNONE10.pdf>
@@ -950,7 +950,7 @@ i-bra-tion plots for SDLM, $[][]$,
 Figures/CalibrationBRI10.pdf> <./Figures/CalibrationFULL10.pdf> <./Figures/Cali
 brationNONE.pdf> <./Figures/CalibrationSTO-Log.pdf> <./Figures/CalibrationSTO-B
 ri.pdf> <./Figures/CalibrationSO.pdf>]
-<Figures/BiasesBoxplots.pdf, id=551, 361.35pt x 252.945pt>
+<Figures/BiasesBoxplots.pdf, id=553, 361.35pt x 252.945pt>
 File: Figures/BiasesBoxplots.pdf Graphic file (type pdf)
 
 <use Figures/BiasesBoxplots.pdf>
@@ -967,14 +967,14 @@ Overfull \hbox (43.82896pt too wide) in paragraph at lines 751--753
  []|  [] 
  []
 
-<Figures/ExamplePlot1b.pdf, id=591, 201.75375pt x 201.75375pt>
+<Figures/ExamplePlot1b.pdf, id=593, 201.75375pt x 201.75375pt>
 File: Figures/ExamplePlot1b.pdf Graphic file (type pdf)
 
 <use Figures/ExamplePlot1b.pdf>
 Package pdftex.def Info: Figures/ExamplePlot1b.pdf used on input line 758.
 (pdftex.def)             Requested size: 176.40198pt x 176.40479pt.
 
-<Figures/ExamplePlot2b.pdf, id=592, 201.75375pt x 201.75375pt>
+<Figures/ExamplePlot2b.pdf, id=594, 201.75375pt x 201.75375pt>
 File: Figures/ExamplePlot2b.pdf Graphic file (type pdf)
 
 <use Figures/ExamplePlot2b.pdf>
@@ -1031,11 +1031,11 @@ Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 884.
 Here is how much of TeX's memory you used:
  12987 strings out of 493633
  198659 string characters out of 3143378
- 278626 words of memory out of 3000000
+ 276628 words of memory out of 3000000
  15854 multiletter control sequences out of 15000+200000
  42928 words of font info for 103 fonts, out of 3000000 for 9000
  831 hyphenation exceptions out of 8191
- 38i,16n,43p,1911b,561s stack positions out of 5000i,500n,10000p,200000b,50000s
+ 38i,16n,43p,1911b,567s stack positions out of 5000i,500n,10000p,200000b,50000s
  </Users/ville/Library/texlive/2011/texmf-var/fonts/pk/ljfour/public/bbm/bbm1
 0.657pk>{/usr/local/texlive/2011/texmf-dist/fonts/enc/dvips/base/8r.enc}</usr/l
 ocal/texlive/2011/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/lo
@@ -1061,7 +1061,7 @@ dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb></usr/local/texlive/2011/te
 xmf-dist/fonts/type1/urw/times/utmb8a.pfb></usr/local/texlive/2011/texmf-dist/f
 onts/type1/urw/times/utmr8a.pfb></usr/local/texlive/2011/texmf-dist/fonts/type1
 /urw/times/utmri8a.pfb>
-Output written on paper.pdf (30 pages, 464610 bytes).
+Output written on paper.pdf (30 pages, 464805 bytes).
 PDF statistics:
  800 PDF objects out of 1000 (max. 8388607)
  695 compressed objects within 7 object streams

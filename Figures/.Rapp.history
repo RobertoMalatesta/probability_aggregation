@@ -1,1316 +1,1095 @@
-T = ifelse(is.matrix(y), nrow(y), length(y))#
-  if(is.matrix(y)){#
-    y = rbind(NA, y)#
-  } else {#
-    y = append(y, NA, after = 0)#
-  }
-y = Y
-T = ifelse(is.matrix(y), nrow(y), length(y))#
-  if(is.matrix(y)){#
-    y = rbind(NA, y)#
-  } else {#
-    y = append(y, NA, after = 0)#
-  }
-T
-y
-theta.prior = vector("list", T+1)#
-  theta = vector("list", T+1)#
-  theta.post = vector("list", T+1)#
-#
-  Sigma.prior = vector("list", T+1)#
-  Sigma = vector("list", T+1)#
-  Sigma.post = vector("list", T+1)#
-#
-  R = vector("list", T+1)#
-#
-  ## time t=0#
-  theta[[1]] = theta0 # First value given#
-  Sigma[[1]] = Sigma0 # First value given
-time t=0#
-  theta[[1]] = theta0 # First value given#
-  Sigma[[1]] = Sigma0 # First value given#
-#
-  ## Filtering:#
-  for(t in 2:(T+1)){#
-    theta.prior[[t]] = G * theta[[t-1]]#
-    Sigma.prior[[t]] = G * Sigma[[t-1]] * G + W#
-#
-    if(is.matrix(y)){#
-      e = y[t,] - F %*% theta.prior[[t]]#
-      S = F %*% Sigma.prior[[t]] %*% t(F) + diag(rep(V, nrow(F)))#
-    } else {#
-      e = y[t] - F * theta.prior[[t]]#
-      S = F^2 * Sigma.prior[[t]] + V#
-    }#
-    K = Sigma.prior[[t]] %*% t(F) %*% solve(S)#
-#
-    theta[[t]] = theta.prior[[t]] + K %*% e#
-    Sigma[[t]] = (1 - K %*% F) %*% Sigma.prior[[t]]      #
-  }
-theta.prior
-theta
-Smoothing:#
-  theta.post[[T+1]] = theta[[T+1]]#
-  Sigma.post[[T+1]] = Sigma[[T+1]]
-theta.post
-Sigma.post
-theta.post
-X.true
-Smoothing:#
-  theta.post[[T+1]] = theta[[T+1]]#
-  Sigma.post[[T+1]] = Sigma[[T+1]]#
-  for(t in T:2){#
-    Sigma.post[[t]] = 1/(G * G / W +1/Sigma[[t]])#
-    theta.post[[t]] = Sigma.post[[t]] * (G * theta.post[[t+1]]/ W + theta[[t]]/Sigma[[t]])#
-  }
-unlist(theta.post)
-sqrt(unlist(Sigma.post))
-length(unlist(theta.post))
-T
-X = rnorm(T, unlist(theta.post), sqrt(unlist(Sigma.post)))
-X
-FFBS = function(y,F,V,G,W,theta0,Sigma0,nd=1){#
-  T = ifelse(is.matrix(y), nrow(y), length(y))#
-  if(is.matrix(y)){#
-    y = rbind(NA, y)#
-  } else {#
-    y = append(y, NA, after = 0)#
-  }#
-#
-  theta.prior = vector("list", T+1)#
-  theta = vector("list", T+1)#
-  theta.post = vector("list", T+1)#
-#
-  Sigma.prior = vector("list", T+1)#
-  Sigma = vector("list", T+1)#
-  Sigma.post = vector("list", T+1)#
-#
-  R = vector("list", T+1)#
-#
-  ## time t=0#
-  theta[[1]] = theta0 # First value given#
-  Sigma[[1]] = Sigma0 # First value given#
-#
-  ## Filtering:#
-  for(t in 2:(T+1)){#
-    theta.prior[[t]] = G * theta[[t-1]]#
-    Sigma.prior[[t]] = G * Sigma[[t-1]] * G + W#
-#
-    if(is.matrix(y)){#
-      e = y[t,] - F %*% theta.prior[[t]]#
-      S = F %*% Sigma.prior[[t]] %*% t(F) + diag(rep(V, nrow(F)))#
-    } else {#
-      e = y[t] - F * theta.prior[[t]]#
-      S = F^2 * Sigma.prior[[t]] + V#
-    }#
-    K = Sigma.prior[[t]] %*% t(F) %*% solve(S)#
-#
-    theta[[t]] = theta.prior[[t]] + K %*% e#
-    Sigma[[t]] = (1 - K %*% F) %*% Sigma.prior[[t]]      #
-  }#
-#
-  ## Smoothing:#
-  theta.post[[T+1]] = theta[[T+1]]#
-  Sigma.post[[T+1]] = Sigma[[T+1]]#
-  for(t in T:2){#
-    Sigma.post[[t]] = 1/(G * G / W +1/Sigma[[t]])#
-    theta.post[[t]] = Sigma.post[[t]] * (G * theta.post[[t+1]]/ W + theta[[t]]/Sigma[[t]])#
-  }#
-  ## Sampling:#
-  X = rnorm(T, unlist(theta.post), sqrt(unlist(Sigma.post)))#
-  return(X)#
-}
-if(is.matrix(Y)){    #
-    N = ncol(Y)#
-    T = nrow(Y)#
-    Y = Y[,order(exp.levels)]#
-    Z = model.matrix(~-1+factor(exp.levels))#
-    Y.vec = c(Y)#
-  } else {#
-    N = 1#
-    T = length(Y)#
-    Z = 1#
-    Y.vec = Y#
-  }#
-#
-  gamma.sim = gamma0#
-  sigma2.sim = sigma20#
-  tau2.sim = tau20#
-  X.sim = matrix(NA, T, num.sims)#
-#
-  exp.levels = sort(exp.levels)#
-  exp.counts = c(table(exp.levels))#
-  b.sim = matrix(1, num.sims+1, length(exp.counts))#
-#
-  a0 = 0.001#
-  b0 = 0.001#
-  mu0 = rep(0, length(exp.counts))#
-  Lambda0 = (1/100)*diag(length(exp.counts))#
-  for(k in 1:num.sims){#
-    if(verbose) print(k)#
-    ## STEP 1: Sample X:#
-    X = FFBS(#
-      y=Y,#
-      F = Z %*% b.sim[k,],#
-      V=sigma2.sim[k],#
-      G=gamma.sim[k],#
-      W=tau2.sim[k],#
-      theta0=0,#
-      Sigma0=1,#
-      nd=1)#
-    X.sim[,k] = X#
-#
-    ## STEP 2: Sample sigma2 and bias b:  #
-    X.bd = bdiag(lapply(exp.counts, function(ii) rep(X, ii)))#
-    Lambdan = (t(X.bd) %*% X.bd + Lambda0)#
-    mun = solve(Lambdan) %*% t(X.bd) %*% Y.vec#
-    an = a0 + length(Y.vec)/2#
-    bn = b0 + 0.5*(t(Y.vec)%*%Y.vec - t(mun) %*% Lambdan %*% mun)#
-#
-    require(MCMCpack)#
-    sigma2.sim[k+1] = rinvgamma(1, shape = an, scale = bn)#
-    b.sim[k+1,] = mvrnorm(1, mun, solve(Lambdan)* sigma2.sim[k+1])#
-    ##res = (Y.vec - X.bd %*% bhat)#
-    ##n.minus.k = length(Y.vec)-length(bhat)#
-    #sigma2.sim[k+1] = rinvchisq(1, df = n.minus.k, scale = (t(res) %*% res)/n.minus.k)#
-    #sigma2.sim[k+1] = 2#
-    ##b.sim[k+1,] = mvrnorm(1, bhat, Vbeta * sigma2.sim[k+1])#
-    #b.sim[k+1,] = 2.5#
-    ## STEP 3: Sample gamma:#
-    XY = X[-1]#
-    XX = X[-T]#
-    Vgamma = solve(t(XX) %*% XX)#
-    gammahat =  Vgamma %*% t(XX) %*% XY#
-    res = (XY - XX*gammahat)#
-#
-    n.minus.k = length(XX)-length(gammahat)#
-    tau2.sim[k+1] = rinvchisq(1, df = n.minus.k, scale = (t(res) %*% res)/n.minus.k)  #
-    gamma.sim[k+1] = rnorm(1, gammahat, sqrt(Vgamma * tau2.sim[k+1]))#
-#
-    tau2.sim[k+1] = 2#
-    gamma.sim[k+1] = 1.01#
-#
-  }
-sigma2.sim
-plot(sigma2.sim)
-b.sim
-exp.levels
-num.sims = 5000
-if(is.matrix(Y)){    #
-    N = ncol(Y)#
-    T = nrow(Y)#
-    Y = Y[,order(exp.levels)]#
-    Z = model.matrix(~-1+factor(exp.levels))#
-    Y.vec = c(Y)#
-  } else {#
-    N = 1#
-    T = length(Y)#
-    Z = 1#
-    Y.vec = Y#
-  }#
-#
-  gamma.sim = gamma0#
-  sigma2.sim = sigma20#
-  tau2.sim = tau20#
-  X.sim = matrix(NA, T, num.sims)#
-#
-  exp.levels = sort(exp.levels)#
-  exp.counts = c(table(exp.levels))#
-  b.sim = matrix(1, num.sims+1, length(exp.counts))#
-#
-  a0 = 0.001#
-  b0 = 0.001#
-  mu0 = rep(0, length(exp.counts))#
-  Lambda0 = (1/100)*diag(length(exp.counts))#
-  for(k in 1:num.sims){#
-    if(verbose) print(k)#
-    ## STEP 1: Sample X:#
-    X = FFBS(#
-      y=Y,#
-      F = Z %*% b.sim[k,],#
-      V=sigma2.sim[k],#
-      G=gamma.sim[k],#
-      W=tau2.sim[k],#
-      theta0=0,#
-      Sigma0=1,#
-      nd=1)#
-    X.sim[,k] = X#
-#
-    ## STEP 2: Sample sigma2 and bias b:  #
-    X.bd = bdiag(lapply(exp.counts, function(ii) rep(X, ii)))#
-    Lambdan = (t(X.bd) %*% X.bd + Lambda0)#
-    mun = solve(Lambdan) %*% t(X.bd) %*% Y.vec#
-    an = a0 + length(Y.vec)/2#
-    bn = b0 + 0.5*(t(Y.vec)%*%Y.vec - t(mun) %*% Lambdan %*% mun)#
-#
-    require(MCMCpack)#
-    sigma2.sim[k+1] = rinvgamma(1, shape = an, scale = bn)#
-    b.sim[k+1,] = mvrnorm(1, mun, solve(Lambdan)* sigma2.sim[k+1])#
-    ##res = (Y.vec - X.bd %*% bhat)#
-    ##n.minus.k = length(Y.vec)-length(bhat)#
-    #sigma2.sim[k+1] = rinvchisq(1, df = n.minus.k, scale = (t(res) %*% res)/n.minus.k)#
-    #sigma2.sim[k+1] = 2#
-    ##b.sim[k+1,] = mvrnorm(1, bhat, Vbeta * sigma2.sim[k+1])#
-    #b.sim[k+1,] = 2.5#
-    ## STEP 3: Sample gamma:#
-    XY = X[-1]#
-    XX = X[-T]#
-    Vgamma = solve(t(XX) %*% XX)#
-    gammahat =  Vgamma %*% t(XX) %*% XY#
-    res = (XY - XX*gammahat)#
-#
-    n.minus.k = length(XX)-length(gammahat)#
-    tau2.sim[k+1] = rinvchisq(1, df = n.minus.k, scale = (t(res) %*% res)/n.minus.k)  #
-    gamma.sim[k+1] = rnorm(1, gammahat, sqrt(Vgamma * tau2.sim[k+1]))#
-#
-    tau2.sim[k+1] = 2#
-    gamma.sim[k+1] = 1.01#
-#
-  }
-plot(sigma2.sim)
-mean(sigma2.sim)
-b.sim
-mean(b.sim)
-plot(b.sim)
-mean(sigma2.sim)
-plot(sigma2.sim)
-mean(sigma2.sim)
-theta.post
-unlist(theta.post)
-X.bd
-X.bd %*% b.sim[k+1,]
-gamma
-if(is.matrix(Y)){    #
-    N = ncol(Y)#
-    T = nrow(Y)#
-    Y = Y[,order(exp.levels)]#
-    Z = model.matrix(~-1+factor(exp.levels))#
-    Y.vec = c(Y)#
-  } else {#
-    N = 1#
-    T = length(Y)#
-    Z = 1#
-    Y.vec = Y#
-  }#
-#
-  gamma.sim = gamma0#
-  sigma2.sim = sigma20#
-  tau2.sim = tau20#
-  X.sim = matrix(NA, T, num.sims)#
-#
-  exp.levels = sort(exp.levels)#
-  exp.counts = c(table(exp.levels))#
-  b.sim = matrix(1, num.sims+1, length(exp.counts))#
-#
-  a0 = 0.001#
-  b0 = 0.001#
-  mu0 = rep(0, length(exp.counts))#
-  Lambda0 = (1/100)*diag(length(exp.counts))#
-  for(k in 1:num.sims){#
-    if(verbose) print(k)#
-    ## STEP 1: Sample X:#
-    X = FFBS(#
-      y=Y,#
-      F = Z %*% b.sim[k,],#
-      V=sigma2.sim[k],#
-      G=gamma.sim[k],#
-      W=tau2.sim[k],#
-      theta0=0,#
-      Sigma0=1,#
-      nd=1)#
-    X.sim[,k] = X#
-#
-    ## STEP 2: Sample sigma2 and bias b:  #
-    X.bd = bdiag(lapply(exp.counts, function(ii) rep(X, ii)))#
-    Lambdan = (t(X.bd) %*% X.bd + Lambda0)#
-    mun = solve(Lambdan) %*% t(X.bd) %*% Y.vec#
-    b.sim[k+1,] = mvrnorm(1, mun, solve(Lambdan)*sigma2.sim[k])#
-    an = a0 + length(Y.vec)/2#
-    bn = b0 + sum( (Y.vec - X.bd %*% b.sim[k+1,])^2)/2#
-    sigma2.sim[k+1] = 1/gamma(1, shape = an, scale = bn)#
-    ##res = (Y.vec - X.bd %*% bhat)#
-    ##n.minus.k = length(Y.vec)-length(bhat)#
-    #sigma2.sim[k+1] = rinvchisq(1, df = n.minus.k, scale = (t(res) %*% res)/n.minus.k)#
-    #sigma2.sim[k+1] = 2#
-    ##b.sim[k+1,] = mvrnorm(1, bhat, Vbeta * sigma2.sim[k+1])#
-    #b.sim[k+1,] = 2.5#
-    ## STEP 3: Sample gamma:#
-    XY = X[-1]#
-    XX = X[-T]#
-    Vgamma = solve(t(XX) %*% XX)#
-    gammahat =  Vgamma %*% t(XX) %*% XY#
-    res = (XY - XX*gammahat)#
-#
-    n.minus.k = length(XX)-length(gammahat)#
-    tau2.sim[k+1] = rinvchisq(1, df = n.minus.k, scale = (t(res) %*% res)/n.minus.k)  #
-    gamma.sim[k+1] = rnorm(1, gammahat, sqrt(Vgamma * tau2.sim[k+1]))#
-#
-    tau2.sim[k+1] = 2#
-    gamma.sim[k+1] = 1.01#
-#
-  }
-if(is.matrix(Y)){    #
-    N = ncol(Y)#
-    T = nrow(Y)#
-    Y = Y[,order(exp.levels)]#
-    Z = model.matrix(~-1+factor(exp.levels))#
-    Y.vec = c(Y)#
-  } else {#
-    N = 1#
-    T = length(Y)#
-    Z = 1#
-    Y.vec = Y#
-  }#
-#
-  gamma.sim = gamma0#
-  sigma2.sim = sigma20#
-  tau2.sim = tau20#
-  X.sim = matrix(NA, T, num.sims)#
-#
-  exp.levels = sort(exp.levels)#
-  exp.counts = c(table(exp.levels))#
-  b.sim = matrix(1, num.sims+1, length(exp.counts))#
-#
-  a0 = 0.001#
-  b0 = 0.001#
-  mu0 = rep(0, length(exp.counts))#
-  Lambda0 = (1/100)*diag(length(exp.counts))#
-  for(k in 1:num.sims){#
-    if(verbose) print(k)#
-    ## STEP 1: Sample X:#
-    X = FFBS(#
-      y=Y,#
-      F = Z %*% b.sim[k,],#
-      V=sigma2.sim[k],#
-      G=gamma.sim[k],#
-      W=tau2.sim[k],#
-      theta0=0,#
-      Sigma0=1,#
-      nd=1)#
-    X.sim[,k] = X#
-#
-    ## STEP 2: Sample sigma2 and bias b:  #
-    X.bd = bdiag(lapply(exp.counts, function(ii) rep(X, ii)))#
-    Lambdan = (t(X.bd) %*% X.bd + Lambda0)#
-    mun = solve(Lambdan) %*% t(X.bd) %*% Y.vec#
-    b.sim[k+1,] = mvrnorm(1, mun, solve(Lambdan)*sigma2.sim[k])#
-    an = a0 + length(Y.vec)/2#
-    bn = b0 + sum( (Y.vec - X.bd %*% b.sim[k+1,])^2)/2#
-    sigma2.sim[k+1] = 1/rgamma(1, shape = an, scale = bn)#
-    ##res = (Y.vec - X.bd %*% bhat)#
-    ##n.minus.k = length(Y.vec)-length(bhat)#
-    #sigma2.sim[k+1] = rinvchisq(1, df = n.minus.k, scale = (t(res) %*% res)/n.minus.k)#
-    #sigma2.sim[k+1] = 2#
-    ##b.sim[k+1,] = mvrnorm(1, bhat, Vbeta * sigma2.sim[k+1])#
-    #b.sim[k+1,] = 2.5#
-    ## STEP 3: Sample gamma:#
-    XY = X[-1]#
-    XX = X[-T]#
-    Vgamma = solve(t(XX) %*% XX)#
-    gammahat =  Vgamma %*% t(XX) %*% XY#
-    res = (XY - XX*gammahat)#
-#
-    n.minus.k = length(XX)-length(gammahat)#
-    tau2.sim[k+1] = rinvchisq(1, df = n.minus.k, scale = (t(res) %*% res)/n.minus.k)  #
-    gamma.sim[k+1] = rnorm(1, gammahat, sqrt(Vgamma * tau2.sim[k+1]))#
-#
-    tau2.sim[k+1] = 2#
-    gamma.sim[k+1] = 1.01#
-#
-  }
-sigma2.sim
-plot(sigma2.sim)
-b.sim
-mean(b.sim)
-plot(b.sim)
-X
-X.true
-STEP 2: Sample sigma2 and bias b:  #
-    X.bd = bdiag(lapply(exp.counts, function(ii) rep(X, ii)))#
-    Lambdan = (t(X.bd) %*% X.bd + Lambda0)#
-    mun = solve(Lambdan) %*% t(X.bd) %*% Y.vec#
-    b.sim[k+1,] = mvrnorm(1, mun, solve(Lambdan)*sigma2.sim[k])
-an = a0 + length(Y.vec)/2#
-    bn = b0 + sum( (Y.vec - X.bd %*% b.sim[k+1,])^2)/2
-a
-an
-bn
-mean(rgamma(1000, shape = an, scale = bn))
-mean(1/rgamma(1000, shape = an, scale = bn))
-an/bn
-an*bn
-mean(1/rgamma(1000, shape = an, scale = bn))
-mean(1/rgamma(1000, shape = an, rate = bn))
-?gamma
-?rgamma
-if(is.matrix(Y)){    #
-    N = ncol(Y)#
-    T = nrow(Y)#
-    Y = Y[,order(exp.levels)]#
-    Z = model.matrix(~-1+factor(exp.levels))#
-    Y.vec = c(Y)#
-  } else {#
-    N = 1#
-    T = length(Y)#
-    Z = 1#
-    Y.vec = Y#
-  }#
-#
-  gamma.sim = gamma0#
-  sigma2.sim = sigma20#
-  tau2.sim = tau20#
-  X.sim = matrix(NA, T, num.sims)#
-#
-  exp.levels = sort(exp.levels)#
-  exp.counts = c(table(exp.levels))#
-  b.sim = matrix(1, num.sims+1, length(exp.counts))#
-#
-  a0 = 0.001#
-  b0 = 0.001#
-  mu0 = rep(0, length(exp.counts))#
-  Lambda0 = (1/100)*diag(length(exp.counts))#
-  for(k in 1:num.sims){#
-    if(verbose) print(k)#
-    ## STEP 1: Sample X:#
-    X = FFBS(#
-      y=Y,#
-      F = Z %*% b.sim[k,],#
-      V=sigma2.sim[k],#
-      G=gamma.sim[k],#
-      W=tau2.sim[k],#
-      theta0=0,#
-      Sigma0=1,#
-      nd=1)#
-    X.sim[,k] = X#
-#
-    ## STEP 2: Sample sigma2 and bias b:  #
-    X.bd = bdiag(lapply(exp.counts, function(ii) rep(X, ii)))#
-    Lambdan = (t(X.bd) %*% X.bd + Lambda0)#
-    mun = solve(Lambdan) %*% t(X.bd) %*% Y.vec#
-    b.sim[k+1,] = mvrnorm(1, mun, solve(Lambdan)*sigma2.sim[k])#
-    an = a0 + length(Y.vec)/2#
-    bn = b0 + sum( (Y.vec - X.bd %*% b.sim[k+1,])^2)/2#
-    sigma2.sim[k+1] = 1/rgamma(1, shape = an, rate = bn)#
-    ##res = (Y.vec - X.bd %*% bhat)#
-    ##n.minus.k = length(Y.vec)-length(bhat)#
-    #sigma2.sim[k+1] = rinvchisq(1, df = n.minus.k, scale = (t(res) %*% res)/n.minus.k)#
-    #sigma2.sim[k+1] = 2#
-    ##b.sim[k+1,] = mvrnorm(1, bhat, Vbeta * sigma2.sim[k+1])#
-    #b.sim[k+1,] = 2.5#
-    ## STEP 3: Sample gamma:#
-    XY = X[-1]#
-    XX = X[-T]#
-    Vgamma = solve(t(XX) %*% XX)#
-    gammahat =  Vgamma %*% t(XX) %*% XY#
-    res = (XY - XX*gammahat)#
-#
-    n.minus.k = length(XX)-length(gammahat)#
-    tau2.sim[k+1] = rinvchisq(1, df = n.minus.k, scale = (t(res) %*% res)/n.minus.k)  #
-    gamma.sim[k+1] = rnorm(1, gammahat, sqrt(Vgamma * tau2.sim[k+1]))#
-#
-    tau2.sim[k+1] = 2#
-    gamma.sim[k+1] = 1.01#
-#
-  }
-sigma2.sim
-plot(sigma2.sim)
-b.sim
-plot(b.sim)
-plot(sigma2.sim)
-colMeans(X.sim)
-rowMeans(X.sim)
-plot(rowMeans(X.sim))
-points(X.true, col = 2)
-N = 1#
-exp.levels = sort(sample(1:2, N, replace = TRUE))#
-b = runif(2, 0, 5)#
-b = c(1.5, 2.5)#
-sim.data = simulate.data(tau2 = 2, sigma2 = 2, x0 = 0, gamma = 1.01, exp.levels = exp.levels, b = b, T = 500)#
-X.true = sim.data$X#
-Y = sim.data$Y#
-#
-plot(X.true)
-if(is.matrix(Y)){    #
-    N = ncol(Y)#
-    T = nrow(Y)#
-    Y = Y[,order(exp.levels)]#
-    Z = model.matrix(~-1+factor(exp.levels))#
-    Y.vec = c(Y)#
-  } else {#
-    N = 1#
-    T = length(Y)#
-    Z = 1#
-    Y.vec = Y#
-  }#
-#
-  gamma.sim = gamma0#
-  sigma2.sim = sigma20#
-  tau2.sim = tau20#
-  X.sim = matrix(NA, T, num.sims)#
-#
-  exp.levels = sort(exp.levels)#
-  exp.counts = c(table(exp.levels))#
-  b.sim = matrix(1, num.sims+1, length(exp.counts))#
-#
-  a0 = 0.001#
-  b0 = 0.001#
-  mu0 = rep(0, length(exp.counts))#
-  Lambda0 = (1/100)*diag(length(exp.counts))#
-  for(k in 1:num.sims){#
-    if(verbose) print(k)#
-    ## STEP 1: Sample X:#
-    X = FFBS(#
-      y=Y,#
-      F = Z %*% b.sim[k,],#
-      V=sigma2.sim[k],#
-      G=gamma.sim[k],#
-      W=tau2.sim[k],#
-      theta0=0,#
-      Sigma0=1,#
-      nd=1)#
-    X.sim[,k] = X#
-#
-    ## STEP 2: Sample sigma2 and bias b:  #
-    X.bd = bdiag(lapply(exp.counts, function(ii) rep(X, ii)))#
-    Lambdan = (t(X.bd) %*% X.bd + Lambda0)#
-    mun = solve(Lambdan) %*% t(X.bd) %*% Y.vec#
-    b.sim[k+1,] = mvrnorm(1, mun, solve(Lambdan)*sigma2.sim[k])#
-    an = a0 + length(Y.vec)/2#
-    bn = b0 + sum( (Y.vec - X.bd %*% b.sim[k+1,])^2)/2#
-    sigma2.sim[k+1] = 1/rgamma(1, shape = an, rate = bn)#
-    ##res = (Y.vec - X.bd %*% bhat)#
-    ##n.minus.k = length(Y.vec)-length(bhat)#
-    #sigma2.sim[k+1] = rinvchisq(1, df = n.minus.k, scale = (t(res) %*% res)/n.minus.k)#
-    #sigma2.sim[k+1] = 2#
-    ##b.sim[k+1,] = mvrnorm(1, bhat, Vbeta * sigma2.sim[k+1])#
-    #b.sim[k+1,] = 2.5#
-    ## STEP 3: Sample gamma:#
-    XY = X[-1]#
-    XX = X[-T]#
-    Vgamma = solve(t(XX) %*% XX)#
-    gammahat =  Vgamma %*% t(XX) %*% XY#
-    res = (XY - XX*gammahat)#
-#
-    n.minus.k = length(XX)-length(gammahat)#
-    tau2.sim[k+1] = rinvchisq(1, df = n.minus.k, scale = (t(res) %*% res)/n.minus.k)  #
-    gamma.sim[k+1] = rnorm(1, gammahat, sqrt(Vgamma * tau2.sim[k+1]))#
-#
-    tau2.sim[k+1] = 2#
-    gamma.sim[k+1] = 1.01#
-#
-  }
-Y
-is.matrix(Y)
-if(is.matrix(Y)){    #
-    N = ncol(Y)#
-    T = nrow(Y)#
-    Y = Y[,order(exp.levels)]#
-    Z = model.matrix(~-1+factor(exp.levels))#
-    Y.vec = c(Y)#
-  } else {#
-    N = 1#
-    T = length(Y)#
-    Z = 1#
-    Y.vec = Y#
-  }
-gamma.sim = gamma0#
-  sigma2.sim = sigma20#
-  tau2.sim = tau20#
-  X.sim = matrix(NA, T, num.sims)#
-#
-  exp.levels = sort(exp.levels)#
-  exp.counts = c(table(exp.levels))#
-  b.sim = matrix(1, num.sims+1, length(exp.counts))#
-#
-  a0 = 0.001#
-  b0 = 0.001#
-  mu0 = rep(0, length(exp.counts))#
-  Lambda0 = (1/100)*diag(length(exp.counts))
-for(k in 1:num.sims){#
-    if(verbose) print(k)#
-    ## STEP 1: Sample X:#
-    X = FFBS(#
-      y=Y,#
-      F = Z %*% b.sim[k,],#
-      V=sigma2.sim[k],#
-      G=gamma.sim[k],#
-      W=tau2.sim[k],#
-      theta0=0,#
-      Sigma0=1,#
-      nd=1)#
-    X.sim[,k] = X#
-#
-    ## STEP 2: Sample sigma2 and bias b:  #
-    X.bd = bdiag(lapply(exp.counts, function(ii) rep(X, ii)))#
-    Lambdan = (t(X.bd) %*% X.bd + Lambda0)#
-    mun = solve(Lambdan) %*% t(X.bd) %*% Y.vec#
-    b.sim[k+1,] = mvrnorm(1, mun, solve(Lambdan)*sigma2.sim[k])#
-    an = a0 + length(Y.vec)/2#
-    bn = b0 + sum( (Y.vec - X.bd %*% b.sim[k+1,])^2)/2#
-    sigma2.sim[k+1] = 1/rgamma(1, shape = an, rate = bn)#
-    ##res = (Y.vec - X.bd %*% bhat)#
-    ##n.minus.k = length(Y.vec)-length(bhat)#
-    #sigma2.sim[k+1] = rinvchisq(1, df = n.minus.k, scale = (t(res) %*% res)/n.minus.k)#
-    #sigma2.sim[k+1] = 2#
-    ##b.sim[k+1,] = mvrnorm(1, bhat, Vbeta * sigma2.sim[k+1])#
-    #b.sim[k+1,] = 2.5#
-    ## STEP 3: Sample gamma:#
-    XY = X[-1]#
-    XX = X[-T]#
-    Vgamma = solve(t(XX) %*% XX)#
-    gammahat =  Vgamma %*% t(XX) %*% XY#
-    res = (XY - XX*gammahat)#
-#
-    n.minus.k = length(XX)-length(gammahat)#
-    tau2.sim[k+1] = rinvchisq(1, df = n.minus.k, scale = (t(res) %*% res)/n.minus.k)  #
-    gamma.sim[k+1] = rnorm(1, gammahat, sqrt(Vgamma * tau2.sim[k+1]))#
-#
-    tau2.sim[k+1] = 2#
-    gamma.sim[k+1] = 1.01#
-#
-  }
-sigma2.sim
-plot(sigma2.sim)
-b.sim
-plot(b.sim)
-b
-exp.levels
-plot(b.sim)
-plot(rowMeans(X.sim))
-points(X.true, col = 2)
-for(k in 1:num.sims){#
-    if(verbose) print(k)#
-    ## STEP 1: Sample X:#
-    X = FFBS(#
-      y=Y,#
-      F = Z %*% b.sim[k,],#
-      V=sigma2.sim[k],#
-      G=gamma.sim[k],#
-      W=tau2.sim[k],#
-      theta0=0,#
-      Sigma0=1,#
-      nd=1)#
-    X.sim[,k] = X#
-#
-    ## STEP 2: Sample sigma2 and bias b:  #
-    X.bd = bdiag(lapply(exp.counts, function(ii) rep(X, ii)))#
-    Lambdan = (t(X.bd) %*% X.bd + Lambda0)#
-    mun = solve(Lambdan) %*% t(X.bd) %*% Y.vec#
-    b.sim[k+1,] = mvrnorm(1, mun, solve(Lambdan)*sigma2.sim[k])#
-    an = a0 + length(Y.vec)/2#
-    bn = b0 + sum( (Y.vec - X.bd %*% b.sim[k+1,])^2)/2#
-    sigma2.sim[k+1] = 1/rgamma(1, shape = an, rate = bn)#
-    ##res = (Y.vec - X.bd %*% bhat)#
-    ##n.minus.k = length(Y.vec)-length(bhat)#
-    #sigma2.sim[k+1] = rinvchisq(1, df = n.minus.k, scale = (t(res) %*% res)/n.minus.k)#
-    #sigma2.sim[k+1] = 2#
-    ##b.sim[k+1,] = mvrnorm(1, bhat, Vbeta * sigma2.sim[k+1])#
-    #b.sim[k+1,] = 2.5#
-    ## STEP 3: Sample gamma:#
-    XY = X[-1]#
-    XX = X[-T]#
-    Vgamma = solve(t(XX) %*% XX)#
-    gammahat =  Vgamma %*% t(XX) %*% XY#
-    res = (XY - XX*gammahat)#
-#
-    n.minus.k = length(XX)-length(gammahat)#
-    tau2.sim[k+1] = rinvchisq(1, df = n.minus.k, scale = (t(res) %*% res)/n.minus.k)  #
-    gamma.sim[k+1] = rnorm(1, gammahat, sqrt(Vgamma * tau2.sim[k+1]))#
-#
-    tau2.sim[k+1] = 2#
-    gamma.sim[k+1] = 1.01#
-#
-  }
-N = 3#
-exp.levels = sort(sample(1:2, N, replace = TRUE))#
-b = runif(2, 0, 5)#
-b = c(1.5, 2.5)#
-sim.data = simulate.data(tau2 = 2, sigma2 = 2, x0 = 0, gamma = 1.01, exp.levels = exp.levels, b = b, T = 500)#
-X.true = sim.data$X#
-Y = sim.data$Y
-if(is.matrix(Y)){    #
-    N = ncol(Y)#
-    T = nrow(Y)#
-    Y = Y[,order(exp.levels)]#
-    Z = model.matrix(~-1+factor(exp.levels))#
-    Y.vec = c(Y)#
-  } else {#
-    N = 1#
-    T = length(Y)#
-    Z = 1#
-    Y.vec = Y#
-  }#
-#
-  gamma.sim = gamma0#
-  sigma2.sim = sigma20#
-  tau2.sim = tau20#
-  X.sim = matrix(NA, T, num.sims)#
-#
-  exp.levels = sort(exp.levels)#
-  exp.counts = c(table(exp.levels))#
-  b.sim = matrix(1, num.sims+1, length(exp.counts))#
-#
-  a0 = 0.001#
-  b0 = 0.001#
-  mu0 = rep(0, length(exp.counts))#
-  Lambda0 = (1/100)*diag(length(exp.counts))#
-  for(k in 1:num.sims){#
-    if(verbose) print(k)#
-    ## STEP 1: Sample X:#
-    X = FFBS(#
-      y=Y,#
-      F = Z %*% b.sim[k,],#
-      V=sigma2.sim[k],#
-      G=gamma.sim[k],#
-      W=tau2.sim[k],#
-      theta0=0,#
-      Sigma0=1,#
-      nd=1)#
-    X.sim[,k] = X#
-#
-    ## STEP 2: Sample sigma2 and bias b:  #
-    X.bd = bdiag(lapply(exp.counts, function(ii) rep(X, ii)))#
-    Lambdan = (t(X.bd) %*% X.bd + Lambda0)#
-    mun = solve(Lambdan) %*% t(X.bd) %*% Y.vec#
-    b.sim[k+1,] = mvrnorm(1, mun, solve(Lambdan)*sigma2.sim[k])#
-    an = a0 + length(Y.vec)/2#
-    bn = b0 + sum( (Y.vec - X.bd %*% b.sim[k+1,])^2)/2#
-    sigma2.sim[k+1] = 1/rgamma(1, shape = an, rate = bn)#
-    ##res = (Y.vec - X.bd %*% bhat)#
-    ##n.minus.k = length(Y.vec)-length(bhat)#
-    #sigma2.sim[k+1] = rinvchisq(1, df = n.minus.k, scale = (t(res) %*% res)/n.minus.k)#
-    #sigma2.sim[k+1] = 2#
-    ##b.sim[k+1,] = mvrnorm(1, bhat, Vbeta * sigma2.sim[k+1])#
-    #b.sim[k+1,] = 2.5#
-    ## STEP 3: Sample gamma:#
-    XY = X[-1]#
-    XX = X[-T]#
-    Vgamma = solve(t(XX) %*% XX)#
-    gammahat =  Vgamma %*% t(XX) %*% XY#
-    res = (XY - XX*gammahat)#
-#
-    n.minus.k = length(XX)-length(gammahat)#
-    tau2.sim[k+1] = rinvchisq(1, df = n.minus.k, scale = (t(res) %*% res)/n.minus.k)  #
-    gamma.sim[k+1] = rnorm(1, gammahat, sqrt(Vgamma * tau2.sim[k+1]))#
-#
-    tau2.sim[k+1] = 2#
-    gamma.sim[k+1] = 1.01#
-#
-  }
-N = 3#
-exp.levels = sort(sample(1:2, N, replace = TRUE))#
-b = runif(2, 0, 5)#
-b = c(1.5, 2.5)#
-sim.data = simulate.data(tau2 = 2, sigma2 = 2, x0 = 0, gamma = 1.01, exp.levels = exp.levels, b = b, T = 100)#
-X.true = sim.data$X#
-Y = sim.data$Y
-if(is.matrix(Y)){    #
-    N = ncol(Y)#
-    T = nrow(Y)#
-    Y = Y[,order(exp.levels)]#
-    Z = model.matrix(~-1+factor(exp.levels))#
-    Y.vec = c(Y)#
-  } else {#
-    N = 1#
-    T = length(Y)#
-    Z = 1#
-    Y.vec = Y#
-  }#
-#
-  gamma.sim = gamma0#
-  sigma2.sim = sigma20#
-  tau2.sim = tau20#
-  X.sim = matrix(NA, T, num.sims)#
-#
-  exp.levels = sort(exp.levels)#
-  exp.counts = c(table(exp.levels))#
-  b.sim = matrix(1, num.sims+1, length(exp.counts))#
-#
-  a0 = 0.001#
-  b0 = 0.001#
-  mu0 = rep(0, length(exp.counts))#
-  Lambda0 = (1/100)*diag(length(exp.counts))#
-  for(k in 1:num.sims){#
-    if(verbose) print(k)#
-    ## STEP 1: Sample X:#
-    X = FFBS(#
-      y=Y,#
-      F = Z %*% b.sim[k,],#
-      V=sigma2.sim[k],#
-      G=gamma.sim[k],#
-      W=tau2.sim[k],#
-      theta0=0,#
-      Sigma0=1,#
-      nd=1)#
-    X.sim[,k] = X#
-#
-    ## STEP 2: Sample sigma2 and bias b:  #
-    X.bd = bdiag(lapply(exp.counts, function(ii) rep(X, ii)))#
-    Lambdan = (t(X.bd) %*% X.bd + Lambda0)#
-    mun = solve(Lambdan) %*% t(X.bd) %*% Y.vec#
-    b.sim[k+1,] = mvrnorm(1, mun, solve(Lambdan)*sigma2.sim[k])#
-    an = a0 + length(Y.vec)/2#
-    bn = b0 + sum( (Y.vec - X.bd %*% b.sim[k+1,])^2)/2#
-    sigma2.sim[k+1] = 1/rgamma(1, shape = an, rate = bn)#
-    ##res = (Y.vec - X.bd %*% bhat)#
-    ##n.minus.k = length(Y.vec)-length(bhat)#
-    #sigma2.sim[k+1] = rinvchisq(1, df = n.minus.k, scale = (t(res) %*% res)/n.minus.k)#
-    #sigma2.sim[k+1] = 2#
-    ##b.sim[k+1,] = mvrnorm(1, bhat, Vbeta * sigma2.sim[k+1])#
-    #b.sim[k+1,] = 2.5#
-    ## STEP 3: Sample gamma:#
-    XY = X[-1]#
-    XX = X[-T]#
-    Vgamma = solve(t(XX) %*% XX)#
-    gammahat =  Vgamma %*% t(XX) %*% XY#
-    res = (XY - XX*gammahat)#
-#
-    n.minus.k = length(XX)-length(gammahat)#
-    tau2.sim[k+1] = rinvchisq(1, df = n.minus.k, scale = (t(res) %*% res)/n.minus.k)  #
-    gamma.sim[k+1] = rnorm(1, gammahat, sqrt(Vgamma * tau2.sim[k+1]))#
-#
-    tau2.sim[k+1] = 2#
-    gamma.sim[k+1] = 1.01#
-#
-  }
-Z
-b.sim
-exp.counts
-exp.lvels
-exp.levels
-N = 5#
-exp.levels = sort(sample(1:2, N, replace = TRUE))#
-b = runif(2, 0, 5)#
-b = c(1.5, 2.5)#
-sim.data = simulate.data(tau2 = 2, sigma2 = 2, x0 = 0, gamma = 1.01, exp.levels = exp.levels, b = b, T = 100)#
-X.true = sim.data$X#
-Y = sim.data$Y
-exp.levels
-if(is.matrix(Y)){    #
-    N = ncol(Y)#
-    T = nrow(Y)#
-    Y = Y[,order(exp.levels)]#
-    Z = model.matrix(~-1+factor(exp.levels))#
-    Y.vec = c(Y)#
-  } else {#
-    N = 1#
-    T = length(Y)#
-    Z = 1#
-    Y.vec = Y#
-  }#
-#
-  gamma.sim = gamma0#
-  sigma2.sim = sigma20#
-  tau2.sim = tau20#
-  X.sim = matrix(NA, T, num.sims)#
-#
-  exp.levels = sort(exp.levels)#
-  exp.counts = c(table(exp.levels))#
-  b.sim = matrix(1, num.sims+1, length(exp.counts))#
-#
-  a0 = 0.001#
-  b0 = 0.001#
-  mu0 = rep(0, length(exp.counts))#
-  Lambda0 = (1/100)*diag(length(exp.counts))#
-  for(k in 1:num.sims){#
-    if(verbose) print(k)#
-    ## STEP 1: Sample X:#
-    X = FFBS(#
-      y=Y,#
-      F = Z %*% b.sim[k,],#
-      V=sigma2.sim[k],#
-      G=gamma.sim[k],#
-      W=tau2.sim[k],#
-      theta0=0,#
-      Sigma0=1,#
-      nd=1)#
-    X.sim[,k] = X#
-#
-    ## STEP 2: Sample sigma2 and bias b:  #
-    X.bd = bdiag(lapply(exp.counts, function(ii) rep(X, ii)))#
-    Lambdan = (t(X.bd) %*% X.bd + Lambda0)#
-    mun = solve(Lambdan) %*% t(X.bd) %*% Y.vec#
-    b.sim[k+1,] = mvrnorm(1, mun, solve(Lambdan)*sigma2.sim[k])#
-    an = a0 + length(Y.vec)/2#
-    bn = b0 + sum( (Y.vec - X.bd %*% b.sim[k+1,])^2)/2#
-    sigma2.sim[k+1] = 1/rgamma(1, shape = an, rate = bn)#
-    ##res = (Y.vec - X.bd %*% bhat)#
-    ##n.minus.k = length(Y.vec)-length(bhat)#
-    #sigma2.sim[k+1] = rinvchisq(1, df = n.minus.k, scale = (t(res) %*% res)/n.minus.k)#
-    #sigma2.sim[k+1] = 2#
-    ##b.sim[k+1,] = mvrnorm(1, bhat, Vbeta * sigma2.sim[k+1])#
-    #b.sim[k+1,] = 2.5#
-    ## STEP 3: Sample gamma:#
-    XY = X[-1]#
-    XX = X[-T]#
-    Vgamma = solve(t(XX) %*% XX)#
-    gammahat =  Vgamma %*% t(XX) %*% XY#
-    res = (XY - XX*gammahat)#
-#
-    n.minus.k = length(XX)-length(gammahat)#
-    tau2.sim[k+1] = rinvchisq(1, df = n.minus.k, scale = (t(res) %*% res)/n.minus.k)  #
-    gamma.sim[k+1] = rnorm(1, gammahat, sqrt(Vgamma * tau2.sim[k+1]))#
-#
-    tau2.sim[k+1] = 2#
-    gamma.sim[k+1] = 1.01#
-#
-  }
-sigma2.sim
-plot(sigma2.sim)
-b.sim
-colMeans(b.sim)
-plot(b.sim[,1])
-plot(b.sim[,2])
-num.sims
-num.sims = 10000
-if(is.matrix(Y)){    #
-    N = ncol(Y)#
-    T = nrow(Y)#
-    Y = Y[,order(exp.levels)]#
-    Z = model.matrix(~-1+factor(exp.levels))#
-    Y.vec = c(Y)#
-  } else {#
-    N = 1#
-    T = length(Y)#
-    Z = 1#
-    Y.vec = Y#
-  }#
-#
-  gamma.sim = gamma0#
-  sigma2.sim = sigma20#
-  tau2.sim = tau20#
-  X.sim = matrix(NA, T, num.sims)#
-#
-  exp.levels = sort(exp.levels)#
-  exp.counts = c(table(exp.levels))#
-  b.sim = matrix(1, num.sims+1, length(exp.counts))#
-#
-  a0 = 0.001#
-  b0 = 0.001#
-  mu0 = rep(0, length(exp.counts))#
-  Lambda0 = (1/100)*diag(length(exp.counts))#
-  for(k in 1:num.sims){#
-    if(verbose) print(k)#
-    ## STEP 1: Sample X:#
-    X = FFBS(#
-      y=Y,#
-      F = Z %*% b.sim[k,],#
-      V=sigma2.sim[k],#
-      G=gamma.sim[k],#
-      W=tau2.sim[k],#
-      theta0=0,#
-      Sigma0=1,#
-      nd=1)#
-    X.sim[,k] = X#
-#
-    ## STEP 2: Sample sigma2 and bias b:  #
-    X.bd = bdiag(lapply(exp.counts, function(ii) rep(X, ii)))#
-    Lambdan = (t(X.bd) %*% X.bd + Lambda0)#
-    mun = solve(Lambdan) %*% t(X.bd) %*% Y.vec#
-    b.sim[k+1,] = mvrnorm(1, mun, solve(Lambdan)*sigma2.sim[k])#
-    an = a0 + length(Y.vec)/2#
-    bn = b0 + sum( (Y.vec - X.bd %*% b.sim[k+1,])^2)/2#
-    sigma2.sim[k+1] = 1/rgamma(1, shape = an, rate = bn)#
-    ##res = (Y.vec - X.bd %*% bhat)#
-    ##n.minus.k = length(Y.vec)-length(bhat)#
-    #sigma2.sim[k+1] = rinvchisq(1, df = n.minus.k, scale = (t(res) %*% res)/n.minus.k)#
-    #sigma2.sim[k+1] = 2#
-    ##b.sim[k+1,] = mvrnorm(1, bhat, Vbeta * sigma2.sim[k+1])#
-    #b.sim[k+1,] = 2.5#
-    ## STEP 3: Sample gamma:#
-    XY = X[-1]#
-    XX = X[-T]#
-    Vgamma = solve(t(XX) %*% XX)#
-    gammahat =  Vgamma %*% t(XX) %*% XY#
-    res = (XY - XX*gammahat)#
-#
-    n.minus.k = length(XX)-length(gammahat)#
-    tau2.sim[k+1] = rinvchisq(1, df = n.minus.k, scale = (t(res) %*% res)/n.minus.k)  #
-    gamma.sim[k+1] = rnorm(1, gammahat, sqrt(Vgamma * tau2.sim[k+1]))#
-#
-    tau2.sim[k+1] = 2#
-    gamma.sim[k+1] = 1.01#
-#
-  }
-plot(sigma.2sim)
-plot(sigma2.sim)
-plot(b.sim[,1])
-plot(b.sim[,2])
-dim(X)
-dim(X.sim)
-plot(X.sim[1,])
-plot(X.sim[2,])
-plot(X.sim[5,])
-plot(X.sim[10,])
-rowMeans(X.sim[,9900:10000])
-plot(rowMeans(X.sim[,9900:10000]))
-points(X.true, col = 2)
-load("/Users/ville/Desktop/Reports/Write-Up/deltas.bri.RData")
-load("/Users/ville/Desktop/Reports/Write-Up/deltas.log.RData")
-load("/Users/ville/Desktop/Reports/Write-Up/deltas.bri.RData")#
-load("/Users/ville/Desktop/Reports/Write-Up/deltas.log.RData")#
-bias = read.csv("/Users/ville/Desktop/Dynamic_Logit_Model/ExpertAnalysis/results/bias_sim_shared.csv", header = FALSE)#
-bb.log = bias/deltas.log#
-bb.bri = bias/deltas.bri#
-colnames(bb.log) = 1:5#
-colnames(bb.bri) = 1:5
-dd = data.frame(values = append(unlist(c(bb.log)),unlist(c(bb.bri))))#
-dd$method = factor(c(rep("STC-Log", nrow(dd)/2), rep("STC-Bri", nrow(dd)/2)))#
-dd$expertise = factor(c(rep(1:5, rep(nrow(bb.log),5)), rep(1:5, rep(nrow(bb.log),5))))#
- library(ggplot2)#
-pl <- qplot(expertise, values, fill=method, data=dd, geom="boxplot", position="dodge", xlab = "Self-Reported Expertise", ylab = "Multiplicative Bias")+geom_boxplot() +#
-  theme_bw() +#
-  opts(axis.text.x=theme_text(size=10)) +#
-  opts(axis.text.y=theme_text(size=10)) +#
-  opts(legend.title=theme_blank()) +#
-  opts(legend.position="top") +#
-  guides(col = guide_legend(ncol = 2))
-library(EMVS)
-ls()
-helloworld()
-rcpparma_hello_world
-rcpparma_hello_world()
-library(EMVS)
-rcpparma_hello_world()
-detach("package:EMVSpackage", unload = TRUE)#
-library("EMVSpackage")#
-EMVS(2)
-delogi
-exp(2)/(1+exp(2))
-detach("package:EMVSpackage", unload = TRUE)#
-library("EMVSpackage")#
-EMVS(2)
-detach("package:EMVSpackage", unload = TRUE)#
-library("EMVSpackage")#
-EMVS(3)
-detach("package:EMVSpackage", unload = TRUE)#
-library("EMVSpackage")#
-EMVS(2)
-beta
-?beta
-detach("package:EMVSpackage", unload = TRUE)#
-library("EMVSpackage")#
-EMVS(2)
-detach("package:EMVSpackage", unload = TRUE)#
-library("EMVSpackage")#
-EMVS(2)detach("package:EMVSpackage", unload = TRUE)#
-library("EMVSpackage")#
-EMVS(2)
-detach("package:EMVSpackage", unload = TRUE)#
-library("EMVSpackage")#
-EMVS(2)
-beta(1, 4)
-detach("package:EMVSpackage", unload = TRUE)#
-library("EMVSpackage")#
-EMVS(2)
-detach("package:EMVSpackage", unload = TRUE)
-library("EMVSpackage")#
-EMVS(2)
-detach("package:EMVSpackage", unload = TRUE)#
-library("EMVSpackage")#
-EMVS(2)
-dnorm(0.2, 1, 0.5)
-E_v0v1<-function(beta_k,sigma_k,v0,v1,p,t){#
-	p_star<-(p*dnorm(beta_k,0,sd=sigma_k*sqrt(v1)))^t/((p*dnorm(beta_k,0,sd=sigma_k*sqrt(v1)))^t+((1-p)*dnorm(beta_k,0,sd=sigma_k*sqrt(v0)))^t)#
-	list(inv_var=p_star/v1+(1-p_star)/v0,prob=p_star)		#
-#
-}
-E_v0v1(1, 1, 0.1, 1, 0.4, 0.5)
-detach("package:EMVSpackage", unload = TRUE)#
-library("EMVSpackage")#
-EMVS(2)
-\
 Testing:#
 library(EMVSpackage)#
+library(mvtnorm)#
 #
-n = 10#
-p = 5#
-Y = runif(n)#
-X = matrix(runif(n*p), n, p)#
+n<-10#
+p<-5#
+beta<-c(1,2,3,rep(0,p-3))#
 #
-EMVS<-function(Y=Y,#
-               X=X,#
-               v0s = c(0.1, 0.2),#
-               v1 = NULL,#
-               type = "betabinomial",#
-               beta_init = NULL,#
-               sigma_init = 1,#
-               epsilon  = 0.001,#
-               temperature = NULL,#
-               Z = NULL,#
-               mu = NULL,#
-               Sigma = NULL,#
-               p = NULL,#
-               a = NULL,#
-               b = NULL,#
-               a_v1 = NULL,#
-               b_v1 = NULL,#
-               v1_g = NULL)
-FKDSF:SDSDF
+rho<-0.5#
+Sig<-rho^abs(rep(1,p)%o%1:p-(1:p))#
+sigma<-sqrt(3)#
+#
+X<-rmvnorm(n,numeric(p),Sig)#
+Y<-X%*%beta+rnorm(n,0,sd=sigma)#
+#
+v0s<-seq(0.1,1,by=1)#
+v1<-100#
+v1_g<-100#
+a<-1#
+b<-1#
+beta_init<-rep(1,p)#
+#
+###############################################################
+# ********* Beta-binomial prior *****************************##
+#
+# UNIT STARTING VALUES#
+#
+beta_init<-rep(1,p)#
+source("/Users/ville/Desktop/EMVS/EMVS_code2 (2).R")#
+result1<-EMVS2(Y,#
+               X,#
+               v0s=v0s,#
+               v1=v1,#
+               type="betabinomial",#
+               sigma_init=1,#
+               epsilon=10^-4,#
+               p = 0.5,#
+               beta_init = beta_init,#
+               a=a,#
+               b=b,#
+               v1_g=v1_g)
+result2 = EMVS(Y=Y[,1],#
+  X=X,#
+  v0s = v0s,#
+  v1 = v1,#
+  type = "betabinomial",#
+  beta_init = beta_init,#
+  sigma_init = 1,#
+  epsilon  = 10^-4,#
+  temperature = NULL,#
+  Z = NULL,#
+  mu = NULL,#
+  Sigma = NULL,#
+  p = 0.5,#
+  a = a,#
+  b = b,#
+  a_v1 = NULL,#
+  b_v1 = NULL,#
+  v1_g = v1_g)
+result1
+Testing:#
+library(EMVSpackage)#
+library(mvtnorm)#
+#
+n<-10#
+p<-5#
+beta<-c(1,2,3,rep(0,p-3))#
+#
+rho<-0.5#
+Sig<-rho^abs(rep(1,p)%o%1:p-(1:p))#
+sigma<-sqrt(3)#
+#
+X<-rmvnorm(n,numeric(p),Sig)#
+Y<-X%*%beta+rnorm(n,0,sd=sigma)#
+#
+v0s<-seq(0.1,1,by=1)#
+v1<-100#
+v1_g<-100#
+a<-1#
+b<-1#
+beta_init<-rep(1,p)#
+#
+###############################################################
+# ********* Beta-binomial prior *****************************##
+#
+# UNIT STARTING VALUES#
+#
+beta_init<-rep(1,p)#
+source("/Users/ville/Desktop/EMVS/EMVS_code2 (2).R")#
+result1<-EMVS2(Y,#
+               X,#
+               v0s=v0s,#
+               v1=v1,#
+               type="betabinomial",#
+               sigma_init=1,#
+               epsilon=10^-4,#
+               p = 0.5,#
+               beta_init = beta_init,#
+               a=a,#
+               b=b,#
+               v1_g=v1_g)
+result2 = EMVS(Y=Y[,1],#
+  X=X,#
+  v0s = v0s,#
+  v1 = v1,#
+  type = "betabinomial",#
+  beta_init = beta_init,#
+  sigma_init = 1,#
+  epsilon  = 10^-4,#
+  temperature = NULL,#
+  Z = NULL,#
+  mu = NULL,#
+  Sigma = NULL,#
+  p = 0.5,#
+  a = a,#
+  b = b,#
+  a_v1 = NULL,#
+  b_v1 = NULL,#
+  v1_g = v1_g)
+Testing:#
+library(EMVSpackage)#
+library(mvtnorm)#
+#
+n<-10#
+p<-5#
+beta<-c(1,2,3,rep(0,p-3))#
+#
+rho<-0.5#
+Sig<-rho^abs(rep(1,p)%o%1:p-(1:p))#
+sigma<-sqrt(3)#
+#
+X<-rmvnorm(n,numeric(p),Sig)#
+Y<-X%*%beta+rnorm(n,0,sd=sigma)#
+#
+v0s<-seq(0.1,1,by=1)#
+v1<-100#
+v1_g<-100#
+a<-1#
+b<-1#
+beta_init<-rep(1,p)#
+#
+###############################################################
+# ********* Beta-binomial prior *****************************##
+#
+# UNIT STARTING VALUES#
+#
+beta_init<-rep(1,p)#
+source("/Users/ville/Desktop/EMVS/EMVS_code2 (2).R")#
+result1<-EMVS2(Y,#
+               X,#
+               v0s=v0s,#
+               v1=v1,#
+               type="betabinomial",#
+               sigma_init=1,#
+               epsilon=10^-4,#
+               p = 0.5,#
+               beta_init = beta_init,#
+               a=a,#
+               b=b,#
+               v1_g=v1_g)
+result2 = EMVS(Y=Y[,1],#
+  X=X,#
+  v0s = v0s,#
+  v1 = v1,#
+  type = "betabinomial",#
+  beta_init = beta_init,#
+  sigma_init = 1,#
+  epsilon  = 10^-4,#
+  temperature = NULL,#
+  Z = NULL,#
+  mu = NULL,#
+  Sigma = NULL,#
+  p = 0.5,#
+  a = a,#
+  b = b,#
+  a_v1 = NULL,#
+  b_v1 = NULL,#
+  v1_g = v1_g)
+Testing:#
+library(EMVSpackage)#
+library(mvtnorm)#
+#
+n<-10#
+p<-5#
+beta<-c(1,2,3,rep(0,p-3))#
+#
+rho<-0.5#
+Sig<-rho^abs(rep(1,p)%o%1:p-(1:p))#
+sigma<-sqrt(3)#
+#
+X<-rmvnorm(n,numeric(p),Sig)#
+Y<-X%*%beta+rnorm(n,0,sd=sigma)#
+#
+v0s<-seq(0.1,1,by=1)#
+v1<-100#
+v1_g<-100#
+a<-1#
+b<-1#
+beta_init<-rep(1,p)#
+#
+###############################################################
+# ********* Beta-binomial prior *****************************##
+#
+# UNIT STARTING VALUES#
+#
+beta_init<-rep(1,p)#
+source("/Users/ville/Desktop/EMVS/EMVS_code2 (2).R")#
+result1<-EMVS2(Y,#
+               X,#
+               v0s=v0s,#
+               v1=v1,#
+               type="betabinomial",#
+               sigma_init=1,#
+               epsilon=10^-4,#
+               p = 0.5,#
+               beta_init = beta_init,#
+               a=a,#
+               b=b,#
+               v1_g=v1_g)
+result2 = EMVS(Y=Y[,1],#
+  X=X,#
+  v0s = v0s,#
+  v1 = v1,#
+  type = "betabinomial",#
+  beta_init = beta_init,#
+  sigma_init = 1,#
+  epsilon  = 10^-4,#
+  temperature = NULL,#
+  Z = NULL,#
+  mu = NULL,#
+  Sigma = NULL,#
+  p = 0.5,#
+  a = a,#
+  b = b,#
+  a_v1 = NULL,#
+  b_v1 = NULL,#
+  v1_g = v1_g)
+result1
+head(result1)
+head(result2)
+Testing:#
+library(EMVSpackage)#
+library(mvtnorm)#
+#
+n<-10000#
+p<-500#
+beta<-c(1,2,3,rep(0,p-3))#
+#
+rho<-0.5#
+Sig<-rho^abs(rep(1,p)%o%1:p-(1:p))#
+sigma<-sqrt(3)#
+#
+X<-rmvnorm(n,numeric(p),Sig)#
+Y<-X%*%beta+rnorm(n,0,sd=sigma)#
+#
+v0s<-seq(0.1,1,by=1)#
+v1<-100#
+v1_g<-100#
+a<-1#
+b<-1#
+beta_init<-rep(1,p)#
+#
+###############################################################
+# ********* Beta-binomial prior *****************************##
+#
+# UNIT STARTING VALUES#
+#
+beta_init<-rep(1,p)#
+source("/Users/ville/Desktop/EMVS/EMVS_code2 (2).R")#
+result1<-EMVS2(Y,#
+               X,#
+               v0s=v0s,#
+               v1=v1,#
+               type="betabinomial",#
+               sigma_init=1,#
+               epsilon=10^-4,#
+               p = 0.5,#
+               beta_init = beta_init,#
+               a=a,#
+               b=b,#
+               v1_g=v1_g)
+Testing:#
+library(EMVSpackage)#
+library(mvtnorm)#
+#
+n<-10000#
+p<-500#
+beta<-c(1,2,3,rep(0,p-3))#
+#
+rho<-0.5#
+Sig<-rho^abs(rep(1,p)%o%1:p-(1:p))#
+sigma<-sqrt(3)#
+#
+X<-rmvnorm(n,numeric(p),Sig)#
+Y<-X%*%beta+rnorm(n,0,sd=sigma)#
+#
+v0s<-seq(0.1,1,by=0.01)#
+v1<-100#
+v1_g<-100#
+a<-1#
+b<-1#
+beta_init<-rep(1,p)#
+#
+###############################################################
+# ********* Beta-binomial prior *****************************##
+#
+# UNIT STARTING VALUES#
+#
+beta_init<-rep(1,p)
+system.time(result1<-EMVS2(Y,#
+               X,#
+               v0s=v0s,#
+               v1=v1,#
+               type="betabinomial",#
+               sigma_init=1,#
+               epsilon=10^-4,#
+               p = 0.5,#
+               beta_init = beta_init,#
+               a=a,#
+               b=b,#
+               v1_g=v1_g))
+system.time(#
+result2 <- EMVS(Y=Y[,1],#
+  X=X,#
+  v0s = v0s,#
+  v1 = v1,#
+  type = "betabinomial",#
+  beta_init = beta_init,#
+  sigma_init = 1,#
+  epsilon  = 10^-4,#
+  temperature = NULL,#
+  Z = NULL,#
+  mu = NULL,#
+  Sigma = NULL,#
+  p = 0.5,#
+  a = a,#
+  b = b,#
+  a_v1 = NULL,#
+  b_v1 = NULL,#
+  v1_g = v1_g))
+76.856
+56.469/76.856
+Testing:#
+library(EMVSpackage)#
+library(mvtnorm)#
+#
+n<-10000#
+p<-500#
+beta<-c(1,2,3,rep(0,p-3))#
+#
+rho<-0.5#
+Sig<-rho^abs(rep(1,p)%o%1:p-(1:p))#
+sigma<-sqrt(3)#
+#
+X<-rmvnorm(n,numeric(p),Sig)#
+Y<-X%*%beta+rnorm(n,0,sd=sigma)#
+#
+v0s<-seq(0.1,1,by=0.01)#
+v1<-100#
+v1_g<-100#
+a<-1#
+b<-1#
+beta_init<-rep(1,p)#
+#
+###############################################################
+# ********* Beta-binomial prior *****************************##
+#
+# UNIT STARTING VALUES#
+#
+beta_init<-rep(1,p)
+system.time(#
+result2 <- EMVS(Y=Y[,1],#
+  X=X,#
+  v0s = v0s,#
+  v1 = v1,#
+  type = "betabinomial",#
+  beta_init = beta_init,#
+  sigma_init = 1,#
+  epsilon  = 10^-4,#
+  temperature = NULL,#
+  Z = NULL,#
+  mu = NULL,#
+  Sigma = NULL,#
+  p = 0.5,#
+  a = a,#
+  b = b,#
+  a_v1 = NULL,#
+  b_v1 = NULL,#
+  v1_g = v1_g))
+Testing:#
+library(EMVSpackage)#
+library(mvtnorm)#
+#
+n<-10000#
+p<-500#
+beta<-c(1,2,3,rep(0,p-3))#
+#
+rho<-0.5#
+Sig<-rho^abs(rep(1,p)%o%1:p-(1:p))#
+sigma<-sqrt(3)#
+#
+X<-rmvnorm(n,numeric(p),Sig)#
+Y<-X%*%beta+rnorm(n,0,sd=sigma)#
+#
+v0s<-seq(0.1,1,by=0.1)#
+v1<-100#
+v1_g<-100#
+a<-1#
+b<-1#
+beta_init<-rep(1,p)
+result2 = EMVS(Y=Y[,1],#
+  X=X,#
+  v0s = v0s,#
+  v1 = v1,#
+  type = "betabinomial",#
+  beta_init = beta_init,#
+  sigma_init = 1,#
+  epsilon  = 10^-4,#
+  temperature = NULL,#
+  Z = NULL,#
+  mu = NULL,#
+  Sigma = NULL,#
+  p = 0.5,#
+  a = a,#
+  b = b,#
+  a_v1 = NULL,#
+  b_v1 = NULL,#
+  v1_g = v1_g)
+v0s<-seq(0.1,1,by=1)
+Testing:#
+library(EMVSpackage)#
+library(mvtnorm)#
+#
+n<-10000#
+p<-500#
+beta<-c(1,2,3,rep(0,p-3))#
+#
+rho<-0.5#
+Sig<-rho^abs(rep(1,p)%o%1:p-(1:p))#
+sigma<-sqrt(3)#
+#
+X<-rmvnorm(n,numeric(p),Sig)#
+Y<-X%*%beta+rnorm(n,0,sd=sigma)#
+#
+v0s<-seq(0.1,1,by=1)#
+v1<-100#
+v1_g<-100#
+a<-1#
+b<-1#
+beta_init<-rep(1,p)
+system.time(#
+result2 <- EMVS(Y=Y[,1],#
+  X=X,#
+  v0s = v0s,#
+  v1 = v1,#
+  type = "betabinomial",#
+  beta_init = beta_init,#
+  sigma_init = 1,#
+  epsilon  = 10^-4,#
+  temperature = NULL,#
+  Z = NULL,#
+  mu = NULL,#
+  Sigma = NULL,#
+  p = 0.5,#
+  a = a,#
+  b = b,#
+  a_v1 = NULL,#
+  b_v1 = NULL,#
+  v1_g = v1_g))
+Testing:#
+library(EMVSpackage)#
+library(mvtnorm)#
+#
+n<-10000#
+p<-500#
+beta<-c(1,2,3,rep(0,p-3))#
+#
+rho<-0.5#
+Sig<-rho^abs(rep(1,p)%o%1:p-(1:p))#
+sigma<-sqrt(3)#
+#
+X<-rmvnorm(n,numeric(p),Sig)#
+Y<-X%*%beta+rnorm(n,0,sd=sigma)#
+#
+v0s<-seq(0.1,1,by=1)#
+v1<-100#
+v1_g<-100#
+a<-1#
+b<-1#
+beta_init<-rep(1,p)
+system.time(#
+result2 <- EMVS(Y=Y[,1],#
+  X=X,#
+  v0s = v0s,#
+  v1 = v1,#
+  type = "betabinomial",#
+  beta_init = beta_init,#
+  sigma_init = 1,#
+  epsilon  = 10^-4,#
+  temperature = NULL,#
+  Z = NULL,#
+  mu = NULL,#
+  Sigma = NULL,#
+  p = 0.5,#
+  a = a,#
+  b = b,#
+  a_v1 = NULL,#
+  b_v1 = NULL,#
+  v1_g = v1_g))
+Testing:#
+library(EMVSpackage)#
+library(mvtnorm)#
+#
+n<-10000#
+p<-500#
+beta<-c(1,2,3,rep(0,p-3))#
+#
+rho<-0.5#
+Sig<-rho^abs(rep(1,p)%o%1:p-(1:p))#
+sigma<-sqrt(3)#
+#
+X<-rmvnorm(n,numeric(p),Sig)#
+Y<-X%*%beta+rnorm(n,0,sd=sigma)#
+#
+v0s<-seq(0.1,1,by=1)#
+v1<-100#
+v1_g<-100#
+a<-1#
+b<-1#
+beta_init<-rep(1,p)#
+system.time(#
+result2 <- EMVS(Y=Y[,1],#
+  X=X,#
+  v0s = v0s,#
+  v1 = v1,#
+  type = "betabinomial",#
+  beta_init = beta_init,#
+  sigma_init = 1,#
+  epsilon  = 10^-4,#
+  temperature = NULL,#
+  Z = NULL,#
+  mu = NULL,#
+  Sigma = NULL,#
+  p = 0.5,#
+  a = a,#
+  b = b,#
+  a_v1 = NULL,#
+  b_v1 = NULL,#
+  v1_g = v1_g))
+system.time(#
+result2 <- EMVS(Y=Y[,1],#
+  X=X,#
+  v0s = v0s,#
+  v1 = v1,#
+  type = "betabinomial",#
+  beta_init = beta_init,#
+  sigma_init = 1,#
+  epsilon  = 10^-4,#
+  temperature = NULL,#
+  Z = NULL,#
+  mu = NULL,#
+  Sigma = NULL,#
+  p = 0.5,#
+  a = a,#
+  b = b,#
+  a_v1 = NULL,#
+  b_v1 = NULL,#
+  v1_g = v1_g))
+Testing:#
+library(EMVSpackage)#
+library(mvtnorm)#
+#
+n<-10000#
+p<-500#
+beta<-c(1,2,3,rep(0,p-3))#
+#
+rho<-0.5#
+Sig<-rho^abs(rep(1,p)%o%1:p-(1:p))#
+sigma<-sqrt(3)#
+#
+X<-rmvnorm(n,numeric(p),Sig)#
+Y<-X%*%beta+rnorm(n,0,sd=sigma)#
+#
+v0s<-seq(0.1,1,by=1)#
+v1<-100#
+v1_g<-100#
+a<-1#
+b<-1#
+beta_init<-rep(1,p)#
+system.time(#
+result2 <- EMVS(Y=Y[,1],#
+  X=X,#
+  v0s = v0s,#
+  v1 = v1,#
+  type = "betabinomial",#
+  beta_init = beta_init,#
+  sigma_init = 1,#
+  epsilon  = 10^-4,#
+  temperature = NULL,#
+  Z = NULL,#
+  mu = NULL,#
+  Sigma = NULL,#
+  p = 0.5,#
+  a = a,#
+  b = b,#
+  a_v1 = NULL,#
+  b_v1 = NULL,#
+  v1_g = v1_g))
+z = t(X) %*% Y
+z = t(X) %*% X
+system.time(z = t(X) %*% X)
+system.time(z <- t(X) %*% X)
+Testing:#
+library(EMVSpackage)#
+library(mvtnorm)#
+#
+n<-10000#
+p<-500#
+beta<-c(1,2,3,rep(0,p-3))#
+#
+rho<-0.5#
+Sig<-rho^abs(rep(1,p)%o%1:p-(1:p))#
+sigma<-sqrt(3)#
+#
+X<-rmvnorm(n,numeric(p),Sig)#
+Y<-X%*%beta+rnorm(n,0,sd=sigma)#
+#
+v0s<-seq(0.1,1,by=1)#
+v1<-100#
+v1_g<-100#
+a<-1#
+b<-1#
+beta_init<-rep(1,p)#
+system.time(#
+result2 <- EMVS(Y=Y[,1],#
+  X=X,#
+  v0s = v0s,#
+  v1 = v1,#
+  type = "betabinomial",#
+  beta_init = beta_init,#
+  sigma_init = 1,#
+  epsilon  = 10^-4,#
+  temperature = NULL,#
+  Z = NULL,#
+  mu = NULL,#
+  Sigma = NULL,#
+  p = 0.5,#
+  a = a,#
+  b = b,#
+  a_v1 = NULL,#
+  b_v1 = NULL,#
+  v1_g = v1_g))
+library(EMVSpackage)#
+library(mvtnorm)#
+#
+n<-10000#
+p<-500#
+beta<-c(1,2,3,rep(0,p-3))#
+#
+rho<-0.5#
+Sig<-rho^abs(rep(1,p)%o%1:p-(1:p))#
+sigma<-sqrt(3)#
+#
+X<-rmvnorm(n,numeric(p),Sig)#
+Y<-X%*%beta+rnorm(n,0,sd=sigma)#
+#
+v0s<-seq(0.1,1,by=0.1)#
+v1<-100#
+v1_g<-100#
+a<-1#
+b<-1#
+beta_init<-rep(1,p)#
+system.time(#
+result2 <- EMVS(Y=Y[,1],#
+  X=X,#
+  v0s = v0s,#
+  v1 = v1,#
+  type = "betabinomial",#
+  beta_init = beta_init,#
+  sigma_init = 1,#
+  epsilon  = 10^-4,#
+  temperature = NULL,#
+  Z = NULL,#
+  mu = NULL,#
+  Sigma = NULL,#
+  p = 0.5,#
+  a = a,#
+  b = b,#
+  a_v1 = NULL,#
+  b_v1 = NULL,#
+  v1_g = v1_g))
+beta_init<-rep(1,p)#
+source("/Users/ville/Desktop/EMVS/EMVS_code2 (2).R")
+system.time(result1<-EMVS2(Y,#
+               X,#
+               v0s=v0s,#
+               v1=v1,#
+               type="betabinomial",#
+               sigma_init=1,#
+               epsilon=10^-4,#
+               p = 0.5,#
+               beta_init = beta_init,#
+               a=a,#
+               b=b,#
+               v1_g=v1_g))
+result1
+head(result1)
+head(result1$beta_k)
+names(result1)
+names(result1)head
+head(result1$betas)
+head(result1$betas[,1:5])
+head(result2$betas[,1:5])
+Testing:#
+library(EMVSpackage)#
+library(mvtnorm)#
+#
+n<-10000#
+p<-500#
+beta<-c(1,2,3,rep(0,p-3))#
+#
+rho<-0.5#
+Sig<-rho^abs(rep(1,p)%o%1:p-(1:p))#
+sigma<-sqrt(3)#
+#
+X<-rmvnorm(n,numeric(p),Sig)#
+Y<-X%*%beta+rnorm(n,0,sd=sigma)#
+#
+v0s<-seq(0.1,1,by=0.1)#
+v1<-100#
+v1_g<-100#
+a<-1#
+b<-1#
+beta_init<-rep(1,p)
+?EWMS
+Testing:#
+library(EMVSpackage)
+?EMVS
+library(EMVSpackage)
+?EMVS
+library(EMVSpackage)
+?EMVS
+Testing:#
+library(EMVSpackage)#
+library(mvtnorm)#
+#
+n<-10000#
+p<-500#
+beta<-c(1,2,3,rep(0,p-3))#
+#
+rho<-0.5#
+Sig<-rho^abs(rep(1,p)%o%1:p-(1:p))#
+sigma<-sqrt(3)#
+#
+X<-rmvnorm(n,numeric(p),Sig)#
+Y<-X%*%beta+rnorm(n,0,sd=sigma)#
+#
+v0s<-seq(0.1,1,by=0.1)#
+v1<-100#
+v1_g<-100#
+a<-1#
+b<-1#
+beta_init<-rep(1,p)#
+system.time(#
+result2 <- EMVS(Y=Y[,1],#
+  X=X,#
+  v0s = v0s,#
+  v1 = v1,#
+  type = "betabinomial",#
+  beta_init = beta_init,#
+  sigma_init = 1,#
+  epsilon  = 10^-4,#
+  temperature = NULL,#
+  Z = NULL,#
+  mu = NULL,#
+  Sigma = NULL,#
+  p = 0.5,#
+  a = a,#
+  b = b,#
+  a_v1 = NULL,#
+  b_v1 = NULL,#
+  v1_g = v1_g))
+Testing:#
+library(EMVSpackage)#
+library(mvtnorm)#
+#
+n<-10000#
+p<-500#
+beta<-c(1,2,3,rep(0,p-3))#
+#
+rho<-0.5#
+Sig<-rho^abs(rep(1,p)%o%1:p-(1:p))#
+sigma<-sqrt(3)#
+#
+X<-rmvnorm(n,numeric(p),Sig)#
+Y<-X%*%beta+rnorm(n,0,sd=sigma)#
+#
+v0s<-seq(0.1,1,by=0.1)#
+v1<-100#
+v1_g<-100#
+a<-1#
+b<-1#
+beta_init<-rep(1,p)
+library(EMVSpackage)
+system.time(#
+result2 <- EMVS(Y=Y[,1],#
+  X=X,#
+  v0s = v0s,#
+  v1 = v1,#
+  type = "betabinomial",#
+  beta_init = beta_init,#
+  sigma_init = 1,#
+  epsilon  = 10^-4,#
+  temperature = NULL,#
+  Z = NULL,#
+  mu = NULL,#
+  Sigma = NULL,#
+  p = 0.5,#
+  a = a,#
+  b = b,#
+  a_v1 = NULL,#
+  b_v1 = NULL,#
+  v1_g = v1_g))
+Testing:#
+library(mvtnorm)#
+#
+n<-10000#
+p<-500#
+beta<-c(1,2,3,rep(0,p-3))#
+#
+rho<-0.5#
+Sig<-rho^abs(rep(1,p)%o%1:p-(1:p))#
+sigma<-sqrt(3)#
+#
+X<-rmvnorm(n,numeric(p),Sig)#
+Y<-X%*%beta+rnorm(n,0,sd=sigma)#
+#
+v0s<-seq(0.1,1,by=0.1)#
+v1<-100#
+v1_g<-100#
+a<-1#
+b<-1#
+beta_init<-rep(1,p)
+system.time(#
+result2 <- EMVS(Y=Y[,1],#
+  X=X,#
+  v0s = v0s,#
+  v1 = v1,#
+  type = "betabinomial",#
+  beta_init = beta_init,#
+  sigma_init = 1,#
+  epsilon  = 10^-4,#
+  temperature = NULL,#
+  Z = NULL,#
+  mu = NULL,#
+  Sigma = NULL,#
+  p = 0.5,#
+  a = a,#
+  b = b,#
+  a_v1 = NULL,#
+  b_v1 = NULL,#
+  v1_g = v1_g))
+library(EMVSpackage)#
+#
+system.time(#
+result2 <- EMVS(Y=Y[,1],#
+  X=X,#
+  v0s = v0s,#
+  v1 = v1,#
+  type = "betabinomial",#
+  beta_init = beta_init,#
+  sigma_init = 1,#
+  epsilon  = 10^-4,#
+  temperature = NULL,#
+  Z = NULL,#
+  mu = NULL,#
+  Sigma = NULL,#
+  p = 0.5,#
+  a = a,#
+  b = b,#
+  a_v1 = NULL,#
+  b_v1 = NULL,#
+  v1_g = v1_g))
+system.time(result1<-EMVS2(Y,#
+               X,#
+               v0s=v0s,#
+               v1=v1,#
+               type="betabinomial",#
+               sigma_init=1,#
+               epsilon=10^-4,#
+               p = 0.5,#
+               beta_init = beta_init,#
+               a=a,#
+               b=b,#
+               v1_g=v1_g))
+source("/Users/ville/Desktop/EMVS/EMVS_code2 (2).R")
+system.time(result1<-EMVS2(Y,#
+               X,#
+               v0s=v0s,#
+               v1=v1,#
+               type="betabinomial",#
+               sigma_init=1,#
+               epsilon=10^-4,#
+               p = 0.5,#
+               beta_init = beta_init,#
+               a=a,#
+               b=b,#
+               v1_g=v1_g))
+n<-10000#
+p<-500#
+beta<-c(1,2,3,rep(0,p-3))#
+#
+rho<-0.5#
+Sig<-rho^abs(rep(1,p)%o%1:p-(1:p))#
+sigma<-sqrt(3)#
+#
+X<-rmvnorm(n,numeric(p),Sig)#
+Y<-X%*%beta+rnorm(n,0,sd=sigma)#
+#
+v0s<-seq(0.1,1,by=0.1)#
+v1<-100#
+v1_g<-100#
+a<-1#
+b<-1#
+beta_init<-rep(1,p)
+Testing:#
+library(mvtnorm)#
+#
+n<-10000#
+p<-500#
+beta<-c(1,2,3,rep(0,p-3))#
+#
+rho<-0.5#
+Sig<-rho^abs(rep(1,p)%o%1:p-(1:p))#
+sigma<-sqrt(3)#
+#
+X<-rmvnorm(n,numeric(p),Sig)#
+Y<-X%*%beta+rnorm(n,0,sd=sigma)#
+#
+v0s<-seq(0.1,1,by=0.1)#
+v1<-100#
+v1_g<-100#
+a<-1#
+b<-1#
+beta_init<-rep(1,p)
+library(EMVSpackage)
+system.time(#
+result2 <- EMVS(Y=Y[,1],#
+  X=X,#
+  v0s = v0s,#
+  v1 = v1,#
+  type = "betabinomial",#
+  beta_init = beta_init,#
+  sigma_init = 1,#
+  epsilon  = 10^-4,#
+  temperature = NULL,#
+  Z = NULL,#
+  mu = NULL,#
+  Sigma = NULL,#
+  p = 0.5,#
+  a = a,#
+  b = b,#
+  a_v1 = NULL,#
+  b_v1 = NULL,#
+  v1_g = v1_g))
+source("/Users/ville/Desktop/EMVS/EMVS_code2 (2).R")
+system.time(result1<-EMVS2(Y,#
+               X,#
+               v0s=v0s,#
+               v1=v1,#
+               type="betabinomial",#
+               sigma_init=1,#
+               epsilon=10^-4,#
+               p = 0.5,#
+               beta_init = beta_init,#
+               a=a,#
+               b=b,#
+               v1_g=v1_g))
+names(result1)
+head(result1$betas[,1:5])
+head(result2$betas[,1:5])
+head(result2$log_post[1:5])
+head(result1$log_post[1:5])
+dim(result2$betas)
 EMVS
+?EMVS
+v0s<-seq(0.1,1,by=0.5)#
+v1<-100#
+v1_g<-100#
+a<-1#
+b<-1#
+beta_init<-rep(1,p)
+v0s
+v0s<-seq(0.1,1,by=0.05)#
+v1<-100#
+v1_g<-100#
+a<-1#
+b<-1#
+beta_init<-rep(1,p)
+v0s
+system.time(#
+result2 <- EMVS(Y=Y[,1],#
+  X=X,#
+  v0s = v0s,#
+  v1 = v1,#
+  type = "betabinomial",#
+  beta_init = beta_init,#
+  sigma_init = 1,#
+  epsilon  = 10^-4,#
+  temperature = NULL,#
+  Z = NULL,#
+  mu = NULL,#
+  Sigma = NULL,#
+  p = 0.5,#
+  a = a,#
+  b = b,#
+  a_v1 = NULL,#
+  b_v1 = NULL,#
+  v1_g = v1_g))
+system.time(result1<-EMVS2(Y,#
+               X,#
+               v0s=v0s,#
+               v1=v1,#
+               type="betabinomial",#
+               sigma_init=1,#
+               epsilon=10^-4,#
+               p = 0.5,#
+               beta_init = beta_init,#
+               a=a,#
+               b=b,#
+               v1_g=v1_g))
 Testing:#
+library(mvtnorm)#
+#
+n<-10000#
+p<-500#
+beta<-c(1,2,3,rep(0,p-3))#
+#
+rho<-0.5#
+Sig<-rho^abs(rep(1,p)%o%1:p-(1:p))#
+sigma<-sqrt(3)#
+#
+X<-rmvnorm(n,numeric(p),Sig)#
+Y<-X%*%beta+rnorm(n,0,sd=sigma)#
+#
+v0s<-seq(0.1,1,by=1)#
+v1<-100#
+v1_g<-100#
+a<-1#
+b<-1#
+beta_init<-rep(1,p)#
+#
 library(EMVSpackage)#
 #
-n = 10#
-p = 5#
-Y = runif(n)#
-X = matrix(runif(n*p), n, p)#
-#
-EMVS(Y=Y,#
-     X=X,#
-     v0s = c(0.1, 0.2),#
-     v1 = NULL,#
-     type = "betabinomial",#
-     beta_init = NULL,#
-     sigma_init = 1,#
-     epsilon  = 0.001,#
-     temperature = NULL,#
-     Z = NULL,#
-     mu = NULL,#
-     Sigma = NULL,#
-     p = NULL,#
-     a = NULL,#
-     b = NULL,#
-     a_v1 = NULL,#
-     b_v1 = NULL,#
-     v1_g = NULL)
-Testing:#
-library(EMVSpackage)#
-#
-n = 10#
-p = 5#
-Y = runif(n)#
-X = matrix(runif(n*p), n, p)#
-#
-EMVS(Y=Y,#
-     X=X,#
-     v0s = c(0.1, 0.2),#
-     v1 = NULL,#
-     type = "betabinomial",#
-     beta_init = NULL,#
-     sigma_init = 1,#
-     epsilon  = 0.001,#
-     temperature = NULL,#
-     Z = NULL,#
-     mu = NULL,#
-     Sigma = NULL,#
-     p = 0.5,#
-     a = NULL,#
-     b = NULL,#
-     a_v1 = NULL,#
-     b_v1 = NULL,#
-     v1_g = NULL)
-Testing:#
-library(EMVSpackage)#
-#
-n = 10#
-p = 5#
-Y = runif(n)#
-X = matrix(runif(n*p), n, p)#
-#
-EMVS(Y=Y,#
-     X=X,#
-     v0s = c(0.1, 0.2),#
-     v1 = 1000,#
-     type = "betabinomial",#
-     beta_init = NULL,#
-     sigma_init = 1,#
-     epsilon  = 0.001,#
-     temperature = NULL,#
-     Z = NULL,#
-     mu = NULL,#
-     Sigma = NULL,#
-     p = 0.5,#
-     a = NULL,#
-     b = NULL,#
-     a_v1 = NULL,#
-     b_v1 = NULL,#
-     v1_g = NULL)
-Testing:#
-library(EMVSpackage)#
-#
-n = 10#
-p = 5#
-Y = runif(n)#
-X = matrix(runif(n*p), n, p)#
-#
-EMVS(Y=Y,#
-     X=X,#
-     v0s = c(0.1),#
-     v1 = 1000,#
-     type = "betabinomial",#
-     beta_init = NULL,#
-     sigma_init = 1,#
-     epsilon  = 0.001,#
-     temperature = NULL,#
-     Z = NULL,#
-     mu = NULL,#
-     Sigma = NULL,#
-     p = 0.5,#
-     a = NULL,#
-     b = NULL,#
-     a_v1 = NULL,#
-     b_v1 = NULL,#
-     v1_g = NULL)
-Testing:#
-library(EMVSpackage)#
-#
-n = 10#
-p = 5#
-Y = runif(n)#
-X = matrix(runif(n*p), n, p)#
-#
-EMVS(Y=Y,#
-     X=X,#
-     v0s = c(0.1),#
-     v1 = 1000,#
-     type = "betabinomial",#
-     beta_init = NULL,#
-     sigma_init = 1,#
-     epsilon  = 0.001,#
-     temperature = NULL,#
-     Z = NULL,#
-     mu = NULL,#
-     Sigma = NULL,#
-     p = 0.5,#
-     a = NULL,#
-     b = NULL,#
-     a_v1 = NULL,#
-     b_v1 = NULL,#
-     v1_g = NULL)
-Testing:#
-library(EMVSpackage)#
-#
-n = 10#
-p = 5#
-Y = runif(n)#
-X = matrix(runif(n*p), n, p)#
-#
-EMVS(Y=Y,#
-     X=X,#
-     v0s = c(0.1, 0.3),#
-     v1 = 1000,#
-     type = "betabinomial",#
-     beta_init = NULL,#
-     sigma_init = 1,#
-     epsilon  = 0.001,#
-     temperature = NULL,#
-     Z = NULL,#
-     mu = NULL,#
-     Sigma = NULL,#
-     p = 0.5,#
-     a = NULL,#
-     b = NULL,#
-     a_v1 = NULL,#
-     b_v1 = NULL,#
-     v1_g = NULL)
+system.time(#
+result2 <- EMVS(Y=Y[,1],#
+  X=X,#
+  v0s = v0s,#
+  v1 = v1,#
+  type = "betabinomial",#
+  beta_init = beta_init,#
+  sigma_init = 1,#
+  epsilon  = 10^-4,#
+  temperature = NULL,#
+  Z = NULL,#
+  mu = NULL,#
+  Sigma = NULL,#
+  p = 0.5,#
+  a = a,#
+  b = b,#
+  a_v1 = NULL,#
+  b_v1 = NULL,#
+  v1_g = v1_g))
 T = 100#
 Ks = c(20, 40, 60, 80, 100) ## Number of problems#
 betas = c(0.5, 0.75, 1, 1/0.75, 1/0.5) ## Expected bias mean: same effect around 1.0#
 sigma2s = c(0.5, 1.0, 1.5, 2.0, 2.5)#
 load("/Users/ville/Desktop/Dynamic_Logit_Model/ExpertAnalysis/X.losses.RData")#
 load("/Users/ville/Desktop/Dynamic_Logit_Model/ExpertAnalysis/b.losses.RData")#
+#
+#load("/Users/ville/Desktop/Dynamic_Logit_Model/ExpertAnalysis/X.log.losses.RData")#
+#load("/Users/ville/Desktop/Dynamic_Logit_Model/ExpertAnalysis/b.log.losses.RData")#
+#X.losses = X.log.losses#
+#b.losses = b.log.losses#
+#
 ######## XXXXXXXXX#
+#
+#betas.x = sapply(betas, function(x) exp(mean(log(x*c(0.5, 0.75, 1, 1/0.75, 1/0.5)))) )#
+#betas.x = sapply(betas, function(x) mean(x*c(0.5, 0.75, 1, 1/0.75, 1/0.5)) )#
+#betas.x = sapply(betas, function(x) sd(x*c(0.5, 0.75, 1, 1/0.75, 1/0.5)) )#
+#betas.x = sapply(betas, function(x) mean(abs(x*c(0.5, 0.75, 1, 1/0.75, 1/0.5)-1)) )#
+betas.x = betas#
 wsize = 2#
 hsize = 1.8#
 font = 8#
@@ -1321,13 +1100,17 @@ pdf("SyntheticSigma2.pdf", width = wsize, height = hsize, family = "Times", poin
 par(mgp = c(1.5,.5,0), mar=c(2.4,2.8,0.8,0.2))#
 BRI = apply(X.losses[[1]], 1, mean)#
 LOG = apply(X.losses[[2]], 1, mean)#
+#EWMLA = apply(X.losses[[3]], 1, mean)#
+EWMA = apply(X.losses[[4]], 1, mean)#
 #FULL = apply(X.losses[[3]], 1, mean)#
-plot(BRI~sigma2s, type = "l", col = 1, lwd = 2, ylim = range(BRI, LOG), xlab = expression(paste(sigma^2)), ylab = "Quadratic Loss: hidden process", axes = FALSE)#
+plot(BRI~sigma2s, type = "l", col = 1, lwd = 2, ylim = range(BRI, LOG, EWMA), xlab = expression(paste(sigma^2)), ylab = "Quadratic Loss", axes = FALSE)#
 box()#
 axis(1, at = round(sigma2s,1))#
 axis(2)#
 #axis(2, at = signif(seq(min(BRI,LOG), max(BRI,LOG), length = 5)[2:4], 2))#
 lines(LOG~sigma2s, lty = 2, lwd = 2)#
+#lines(EWMLA~sigma2s, lty = 2, lwd = 2, col = 2)#
+lines(EWMA~sigma2s, lty = 3, lwd = 2)#
 #lines(FULL~sigma2s, col = 3, lwd = 2)#
 dev.off()#
 #
@@ -1337,13 +1120,17 @@ pdf(file = "SyntheticBeta.pdf", width = wsize, height = hsize, onefile = TRUE, f
 par(mgp = c(1.5,.5,0), mar=c(2.4,2.8,0.8,0.2))#
 BRI = apply(X.losses[[1]], 2, mean)#
 LOG = apply(X.losses[[2]], 2, mean)#
+#EWMLA = apply(X.losses[[3]], 2, mean)#
+EWMA = apply(X.losses[[4]], 2, mean)#
 #FULL = apply(X.losses[[3]], 2, mean)#
-plot(BRI~betas, type = "l", col = 1, lwd = 2, ylim = range(BRI, LOG), xlab = expression(paste(beta)), ylab = "Quadratic Loss: hidden process", axes = FALSE)#
+plot(BRI~betas.x, type = "l", col = 1, lwd = 2, ylim =range(BRI, LOG, EWMA), xlab = expression(paste(beta)), ylab = "Quadratic Loss", axes = FALSE)#
 box()#
-axis(1, at = round(betas,1))#
+axis(1, at = round(betas.x,1))#
 #axis(2, at = signif(seq(min(BRI,LOG), max(BRI,LOG), length = 5)[2:4], 2))#
 axis(2)#
-lines(LOG~betas, lty = 2, lwd = 2)#
+lines(LOG~betas.x, lty = 2, lwd = 2)#
+#lines(EWMLA~betas.x, lty = 2, lwd = 2, col = 2)#
+lines(EWMA~betas.x, lty = 3, lwd = 2)#
 #lines(FULL~betas, col = 3, lwd = 2)#
 dev.off()#
 #
@@ -1353,13 +1140,17 @@ pdf(file = "SyntheticK.pdf", width = wsize, height = hsize, onefile = TRUE, fami
 par(mgp = c(1.5,.5,0), mar=c(2.4,2.8,0.8,0.2))#
 BRI = apply(X.losses[[1]], 3, mean)#
 LOG = apply(X.losses[[2]], 3, mean)#
+#EWMLA = apply(X.losses[[3]], 3, mean)#
+EWMA = apply(X.losses[[4]], 3, mean)#
 #FULL = apply(X.losses[[3]], 3, mean)#
-plot(BRI~Ks, type = "l", col = 1, lwd = 2, ylim = range(BRI, LOG), xlab = "K", ylab = "Quadratic Loss: hidden process", axes = FALSE)#
+plot(BRI~Ks, type = "l", col = 1, lwd = 2, ylim = range(BRI, LOG, EWMA), xlab = "K", ylab = "Quadratic Loss", axes = FALSE)#
 box()#
 axis(1, at = round(Ks, 1))#
 axis(2)#
 #axis(2, at = signif(seq(min(BRI,LOG), max(BRI,LOG), length = 5)[2:4], 2))#
 lines(LOG~Ks, lwd = 2, lty = 2)#
+#lines(EWMLA~Ks, lty = 2, lwd = 2, col = 2)#
+lines(EWMA~Ks, lty = 3, lwd = 2)#
 #lines(FULL~Ks, col = 3, lwd = 2)#
 dev.off()#
 ######## BBBBBBBBBBBB#
@@ -1369,7 +1160,7 @@ par(mgp = c(1.5,.5,0), mar=c(2.4,2.8,0.8,0.2))#
 BRI = apply(b.losses[[1]], 1, mean)#
 LOG = apply(b.losses[[2]], 1, mean)#
 #FULL = apply(b.losses[[3]], 1, mean)#
-plot(BRI~sigma2s, type = "l", col = 1, lwd = 2, ylim = range(BRI, LOG), xlab = expression(paste(sigma^2)), ylab = "Quadratic Loss: bias vector", axes = FALSE)#
+plot(BRI~sigma2s, type = "l", col = 1, lwd = 2, ylim = range(BRI, LOG), xlab = expression(paste(sigma^2)), ylab = "Quadratic Loss", axes = FALSE)#
 box()#
 axis(1, at = round(sigma2s, 1))#
 #axis(2, at = signif(seq(min(BRI,LOG), max(BRI,LOG), length = 5)[2:4], 2))#
@@ -1384,12 +1175,12 @@ par(mgp = c(1.5,.5,0), mar=c(2.4,2.8,0.8,0.2))#
 BRI = apply(b.losses[[1]], 2, mean)#
 LOG = apply(b.losses[[2]], 2, mean)#
 #FULL = apply(b.losses[[3]], 2, mean)#
-plot(BRI~betas, type = "l", col = 1, lwd = 2, ylim = range(BRI, LOG), xlab = expression(paste(beta)), ylab = "Quadratic Loss: bias vector", axes = FALSE)#
+plot(BRI~betas.x, type = "l", col = 1, lwd = 2, ylim = range(BRI, LOG), xlab = expression(paste(beta)), ylab = "Quadratic Loss", axes = FALSE)#
 box()#
-axis(1, at = round(betas, 1))#
+axis(1, at = round(betas.x, 1))#
 axis(2)#
 #axis(2, at = signif(seq(min(BRI,LOG), max(BRI,LOG), length = 5)[2:4], 2))#
-lines(LOG~betas, lwd = 2, lty = 2)#
+lines(LOG~betas.x, lwd = 2, lty = 2)#
 #lines(FULL~betas, col = 3, lwd = 2)#
 dev.off()#
 #
@@ -1399,7 +1190,7 @@ par(mgp = c(1.5,.5,0), mar=c(2.4,2.8,0.8,0.2))#
 BRI = apply(b.losses[[1]], 3, mean)#
 LOG = apply(b.losses[[2]], 3, mean)#
 #FULL = apply(b.losses[[3]], 3, mean)#
-plot(BRI~Ks, type = "l", col = 1, lwd = 2, ylim = range(BRI, LOG), xlab = "K", ylab = "Quadratic Loss: bias vector", axes = FALSE)#
+plot(BRI~Ks, type = "l", col = 1, lwd = 2, ylim = range(BRI, LOG), xlab = "K", ylab = "Quadratic Loss", axes = FALSE)#
 box()#
 axis(1, at = round(Ks, 1))#
 axis(2)#
@@ -1407,1567 +1198,1076 @@ axis(2)#
 lines(LOG~Ks,  lwd = 2, lty = 2)#
 #lines(FULL~Ks, col = 3, lwd = 2)#
 dev.off()
-T = 100#
-Ks = c(20, 40, 60, 80, 100) ## Number of problems#
-betas = c(0.5, 0.75, 1, 1/0.75, 1/0.5) ## Expected bias mean: same effect around 1.0#
-sigma2s = c(0.5, 1.0, 1.5, 2.0, 2.5)#
-load("/Users/ville/Desktop/Dynamic_Logit_Model/ExpertAnalysis/X.losses.RData")#
-load("/Users/ville/Desktop/Dynamic_Logit_Model/ExpertAnalysis/b.losses.RData")#
-######## XXXXXXXXX#
-wsize = 2#
-hsize = 1.8#
-font = 8#
+l1 = 1000#
+max.size = 100#
 #
-setwd("/Users/ville/probability_aggregation/Figures/")#
-#CairoPDF(file = "SyntheticSigma2.pdf", width = size, height = size, onefile = TRUE, family = "Times", pointsize = font)#
-pdf("SyntheticSigma2.pdf", width = wsize, height = hsize, family = "Times", pointsize = font)#
-par(mgp = c(1.5,.5,0), mar=c(2.4,2.8,0.8,0.2))#
-BRI = apply(X.losses[[1]], 1, mean)#
-LOG = apply(X.losses[[2]], 1, mean)#
-#FULL = apply(X.losses[[3]], 1, mean)#
-plot(BRI~sigma2s, type = "l", col = 1, lwd = 2, ylim = range(BRI, LOG), xlab = expression(paste(sigma^2)), ylab = "Quadratic Loss: hidden process", axes = FALSE)#
-box()#
-axis(1, at = round(sigma2s,1))#
-axis(2)#
-#axis(2, at = signif(seq(min(BRI,LOG), max(BRI,LOG), length = 5)[2:4], 2))#
-lines(LOG~sigma2s, lty = 2, lwd = 2)#
-#lines(FULL~sigma2s, col = 3, lwd = 2)#
-dev.off()#
-#
-setwd("/Users/ville/probability_aggregation/Figures/")#
-#CairoPDF(file = "SyntheticBeta.pdf", width = size, height = size, onefile = TRUE, family = "Times", pointsize = font)#
-pdf(file = "SyntheticBeta.pdf", width = wsize, height = hsize, onefile = TRUE, family = "Times", pointsize = font)#
-par(mgp = c(1.5,.5,0), mar=c(2.4,2.8,0.8,0.2))#
-BRI = apply(X.losses[[1]], 2, mean)#
-LOG = apply(X.losses[[2]], 2, mean)#
-#FULL = apply(X.losses[[3]], 2, mean)#
-plot(BRI~betas, type = "l", col = 1, lwd = 2, ylim = range(BRI, LOG), xlab = expression(paste(beta)), ylab = "Quadratic Loss: hidden process", axes = FALSE)#
-box()#
-axis(1, at = round(betas,1))#
-#axis(2, at = signif(seq(min(BRI,LOG), max(BRI,LOG), length = 5)[2:4], 2))#
-axis(2)#
-lines(LOG~betas, lty = 2, lwd = 2)#
-#lines(FULL~betas, col = 3, lwd = 2)#
-dev.off()#
-#
-setwd("/Users/ville/probability_aggregation/Figures/")#
-#CairoPDF(file = "SyntheticK.pdf", width = size, height = size, onefile = TRUE, family = "Times", pointsize = font)#
-pdf(file = "SyntheticK.pdf", width = wsize, height = hsize, onefile = TRUE, family = "Times", pointsize = font)#
-par(mgp = c(1.5,.5,0), mar=c(2.4,2.8,0.8,0.2))#
-BRI = apply(X.losses[[1]], 3, mean)#
-LOG = apply(X.losses[[2]], 3, mean)#
-#FULL = apply(X.losses[[3]], 3, mean)#
-plot(BRI~Ks, type = "l", col = 1, lwd = 2, ylim = range(BRI, LOG), xlab = "K", ylab = "Quadratic Loss: hidden process", axes = FALSE)#
-box()#
-axis(1, at = round(Ks, 1))#
-axis(2)#
-#axis(2, at = signif(seq(min(BRI,LOG), max(BRI,LOG), length = 5)[2:4], 2))#
-lines(LOG~Ks, lwd = 2, lty = 2)#
-#lines(FULL~Ks, col = 3, lwd = 2)#
-dev.off()#
-######## BBBBBBBBBBBB#
-setwd("/Users/ville/probability_aggregation/Figures/")#
-pdf("SyntheticSigma2bias.pdf", width = wsize, height = hsize, onefile = TRUE, family = "Times", pointsize = font)#
-par(mgp = c(1.5,.5,0), mar=c(2.4,2.8,0.8,0.2))#
-BRI = apply(b.losses[[1]], 1, mean)#
-LOG = apply(b.losses[[2]], 1, mean)#
-#FULL = apply(b.losses[[3]], 1, mean)#
-plot(BRI~sigma2s, type = "l", col = 1, lwd = 2, ylim = range(BRI, LOG), xlab = expression(paste(sigma^2)), ylab = "Quadratic Loss: bias vector", axes = FALSE)#
-box()#
-axis(1, at = round(sigma2s, 1))#
-#axis(2, at = signif(seq(min(BRI,LOG), max(BRI,LOG), length = 5)[2:4], 2))#
-axis(2)#
-lines(LOG~sigma2s, lwd = 2, lty = 2)#
-#lines(FULL~sigma2s, col = 3, lwd = 2)#
-dev.off()#
-#
-setwd("/Users/ville/probability_aggregation/Figures/")#
-pdf("SyntheticBetabias.pdf", width = wsize, height = hsize, onefile = TRUE, family = "Times", pointsize = font)#
-par(mgp = c(1.5,.5,0), mar=c(2.4,2.8,0.8,0.2))#
-BRI = apply(b.losses[[1]], 2, mean)#
-LOG = apply(b.losses[[2]], 2, mean)#
-#FULL = apply(b.losses[[3]], 2, mean)#
-plot(BRI~betas, type = "l", col = 1, lwd = 2, ylim = range(BRI, LOG), xlab = expression(paste(beta)), ylab = "Quadratic Loss: bias vector", axes = FALSE)#
-box()#
-axis(1, at = round(betas, 1))#
-axis(2)#
-#axis(2, at = signif(seq(min(BRI,LOG), max(BRI,LOG), length = 5)[2:4], 2))#
-lines(LOG~betas, lwd = 2, lty = 2)#
-#lines(FULL~betas, col = 3, lwd = 2)#
-dev.off()#
-#
-setwd("/Users/ville/probability_aggregation/Figures/")#
-pdf("SyntheticKbias.pdf", width = wsize, height = hsize, onefile = TRUE, family = "Times", pointsize = font)#
-par(mgp = c(1.5,.5,0), mar=c(2.4,2.8,0.8,0.2))#
-BRI = apply(b.losses[[1]], 3, mean)#
-LOG = apply(b.losses[[2]], 3, mean)#
-#FULL = apply(b.losses[[3]], 3, mean)#
-plot(BRI~Ks, type = "l", col = 1, lwd = 2, ylim = range(BRI, LOG), xlab = "K", ylab = "Quadratic Loss: bias vector", axes = FALSE)#
-box()#
-axis(1, at = round(Ks, 1))#
-axis(2)#
-#axis(2, at = signif(seq(min(BRI,LOG), max(BRI,LOG), length = 5)[2:4], 2))#
-lines(LOG~Ks,  lwd = 2, lty = 2)#
-#lines(FULL~Ks, col = 3, lwd = 2)#
-dev.off()
-T = 100#
-Ks = c(20, 40, 60, 80, 100) ## Number of problems#
-betas = c(0.5, 0.75, 1, 1/0.75, 1/0.5) ## Expected bias mean: same effect around 1.0#
-sigma2s = c(0.5, 1.0, 1.5, 2.0, 2.5)#
-load("/Users/ville/Desktop/Dynamic_Logit_Model/ExpertAnalysis/X.losses.RData")#
-load("/Users/ville/Desktop/Dynamic_Logit_Model/ExpertAnalysis/b.losses.RData")#
-######## XXXXXXXXX#
-wsize = 2#
-hsize = 1.8#
-font = 8#
-#
-setwd("/Users/ville/probability_aggregation/Figures/")#
-#CairoPDF(file = "SyntheticSigma2.pdf", width = size, height = size, onefile = TRUE, family = "Times", pointsize = font)#
-pdf("SyntheticSigma2.pdf", width = wsize, height = hsize, family = "Times", pointsize = font)#
-par(mgp = c(1.5,.5,0), mar=c(2.4,2.8,0.8,0.2))#
-BRI = apply(X.losses[[1]], 1, mean)#
-LOG = apply(X.losses[[2]], 1, mean)#
-#FULL = apply(X.losses[[3]], 1, mean)#
-plot(BRI~sigma2s, type = "l", col = 1, lwd = 2, ylim = range(BRI, LOG), xlab = expression(paste(sigma^2)), ylab = "Quadratic Loss: hidden process", axes = FALSE)#
-box()#
-axis(1, at = round(sigma2s,1))#
-axis(2)#
-#axis(2, at = signif(seq(min(BRI,LOG), max(BRI,LOG), length = 5)[2:4], 2))#
-lines(LOG~sigma2s, lty = 2, lwd = 2)#
-#lines(FULL~sigma2s, col = 3, lwd = 2)#
-dev.off()#
-#
-setwd("/Users/ville/probability_aggregation/Figures/")#
-#CairoPDF(file = "SyntheticBeta.pdf", width = size, height = size, onefile = TRUE, family = "Times", pointsize = font)#
-pdf(file = "SyntheticBeta.pdf", width = wsize, height = hsize, onefile = TRUE, family = "Times", pointsize = font)#
-par(mgp = c(1.5,.5,0), mar=c(2.4,2.8,0.8,0.2))#
-BRI = apply(X.losses[[1]], 2, mean)#
-LOG = apply(X.losses[[2]], 2, mean)#
-#FULL = apply(X.losses[[3]], 2, mean)#
-plot(BRI~betas, type = "l", col = 1, lwd = 2, ylim = range(BRI, LOG), xlab = expression(paste(beta)), ylab = "Quadratic Loss: hidden process", axes = FALSE)#
-box()#
-axis(1, at = round(betas,1))#
-#axis(2, at = signif(seq(min(BRI,LOG), max(BRI,LOG), length = 5)[2:4], 2))#
-axis(2)#
-lines(LOG~betas, lty = 2, lwd = 2)#
-#lines(FULL~betas, col = 3, lwd = 2)#
-dev.off()#
-#
-setwd("/Users/ville/probability_aggregation/Figures/")#
-#CairoPDF(file = "SyntheticK.pdf", width = size, height = size, onefile = TRUE, family = "Times", pointsize = font)#
-pdf(file = "SyntheticK.pdf", width = wsize, height = hsize, onefile = TRUE, family = "Times", pointsize = font)#
-par(mgp = c(1.5,.5,0), mar=c(2.4,2.8,0.8,0.2))#
-BRI = apply(X.losses[[1]], 3, mean)#
-LOG = apply(X.losses[[2]], 3, mean)#
-#FULL = apply(X.losses[[3]], 3, mean)#
-plot(BRI~Ks, type = "l", col = 1, lwd = 2, ylim = range(BRI, LOG), xlab = "K", ylab = "Quadratic Loss: hidden process", axes = FALSE)#
-box()#
-axis(1, at = round(Ks, 1))#
-axis(2)#
-#axis(2, at = signif(seq(min(BRI,LOG), max(BRI,LOG), length = 5)[2:4], 2))#
-lines(LOG~Ks, lwd = 2, lty = 2)#
-#lines(FULL~Ks, col = 3, lwd = 2)#
-dev.off()#
-######## BBBBBBBBBBBB#
-setwd("/Users/ville/probability_aggregation/Figures/")#
-pdf("SyntheticSigma2bias.pdf", width = wsize, height = hsize, onefile = TRUE, family = "Times", pointsize = font)#
-par(mgp = c(1.5,.5,0), mar=c(2.4,2.8,0.8,0.2))#
-BRI = apply(b.losses[[1]], 1, mean)#
-LOG = apply(b.losses[[2]], 1, mean)#
-#FULL = apply(b.losses[[3]], 1, mean)#
-plot(BRI~sigma2s, type = "l", col = 1, lwd = 2, ylim = range(BRI, LOG), xlab = expression(paste(sigma^2)), ylab = "Quadratic Loss: bias vector", axes = FALSE)#
-box()#
-axis(1, at = round(sigma2s, 1))#
-#axis(2, at = signif(seq(min(BRI,LOG), max(BRI,LOG), length = 5)[2:4], 2))#
-axis(2)#
-lines(LOG~sigma2s, lwd = 2, lty = 2)#
-#lines(FULL~sigma2s, col = 3, lwd = 2)#
-dev.off()#
-#
-setwd("/Users/ville/probability_aggregation/Figures/")#
-pdf("SyntheticBetabias.pdf", width = wsize, height = hsize, onefile = TRUE, family = "Times", pointsize = font)#
-par(mgp = c(1.5,.5,0), mar=c(2.4,2.8,0.8,0.2))#
-BRI = apply(b.losses[[1]], 2, mean)#
-LOG = apply(b.losses[[2]], 2, mean)#
-#FULL = apply(b.losses[[3]], 2, mean)#
-plot(BRI~betas, type = "l", col = 1, lwd = 2, ylim = range(BRI, LOG), xlab = expression(paste(beta)), ylab = "Quadratic Loss: bias vector", axes = FALSE)#
-box()#
-axis(1, at = round(betas, 1))#
-axis(2)#
-#axis(2, at = signif(seq(min(BRI,LOG), max(BRI,LOG), length = 5)[2:4], 2))#
-lines(LOG~betas, lwd = 2, lty = 2)#
-#lines(FULL~betas, col = 3, lwd = 2)#
-dev.off()#
-#
-setwd("/Users/ville/probability_aggregation/Figures/")#
-pdf("SyntheticKbias.pdf", width = wsize, height = hsize, onefile = TRUE, family = "Times", pointsize = font)#
-par(mgp = c(1.5,.5,0), mar=c(2.4,2.8,0.8,0.2))#
-BRI = apply(b.losses[[1]], 3, mean)#
-LOG = apply(b.losses[[2]], 3, mean)#
-#FULL = apply(b.losses[[3]], 3, mean)#
-plot(BRI~Ks, type = "l", col = 1, lwd = 2, ylim = range(BRI, LOG), xlab = "K", ylab = "Quadratic Loss: bias vector", axes = FALSE)#
-box()#
-axis(1, at = round(Ks, 1))#
-axis(2)#
-#axis(2, at = signif(seq(min(BRI,LOG), max(BRI,LOG), length = 5)[2:4], 2))#
-lines(LOG~Ks,  lwd = 2, lty = 2)#
-#lines(FULL~Ks, col = 3, lwd = 2)#
-dev.off()
-runif(1)
-runif(1)*1000
-round(runif(1)*1000)
-round(runif(1)*1000)
-round(runif(1)*1000)
-round(runif(1)*1000)
-round(runif(1)*1000)
-round(runif(1)*1000)
-round(runif(1)*1000)
-round(runif(1)*1000)
-T = 100#
-Ks = c(20, 40, 60, 80, 100) ## Number of problems#
-betas = c(0.5, 0.75, 1, 1/0.75, 1/0.5) ## Expected bias mean: same effect around 1.0#
-sigma2s = c(0.5, 1.0, 1.5, 2.0, 2.5)#
-load("/Users/ville/Desktop/Dynamic_Logit_Model/ExpertAnalysis/X.losses.RData")#
-load("/Users/ville/Desktop/Dynamic_Logit_Model/ExpertAnalysis/b.losses.RData")#
-######## XXXXXXXXX#
-wsize = 2#
-hsize = 1.8#
-font = 8#
-#
-setwd("/Users/ville/probability_aggregation/Figures/")#
-#CairoPDF(file = "SyntheticSigma2.pdf", width = size, height = size, onefile = TRUE, family = "Times", pointsize = font)#
-pdf("SyntheticSigma2.pdf", width = wsize, height = hsize, family = "Times", pointsize = font)#
-par(mgp = c(1.5,.5,0), mar=c(2.4,2.8,0.8,0.2))#
-BRI = apply(X.losses[[1]], 1, mean)#
-LOG = apply(X.losses[[2]], 1, mean)#
-#FULL = apply(X.losses[[3]], 1, mean)#
-plot(BRI~sigma2s, type = "l", col = 1, lwd = 2, ylim = range(BRI, LOG), xlab = expression(paste(sigma^2)), ylab = "Quadratic Loss: hidden process", axes = FALSE)#
-box()#
-axis(1, at = round(sigma2s,1))#
-axis(2)#
-#axis(2, at = signif(seq(min(BRI,LOG), max(BRI,LOG), length = 5)[2:4], 2))#
-lines(LOG~sigma2s, lty = 2, lwd = 2)#
-#lines(FULL~sigma2s, col = 3, lwd = 2)#
-dev.off()#
-#
-setwd("/Users/ville/probability_aggregation/Figures/")#
-#CairoPDF(file = "SyntheticBeta.pdf", width = size, height = size, onefile = TRUE, family = "Times", pointsize = font)#
-pdf(file = "SyntheticBeta.pdf", width = wsize, height = hsize, onefile = TRUE, family = "Times", pointsize = font)#
-par(mgp = c(1.5,.5,0), mar=c(2.4,2.8,0.8,0.2))#
-BRI = apply(X.losses[[1]], 2, mean)#
-LOG = apply(X.losses[[2]], 2, mean)#
-#FULL = apply(X.losses[[3]], 2, mean)#
-plot(BRI~betas, type = "l", col = 1, lwd = 2, ylim = range(BRI, LOG), xlab = expression(paste(beta)), ylab = "Quadratic Loss: hidden process", axes = FALSE)#
-box()#
-axis(1, at = round(betas,1))#
-#axis(2, at = signif(seq(min(BRI,LOG), max(BRI,LOG), length = 5)[2:4], 2))#
-axis(2)#
-lines(LOG~betas, lty = 2, lwd = 2)#
-#lines(FULL~betas, col = 3, lwd = 2)#
-dev.off()#
-#
-setwd("/Users/ville/probability_aggregation/Figures/")#
-#CairoPDF(file = "SyntheticK.pdf", width = size, height = size, onefile = TRUE, family = "Times", pointsize = font)#
-pdf(file = "SyntheticK.pdf", width = wsize, height = hsize, onefile = TRUE, family = "Times", pointsize = font)#
-par(mgp = c(1.5,.5,0), mar=c(2.4,2.8,0.8,0.2))#
-BRI = apply(X.losses[[1]], 3, mean)#
-LOG = apply(X.losses[[2]], 3, mean)#
-#FULL = apply(X.losses[[3]], 3, mean)#
-plot(BRI~Ks, type = "l", col = 1, lwd = 2, ylim = range(BRI, LOG), xlab = "K", ylab = "Quadratic Loss: hidden process", axes = FALSE)#
-box()#
-axis(1, at = round(Ks, 1))#
-axis(2)#
-#axis(2, at = signif(seq(min(BRI,LOG), max(BRI,LOG), length = 5)[2:4], 2))#
-lines(LOG~Ks, lwd = 2, lty = 2)#
-#lines(FULL~Ks, col = 3, lwd = 2)#
-dev.off()#
-######## BBBBBBBBBBBB#
-setwd("/Users/ville/probability_aggregation/Figures/")#
-pdf("SyntheticSigma2bias.pdf", width = wsize, height = hsize, onefile = TRUE, family = "Times", pointsize = font)#
-par(mgp = c(1.5,.5,0), mar=c(2.4,2.8,0.8,0.2))#
-BRI = apply(b.losses[[1]], 1, mean)#
-LOG = apply(b.losses[[2]], 1, mean)#
-#FULL = apply(b.losses[[3]], 1, mean)#
-plot(BRI~sigma2s, type = "l", col = 1, lwd = 2, ylim = range(BRI, LOG), xlab = expression(paste(sigma^2)), ylab = "Quadratic Loss: bias vector", axes = FALSE)#
-box()#
-axis(1, at = round(sigma2s, 1))#
-#axis(2, at = signif(seq(min(BRI,LOG), max(BRI,LOG), length = 5)[2:4], 2))#
-axis(2)#
-lines(LOG~sigma2s, lwd = 2, lty = 2)#
-#lines(FULL~sigma2s, col = 3, lwd = 2)#
-dev.off()#
-#
-setwd("/Users/ville/probability_aggregation/Figures/")#
-pdf("SyntheticBetabias.pdf", width = wsize, height = hsize, onefile = TRUE, family = "Times", pointsize = font)#
-par(mgp = c(1.5,.5,0), mar=c(2.4,2.8,0.8,0.2))#
-BRI = apply(b.losses[[1]], 2, mean)#
-LOG = apply(b.losses[[2]], 2, mean)#
-#FULL = apply(b.losses[[3]], 2, mean)#
-plot(BRI~betas, type = "l", col = 1, lwd = 2, ylim = range(BRI, LOG), xlab = expression(paste(beta)), ylab = "Quadratic Loss: bias vector", axes = FALSE)#
-box()#
-axis(1, at = round(betas, 1))#
-axis(2)#
-#axis(2, at = signif(seq(min(BRI,LOG), max(BRI,LOG), length = 5)[2:4], 2))#
-lines(LOG~betas, lwd = 2, lty = 2)#
-#lines(FULL~betas, col = 3, lwd = 2)#
-dev.off()#
-#
-setwd("/Users/ville/probability_aggregation/Figures/")#
-pdf("SyntheticKbias.pdf", width = wsize, height = hsize, onefile = TRUE, family = "Times", pointsize = font)#
-par(mgp = c(1.5,.5,0), mar=c(2.4,2.8,0.8,0.2))#
-BRI = apply(b.losses[[1]], 3, mean)#
-LOG = apply(b.losses[[2]], 3, mean)#
-#FULL = apply(b.losses[[3]], 3, mean)#
-plot(BRI~Ks, type = "l", col = 1, lwd = 2, ylim = range(BRI, LOG), xlab = "K", ylab = "Quadratic Loss: bias vector", axes = FALSE)#
-box()#
-axis(1, at = round(Ks, 1))#
-axis(2)#
-#axis(2, at = signif(seq(min(BRI,LOG), max(BRI,LOG), length = 5)[2:4], 2))#
-lines(LOG~Ks,  lwd = 2, lty = 2)#
-#lines(FULL~Ks, col = 3, lwd = 2)#
-dev.off()
-T = 100#
-Ks = c(20, 40, 60, 80, 100) ## Number of problems#
-betas = c(0.5, 0.75, 1, 1/0.75, 1/0.5) ## Expected bias mean: same effect around 1.0#
-sigma2s = c(0.5, 1.0, 1.5, 2.0, 2.5)#
-load("/Users/ville/Desktop/Dynamic_Logit_Model/ExpertAnalysis/X.losses.RData")#
-load("/Users/ville/Desktop/Dynamic_Logit_Model/ExpertAnalysis/b.losses.RData")#
-######## XXXXXXXXX#
-wsize = 2#
-hsize = 1.8#
-font = 8#
-#
-setwd("/Users/ville/probability_aggregation/Figures/")#
-#CairoPDF(file = "SyntheticSigma2.pdf", width = size, height = size, onefile = TRUE, family = "Times", pointsize = font)#
-pdf("SyntheticSigma2.pdf", width = wsize, height = hsize, family = "Times", pointsize = font)#
-par(mgp = c(1.5,.5,0), mar=c(2.4,2.8,0.8,0.2))#
-BRI = apply(X.losses[[1]], 1, mean)#
-LOG = apply(X.losses[[2]], 1, mean)#
-#FULL = apply(X.losses[[3]], 1, mean)#
-plot(BRI~sigma2s, type = "l", col = 1, lwd = 2, ylim = range(BRI, LOG), xlab = expression(paste(sigma^2)), ylab = "Quadratic Loss: hidden process", axes = FALSE)#
-box()#
-axis(1, at = round(sigma2s,1))#
-axis(2)#
-#axis(2, at = signif(seq(min(BRI,LOG), max(BRI,LOG), length = 5)[2:4], 2))#
-lines(LOG~sigma2s, lty = 2, lwd = 2)#
-#lines(FULL~sigma2s, col = 3, lwd = 2)#
-dev.off()#
-#
-setwd("/Users/ville/probability_aggregation/Figures/")#
-#CairoPDF(file = "SyntheticBeta.pdf", width = size, height = size, onefile = TRUE, family = "Times", pointsize = font)#
-pdf(file = "SyntheticBeta.pdf", width = wsize, height = hsize, onefile = TRUE, family = "Times", pointsize = font)#
-par(mgp = c(1.5,.5,0), mar=c(2.4,2.8,0.8,0.2))#
-BRI = apply(X.losses[[1]], 2, mean)#
-LOG = apply(X.losses[[2]], 2, mean)#
-#FULL = apply(X.losses[[3]], 2, mean)#
-plot(BRI~betas, type = "l", col = 1, lwd = 2, ylim = range(BRI, LOG), xlab = expression(paste(beta)), ylab = "Quadratic Loss: hidden process", axes = FALSE)#
-box()#
-axis(1, at = round(betas,1))#
-#axis(2, at = signif(seq(min(BRI,LOG), max(BRI,LOG), length = 5)[2:4], 2))#
-axis(2)#
-lines(LOG~betas, lty = 2, lwd = 2)#
-#lines(FULL~betas, col = 3, lwd = 2)#
-dev.off()#
-#
-setwd("/Users/ville/probability_aggregation/Figures/")#
-#CairoPDF(file = "SyntheticK.pdf", width = size, height = size, onefile = TRUE, family = "Times", pointsize = font)#
-pdf(file = "SyntheticK.pdf", width = wsize, height = hsize, onefile = TRUE, family = "Times", pointsize = font)#
-par(mgp = c(1.5,.5,0), mar=c(2.4,2.8,0.8,0.2))#
-BRI = apply(X.losses[[1]], 3, mean)#
-LOG = apply(X.losses[[2]], 3, mean)#
-#FULL = apply(X.losses[[3]], 3, mean)#
-plot(BRI~Ks, type = "l", col = 1, lwd = 2, ylim = range(BRI, LOG), xlab = "K", ylab = "Quadratic Loss: hidden process", axes = FALSE)#
-box()#
-axis(1, at = round(Ks, 1))#
-axis(2)#
-#axis(2, at = signif(seq(min(BRI,LOG), max(BRI,LOG), length = 5)[2:4], 2))#
-lines(LOG~Ks, lwd = 2, lty = 2)#
-#lines(FULL~Ks, col = 3, lwd = 2)#
-dev.off()#
-######## BBBBBBBBBBBB#
-setwd("/Users/ville/probability_aggregation/Figures/")#
-pdf("SyntheticSigma2bias.pdf", width = wsize, height = hsize, onefile = TRUE, family = "Times", pointsize = font)#
-par(mgp = c(1.5,.5,0), mar=c(2.4,2.8,0.8,0.2))#
-BRI = apply(b.losses[[1]], 1, mean)#
-LOG = apply(b.losses[[2]], 1, mean)#
-#FULL = apply(b.losses[[3]], 1, mean)#
-plot(BRI~sigma2s, type = "l", col = 1, lwd = 2, ylim = range(BRI, LOG), xlab = expression(paste(sigma^2)), ylab = "Quadratic Loss: bias vector", axes = FALSE)#
-box()#
-axis(1, at = round(sigma2s, 1))#
-#axis(2, at = signif(seq(min(BRI,LOG), max(BRI,LOG), length = 5)[2:4], 2))#
-axis(2)#
-lines(LOG~sigma2s, lwd = 2, lty = 2)#
-#lines(FULL~sigma2s, col = 3, lwd = 2)#
-dev.off()#
-#
-setwd("/Users/ville/probability_aggregation/Figures/")#
-pdf("SyntheticBetabias.pdf", width = wsize, height = hsize, onefile = TRUE, family = "Times", pointsize = font)#
-par(mgp = c(1.5,.5,0), mar=c(2.4,2.8,0.8,0.2))#
-BRI = apply(b.losses[[1]], 2, mean)#
-LOG = apply(b.losses[[2]], 2, mean)#
-#FULL = apply(b.losses[[3]], 2, mean)#
-plot(BRI~betas, type = "l", col = 1, lwd = 2, ylim = range(BRI, LOG), xlab = expression(paste(beta)), ylab = "Quadratic Loss: bias vector", axes = FALSE)#
-box()#
-axis(1, at = round(betas, 1))#
-axis(2)#
-#axis(2, at = signif(seq(min(BRI,LOG), max(BRI,LOG), length = 5)[2:4], 2))#
-lines(LOG~betas, lwd = 2, lty = 2)#
-#lines(FULL~betas, col = 3, lwd = 2)#
-dev.off()#
-#
-setwd("/Users/ville/probability_aggregation/Figures/")#
-pdf("SyntheticKbias.pdf", width = wsize, height = hsize, onefile = TRUE, family = "Times", pointsize = font)#
-par(mgp = c(1.5,.5,0), mar=c(2.4,2.8,0.8,0.2))#
-BRI = apply(b.losses[[1]], 3, mean)#
-LOG = apply(b.losses[[2]], 3, mean)#
-#FULL = apply(b.losses[[3]], 3, mean)#
-plot(BRI~Ks, type = "l", col = 1, lwd = 2, ylim = range(BRI, LOG), xlab = "K", ylab = "Quadratic Loss: bias vector", axes = FALSE)#
-box()#
-axis(1, at = round(Ks, 1))#
-axis(2)#
-#axis(2, at = signif(seq(min(BRI,LOG), max(BRI,LOG), length = 5)[2:4], 2))#
-lines(LOG~Ks,  lwd = 2, lty = 2)#
-#lines(FULL~Ks, col = 3, lwd = 2)#
-dev.off()
-T = 100#
-Ks = c(20, 40, 60, 80, 100) ## Number of problems#
-betas = c(0.5, 0.75, 1, 1/0.75, 1/0.5) ## Expected bias mean: same effect around 1.0#
-sigma2s = c(0.5, 1.0, 1.5, 2.0, 2.5)#
-load("/Users/ville/Desktop/Dynamic_Logit_Model/ExpertAnalysis/X.losses.RData")#
-load("/Users/ville/Desktop/Dynamic_Logit_Model/ExpertAnalysis/b.losses.RData")#
-######## XXXXXXXXX#
-wsize = 2#
-hsize = 1.8#
-font = 8#
-#
-setwd("/Users/ville/probability_aggregation/Figures/")#
-#CairoPDF(file = "SyntheticSigma2.pdf", width = size, height = size, onefile = TRUE, family = "Times", pointsize = font)#
-pdf("SyntheticSigma2.pdf", width = wsize, height = hsize, family = "Times", pointsize = font)#
-par(mgp = c(1.5,.5,0), mar=c(2.4,2.8,0.8,0.2))#
-BRI = apply(X.losses[[1]], 1, mean)#
-LOG = apply(X.losses[[2]], 1, mean)#
-#FULL = apply(X.losses[[3]], 1, mean)#
-plot(BRI~sigma2s, type = "l", col = 1, lwd = 2, ylim = range(BRI, LOG), xlab = expression(paste(sigma^2)), ylab = "Quadratic Loss: hidden process", axes = FALSE)#
-box()#
-axis(1, at = round(sigma2s,1))#
-axis(2)#
-#axis(2, at = signif(seq(min(BRI,LOG), max(BRI,LOG), length = 5)[2:4], 2))#
-lines(LOG~sigma2s, lty = 2, lwd = 2)#
-#lines(FULL~sigma2s, col = 3, lwd = 2)#
-dev.off()#
-#
-setwd("/Users/ville/probability_aggregation/Figures/")#
-#CairoPDF(file = "SyntheticBeta.pdf", width = size, height = size, onefile = TRUE, family = "Times", pointsize = font)#
-pdf(file = "SyntheticBeta.pdf", width = wsize, height = hsize, onefile = TRUE, family = "Times", pointsize = font)#
-par(mgp = c(1.5,.5,0), mar=c(2.4,2.8,0.8,0.2))#
-BRI = apply(X.losses[[1]], 2, mean)#
-LOG = apply(X.losses[[2]], 2, mean)#
-#FULL = apply(X.losses[[3]], 2, mean)#
-plot(BRI~betas, type = "l", col = 1, lwd = 2, ylim = range(BRI, LOG), xlab = expression(paste(beta)), ylab = "Quadratic Loss: hidden process", axes = FALSE)#
-box()#
-axis(1, at = round(betas,1))#
-#axis(2, at = signif(seq(min(BRI,LOG), max(BRI,LOG), length = 5)[2:4], 2))#
-axis(2)#
-lines(LOG~betas, lty = 2, lwd = 2)#
-#lines(FULL~betas, col = 3, lwd = 2)#
-dev.off()#
-#
-setwd("/Users/ville/probability_aggregation/Figures/")#
-#CairoPDF(file = "SyntheticK.pdf", width = size, height = size, onefile = TRUE, family = "Times", pointsize = font)#
-pdf(file = "SyntheticK.pdf", width = wsize, height = hsize, onefile = TRUE, family = "Times", pointsize = font)#
-par(mgp = c(1.5,.5,0), mar=c(2.4,2.8,0.8,0.2))#
-BRI = apply(X.losses[[1]], 3, mean)#
-LOG = apply(X.losses[[2]], 3, mean)#
-#FULL = apply(X.losses[[3]], 3, mean)#
-plot(BRI~Ks, type = "l", col = 1, lwd = 2, ylim = range(BRI, LOG), xlab = "K", ylab = "Quadratic Loss: hidden process", axes = FALSE)#
-box()#
-axis(1, at = round(Ks, 1))#
-axis(2)#
-#axis(2, at = signif(seq(min(BRI,LOG), max(BRI,LOG), length = 5)[2:4], 2))#
-lines(LOG~Ks, lwd = 2, lty = 2)#
-#lines(FULL~Ks, col = 3, lwd = 2)#
-dev.off()#
-######## BBBBBBBBBBBB#
-setwd("/Users/ville/probability_aggregation/Figures/")#
-pdf("SyntheticSigma2bias.pdf", width = wsize, height = hsize, onefile = TRUE, family = "Times", pointsize = font)#
-par(mgp = c(1.5,.5,0), mar=c(2.4,2.8,0.8,0.2))#
-BRI = apply(b.losses[[1]], 1, mean)#
-LOG = apply(b.losses[[2]], 1, mean)#
-#FULL = apply(b.losses[[3]], 1, mean)#
-plot(BRI~sigma2s, type = "l", col = 1, lwd = 2, ylim = range(BRI, LOG), xlab = expression(paste(sigma^2)), ylab = "Quadratic Loss: bias vector", axes = FALSE)#
-box()#
-axis(1, at = round(sigma2s, 1))#
-#axis(2, at = signif(seq(min(BRI,LOG), max(BRI,LOG), length = 5)[2:4], 2))#
-axis(2)#
-lines(LOG~sigma2s, lwd = 2, lty = 2)#
-#lines(FULL~sigma2s, col = 3, lwd = 2)#
-dev.off()#
-#
-setwd("/Users/ville/probability_aggregation/Figures/")#
-pdf("SyntheticBetabias.pdf", width = wsize, height = hsize, onefile = TRUE, family = "Times", pointsize = font)#
-par(mgp = c(1.5,.5,0), mar=c(2.4,2.8,0.8,0.2))#
-BRI = apply(b.losses[[1]], 2, mean)#
-LOG = apply(b.losses[[2]], 2, mean)#
-#FULL = apply(b.losses[[3]], 2, mean)#
-plot(BRI~betas, type = "l", col = 1, lwd = 2, ylim = range(BRI, LOG), xlab = expression(paste(beta)), ylab = "Quadratic Loss: bias vector", axes = FALSE)#
-box()#
-axis(1, at = round(betas, 1))#
-axis(2)#
-#axis(2, at = signif(seq(min(BRI,LOG), max(BRI,LOG), length = 5)[2:4], 2))#
-lines(LOG~betas, lwd = 2, lty = 2)#
-#lines(FULL~betas, col = 3, lwd = 2)#
-dev.off()#
-#
-setwd("/Users/ville/probability_aggregation/Figures/")#
-pdf("SyntheticKbias.pdf", width = wsize, height = hsize, onefile = TRUE, family = "Times", pointsize = font)#
-par(mgp = c(1.5,.5,0), mar=c(2.4,2.8,0.8,0.2))#
-BRI = apply(b.losses[[1]], 3, mean)#
-LOG = apply(b.losses[[2]], 3, mean)#
-#FULL = apply(b.losses[[3]], 3, mean)#
-plot(BRI~Ks, type = "l", col = 1, lwd = 2, ylim = range(BRI, LOG), xlab = "K", ylab = "Quadratic Loss: bias vector", axes = FALSE)#
-box()#
-axis(1, at = round(Ks, 1))#
-axis(2)#
-#axis(2, at = signif(seq(min(BRI,LOG), max(BRI,LOG), length = 5)[2:4], 2))#
-lines(LOG~Ks,  lwd = 2, lty = 2)#
-#lines(FULL~Ks, col = 3, lwd = 2)#
-dev.off()
+library(splines)#
+sizes = sample(1:max.size, l1, replace = TRUE)#
+sizes_scale = scale(sizes)[,1]#
+knots = quantile(sizes_scale, c(0.25, 0.5, 0.75))#
+CX = bs(sizes_scale, knots = knots, degree = 3, intercept = TRUE)#
+CX_sigma = matrix(1, l1, 2)#
+CX_sigma[,2] = sizes_scale
+head(CX)
+head(CX_sigma)
+gamma_alpha = -c(1:7)#
+gamma_sigma2 = c(1, -0.2)#
+alphas = rnorm(l1, CX %*% gamma_alpha, sqrt(exp(CX_sigma %*% gamma_sigma2)))
+head(alphas)
+plot(sort(alphas))
+sqrt(exp(CX_sigma %*% gamma_sigma2))
+plot(sqrt(exp(CX_sigma %*% gamma_sigma2))~sizes)
+gamma_alpha = -c(1:7)*0.3#
+gamma_sigma2 = c(1, -0.2)#
+alphas = rnorm(l1, CX %*% gamma_alpha, sqrt(exp(CX_sigma %*% gamma_sigma2)))
+plot(sqrt(exp(CX_sigma %*% gamma_sigma2))~sizes)
+gamma_alpha = -c(1:7)*0.3#
+gamma_sigma2 = c(0.5, -1)#
+alphas = rnorm(l1, CX %*% gamma_alpha, sqrt(exp(CX_sigma %*% gamma_sigma2)))
+plot(alphas~sizes)
+plot(CX %*% gamma_alpha~sizes)
+gamma_alpha = -c(1, 0.2, 0.8, 0.9, 2, 3, 4)#
+gamma_sigma2 = c(0.5, -1)#
+alphas = rnorm(l1, CX %*% gamma_alpha, sqrt(exp(CX_sigma %*% gamma_sigma2)))#
+plot(CX %*% gamma_alpha~sizes)
+gamma_alpha = -c(0.1, 0.2, 0.8, 0.9, 2, 3, 4)#
+gamma_sigma2 = c(0.5, -1)#
+alphas = rnorm(l1, CX %*% gamma_alpha, sqrt(exp(CX_sigma %*% gamma_sigma2)))#
+plot(CX %*% gamma_alpha~sizes)
+plot(alphas~sizes)
+?write.table
+write.table(alphas, file = "alphas.csv", row.names = FALSE)
 getwd()
-HELPER FUNCTIONS:#
-delogit = function(x) ifelse(x > 100, 1, exp(x)/(1+exp(x)))#
-logit = function(x) log(x/(1-x))#
+setwd("/Users/ville/probability_aggregation/Figures")
+getwd()
+Generate synthetic hospital data:#
+setwd("/Users/ville/Desktop/SYNTHETIC")#
+l1 = 1000#
+max.size = 100#
 #
-delta.calibration.bri = function(delta){#
-  l = 0#
-  for(i in 1:num.probs){#
-    xx = unlist(X.post[[i]])#
-    xx = exp(delta*xx)#
-    xx = xx/(1+xx)#
-    l = l + sum( (xx - ANS.train[i])^2)#
-  }#
-  return(l)#
-}#
+library(splines)#
+sizes = sample(1:max.size, l1, replace = TRUE)#
+sizes_scale = scale(sizes)[,1]#
+knots = quantile(sizes_scale, c(0.25, 0.5, 0.75))#
+CX = bs(sizes_scale, knots = knots, degree = 3, intercept = TRUE)#
+CX_sigma = matrix(1, l1, 2)#
+CX_sigma[,2] = sizes_scale#
 #
-delta.calibration.log = function(delta){#
-  l = 0#
-  for(i in 1:num.probs){#
-    xx = unlist(X.post[[i]])#
-    xx = exp(delta*xx)#
-    xx = xx/(1+xx)#
-    l = l + sum(-(ANS.train[i]*log(xx) + (1-ANS.train[i])*log(1-xx)))#
-  }#
-  return(l)#
-}#
-#####################################################################################################################################
+gamma_alpha = -c(0.1, 0.2, 0.8, 0.9, 2, 3, 4)#
+gamma_sigma2 = c(0.5, -1)#
+alphas = rnorm(l1, CX %*% gamma_alpha, sqrt(exp(CX_sigma %*% gamma_sigma2)))#
+plot(CX %*% gamma_alpha~sizes)#
+plot(alphas~sizes)#
 #
-home = TRUE#
-num.folds = 10#
-num.values = 200#
-burnin = 100#
-thin = 2#
-if(home){#
-  setwd("/Users/ville/Desktop/Dynamic_Logit_Model/ExpertAnalysis/")#
-  load("/Users/ville/Desktop/Dynamic_Logit_Model/data/answers.RData")#
-  load("/Users/ville/Desktop/Dynamic_Logit_Model/data/data.RData")#
-} else {#
-  setwd("~/DLogM/ExpertAnalysisPrediction/")#
-  load("~/DLogM/data/answers.RData")#
-  load("~/DLogM/data/data.RData")#
-}#
-answers = answers[order(answers$Ifpid),]#
+write.table(alphas, file = "alphas.csv", row.names = FALSE)
+Generate synthetic hospital data:#
+setwd("/Users/ville/Desktop/SYNTHETIC")#
+l1 = 1000#
+max.size = 100#
 #
-## REMOVE 1150; This problem causes problems!!#
-answers = answers[answers$Ifpid != 1150,]#
-data = data[data$Ifpid != 1150,]#
+library(splines)#
+sizes = sample(1:max.size, l1, replace = TRUE)#
+sizes_scale = scale(sizes)[,1]#
+knots = quantile(sizes_scale, c(0.25, 0.5, 0.75))#
+CX = bs(sizes_scale, knots = knots, degree = 3, intercept = TRUE)#
+CX_sigma = matrix(1, l1, 2)#
+CX_sigma[,2] = sizes_scale#
 #
-PIDS = sort(unique(data$Ifpid))#
-counts = matrix(NA, length(PIDS), 5)#
-epsilon = 0.01#
-correctAnswer = factor(answers$CorrectAnswer, levels = levels(data$AnswerOption))#
-K = length(PIDS)#
-scores.sample.only = list()#
-scores.sample.then.optimize.brier = list()#
-scores.sample.then.optimize.log = list()#
-scores.none = list()#
-scores.ewma = list()#
-scores.belp = list()#
-scores.logit = list()
-Ts = aggregate(data$created.at, by = list(data$Ifpid), function(x) as.numeric(diff(range(x))+1))#
-Ts = Ts[order(Ts[,2], decreasing = TRUE),]#
-fold.sets = NULL#
-fold.sums = rep(0, num.folds)#
-for(i in 1:nrow(Ts)){#
-  ii = which(fold.sums == min(fold.sums))[1]#
-  fold.sums[ii] = fold.sums[ii] +  Ts[i,2]#
-  fold.sets = append(fold.sets, ii)#
-}#
-table(fold.sets)#
-TTs = NULL#
-folds = list()
-info
-folds
-Ts = aggregate(data$created.at, by = list(data$Ifpid), function(x) as.numeric(diff(range(x))+1))#
-Ts = Ts[order(Ts[,2], decreasing = TRUE),]#
-fold.sets = NULL#
-fold.sums = rep(0, num.folds)#
-for(i in 1:nrow(Ts)){#
-  ii = which(fold.sums == min(fold.sums))[1]#
-  fold.sums[ii] = fold.sums[ii] +  Ts[i,2]#
-  fold.sets = append(fold.sets, ii)#
-}#
-table(fold.sets)#
-TTs = NULL#
-folds = list()#
-for(i in 1:num.folds){#
-  Ts.sub = Ts[fold.sets == i,]#
+gamma_alpha = -c(0.1, 0.2, 0.8, 0.9, 2, 3, 4)#
+gamma_sigma2 = c(0.5, -1)#
+alphas = rnorm(l1, CX %*% gamma_alpha, sqrt(exp(CX_sigma %*% gamma_sigma2)))#
+plot(CX %*% gamma_alpha~sizes)#
+plot(alphas~sizes)#
 #
-  ones.train = zeros.train = factor(NA, levels = levels(Ts[,1]))#
-  ones.sum = zeros.sum = 0#
-  z = o = 1#
-  for(j in 1:nrow(Ts.sub)){#
-    if(ones.sum < zeros.sum){#
-      ones.sum = ones.sum + Ts.sub[j,2]#
-      ones.train[o] = Ts.sub[j,1]    #
-      o = o + 1#
-    } else {#
-      zeros.sum = zeros.sum + Ts.sub[j,2]#
-      zeros.train[z] = Ts.sub[j,1]#
-      z = z + 1#
-    }  #
-  }#
-  cat(paste("ONES:", ones.sum-1, ", ZEROS:", zeros.sum-1, "\n"))#
-  TTs[i] = ones.sum-1 + zeros.sum -1#
-  correctAnswer = answers[,c("Ifpid", "CorrectAnswer")]#
-  correctAnswer[,2] =  factor(correctAnswer[,2], levels = levels(data$AnswerOption))#
-  correctAnswer = correctAnswer[correctAnswer[,1] %in% Ts.sub[,1],]#
-  OptionAnswered = correctAnswer#
-  zeros.index = match(zeros.train, OptionAnswered[,1])#
-  OptionAnswered[zeros.index,2] = ifelse(OptionAnswered[zeros.index, 2] == "a", "b", "a")#
-  OptionAnswered$truth = correctAnswer[,2]#
-  OptionAnswered[,1] = factor(OptionAnswered[,1], levels = levels(data$Ifpid))#
-  OptionAnswered[,2] = factor(OptionAnswered[,2], levels = levels(data$AnswerOption))#
-  names(OptionAnswered) = c("Ifpid", "OptionAnswered", "CorrectAnswer")#
-  cat(paste(mean(OptionAnswered[,2] == OptionAnswered[,3]), "\n"))  #
-  folds[[i]] = OptionAnswered#
-}#
-P.means = Y.means =  P.means.exp =  list()  #
-if(home){#
-  setwd("/Users/ville/Desktop/Dynamic_Logit_Model/ExpertAnalysis/WOExp")#
-} else {#
-  setwd("~/DLogM/ExpertAnalysisPrediction/WOExp")#
+write.table(alphas, file = "alphas.csv", row.names = FALSE, col.names = FALSE)
+Generate synthetic hospital data:#
+setwd("/Users/ville/Desktop/SYNTHETIC")#
+l1 = 1000#
+max.size = 100#
+#
+library(splines)#
+sizes = sample(1:max.size, l1, replace = TRUE)#
+sizes_scale = scale(sizes)[,1]#
+knots = quantile(sizes_scale, c(0.25, 0.5, 0.75))#
+CX = bs(sizes_scale, knots = knots, degree = 3, intercept = TRUE)#
+CX_sigma = matrix(1, l1, 2)#
+CX_sigma[,2] = sizes_scale#
+#
+gamma_alpha = -c(0.1, 0.2, 0.8, 0.9, 2, 3, 4)#
+gamma_sigma2 = c(0.5, -1)#
+alphas = rnorm(l1, CX %*% gamma_alpha, sqrt(exp(CX_sigma %*% gamma_sigma2)))#
+plot(CX %*% gamma_alpha~sizes)#
+plot(alphas~sizes)#
+#
+write.table(alphas, file = "alphas.csv", row.names = FALSE, col.names = FALSE, sep = "l")
+Generate synthetic hospital data:#
+setwd("/Users/ville/Desktop/SYNTHETIC")#
+l1 = 1000#
+max.size = 100#
+#
+library(splines)#
+sizes = sample(1:max.size, l1, replace = TRUE)#
+sizes_scale = scale(sizes)[,1]#
+knots = quantile(sizes_scale, c(0.25, 0.5, 0.75))#
+CX = bs(sizes_scale, knots = knots, degree = 3, intercept = TRUE)#
+CX_sigma = matrix(1, l1, 2)#
+CX_sigma[,2] = sizes_scale#
+#
+gamma_alpha = -c(0.1, 0.2, 0.8, 0.9, 2, 3, 4)#
+gamma_sigma2 = c(0.5, -1)#
+alphas = rnorm(l1, CX %*% gamma_alpha, sqrt(exp(CX_sigma %*% gamma_sigma2)))#
+plot(CX %*% gamma_alpha~sizes)#
+plot(alphas~sizes)#
+#
+write.table(alphas, file = "alphas.csv", row.names = FALSE, col.names = FALSE, sep = ",")
+write.table(CX, file = "CX.csv", row.names = FALSE, col.names = FALSE, sep = ",")#
+write.table(CX_sigma, file = "CX_sigma.csv", row.names = FALSE, col.names = FALSE, sep = ",")
+Generate synthetic hospital data:#
+setwd("/Users/ville/Desktop/SYNTHETIC")#
+l1 = 5000#
+max.size = 100#
+#
+library(splines)#
+sizes = sample(1:max.size, l1, replace = TRUE)#
+sizes_scale = scale(sizes)[,1]#
+knots = quantile(sizes_scale, c(0.25, 0.5, 0.75))#
+CX = bs(sizes_scale, knots = knots, degree = 3, intercept = TRUE)#
+CX_sigma = matrix(1, l1, 2)#
+CX_sigma[,2] = sizes_scale#
+#
+gamma_alpha = -c(0.1, 0.2, 0.8, 0.9, 2, 3, 4)#
+gamma_sigma2 = c(0.5, -1)#
+alphas = rnorm(l1, CX %*% gamma_alpha, sqrt(exp(CX_sigma %*% gamma_sigma2)))#
+plot(CX %*% gamma_alpha~sizes)#
+plot(alphas~sizes)#
+#
+write.table(alphas, file = "alphas.csv", row.names = FALSE)#
+write.table(CX, file = "CX.csv", row.names = FALSE, col.names = FALSE, sep = ",")#
+write.table(CX_sigma, file = "CX_sigma.csv", row.names = FALSE, col.names = FALSE, sep = ",")
+Generate synthetic hospital data:#
+setwd("/Users/ville/Desktop/SYNTHETIC")#
+l1 = 2000#
+max.size = 100#
+#
+library(splines)#
+sizes = sample(1:max.size, l1, replace = TRUE)#
+sizes_scale = scale(sizes)[,1]#
+knots = quantile(sizes_scale, c(0.25, 0.5, 0.75))#
+CX = bs(sizes_scale, knots = knots, degree = 3, intercept = TRUE)#
+CX_sigma = matrix(1, l1, 2)#
+CX_sigma[,2] = sizes_scale#
+#
+gamma_alpha = -c(0.1, 0.2, 0.8, 0.9, 2, 3, 4)#
+gamma_sigma2 = c(0.5, -1)#
+alphas = rnorm(l1, CX %*% gamma_alpha, sqrt(exp(CX_sigma %*% gamma_sigma2)))#
+plot(CX %*% gamma_alpha~sizes)#
+plot(alphas~sizes)#
+#
+write.table(alphas, file = "alphas.csv", row.names = FALSE)#
+write.table(CX, file = "CX.csv", row.names = FALSE, col.names = FALSE, sep = ",")#
+write.table(CX_sigma, file = "CX_sigma.csv", row.names = FALSE, col.names = FALSE, sep = ",")
+dim(CX)
+Generate synthetic hospital data:#
+setwd("/Users/ville/Desktop/SYNTHETIC")#
+l1 = 1000#
+max.size = 100#
+#
+library(splines)#
+sizes = sample(1:max.size, l1, replace = TRUE)#
+sizes_scale = scale(sizes)[,1]#
+knots = quantile(sizes_scale, c(0.25, 0.5, 0.75))#
+CX = bs(sizes_scale, knots = knots, degree = 3, intercept = TRUE)#
+CX_sigma = matrix(1, l1, 2)#
+CX_sigma[,2] = sizes_scale#
+#
+gamma_alpha = -c(0.1, 0.2, 0.8, 0.9, 2, 3, 4)#
+gamma_sigma2 = c(0.5, -1)#
+alphas = rnorm(l1, CX %*% gamma_alpha, sqrt(exp(CX_sigma %*% gamma_sigma2)))#
+plot(CX %*% gamma_alpha~sizes)#
+plot(alphas~sizes)#
+#
+write.table(alphas, file = "alphas.csv", row.names = FALSE)#
+write.table(CX, file = "CX.csv", row.names = FALSE, col.names = FALSE, sep = ",")#
+write.table(CX_sigma, file = "CX_sigma.csv", row.names = FALSE, col.names = FALSE, sep = ",")
+CX
+t(CX) %*% CX
+solve(t(CX) %*% CX)
+chol(solve(t(CX) %*% CX))
+chol(solve(t(CX) %*% CX + diag(1/(10^6))))
+chol(solve(t(CX) %*% CX + diag(rep(1/(10^6), 7))))
+Generate synthetic hospital data:#
+setwd("/Users/ville/Desktop/SYNTHETIC")#
+l1 = 1000#
+max.size = 100#
+#
+library(splines)#
+sizes = sample(1:max.size, l1, replace = TRUE)#
+sizes_scale = scale(sizes)[,1]#
+knots = quantile(sizes_scale, c(0.25, 0.5, 0.75))#
+CX = bs(sizes_scale, knots = knots, degree = 3, intercept = TRUE)#
+CX_sigma = matrix(1, l1, 2)#
+CX_sigma[,2] = sizes_scale#
+#
+gamma_alpha = -c(0.1, 0.2, 0.8, 0.9, 2, 3, 4)#
+gamma_sigma2 = c(0.5, -1)#
+alphas = rnorm(l1, CX %*% gamma_alpha, sqrt(exp(CX_sigma %*% gamma_sigma2)))#
+plot(CX %*% gamma_alpha~sizes)#
+plot(alphas~sizes)#
+#
+write.table(alphas, file = "alphas.csv", row.names = FALSE)#
+write.table(CX, file = "CX.csv", row.names = FALSE, col.names = FALSE, sep = ",")#
+write.table(CX_sigma, file = "CX_sigma.csv", row.names = FALSE, col.names = FALSE, sep = ",")
+solve(t(CX) %*% CX)
+t(CX) %*% CX
+t(CX) %*% diag(l1) %*% CX
+Generate synthetic hospital data:#
+setwd("/Users/ville/Desktop/SYNTHETIC")#
+l1 = 10#
+max.size = 100#
+#
+library(splines)#
+sizes = sample(1:max.size, l1, replace = TRUE)#
+sizes_scale = scale(sizes)[,1]#
+knots = quantile(sizes_scale, c(0.25, 0.5, 0.75))#
+CX = bs(sizes_scale, knots = knots, degree = 3, intercept = TRUE)#
+CX_sigma = matrix(1, l1, 2)#
+CX_sigma[,2] = sizes_scale#
+#
+gamma_alpha = -c(0.1, 0.2, 0.8, 0.9, 2, 3, 4)#
+gamma_sigma2 = c(0.5, -1)#
+alphas = rnorm(l1, CX %*% gamma_alpha, sqrt(exp(CX_sigma %*% gamma_sigma2)))#
+plot(CX %*% gamma_alpha~sizes)#
+plot(alphas~sizes)#
+#
+write.table(alphas, file = "alphas.csv", row.names = FALSE)#
+write.table(CX, file = "CX.csv", row.names = FALSE, col.names = FALSE, sep = ",")#
+write.table(CX_sigma, file = "CX_sigma.csv", row.names = FALSE, col.names = FALSE, sep = ",")
+t(CX) %*% CX
+t(CX) %*% diag(7) %*% CX
+t(CX) %*% diag(l1) %*% CX
+diag(l1)
+l1
+t(CX) %*% diag(l1+1) %*% CX
+t(CX)
+CX
+alpha
+alphas
+length(alphas)
+Generate synthetic hospital data:#
+setwd("/Users/ville/Desktop/SYNTHETIC")#
+l1 = 10#
+max.size = 100#
+#
+library(splines)#
+sizes = sample(1:max.size, l1, replace = TRUE)#
+sizes_scale = scale(sizes)[,1]#
+knots = quantile(sizes_scale, c(0.25, 0.5, 0.75))#
+CX = bs(sizes_scale, knots = knots, degree = 3, intercept = TRUE)#
+CX_sigma = matrix(1, l1, 2)#
+CX_sigma[,2] = sizes_scale#
+#
+gamma_alpha = -c(0.1, 0.2, 0.8, 0.9, 2, 3, 4)#
+gamma_sigma2 = c(0.5, -1)#
+alphas = rnorm(l1, CX %*% gamma_alpha, sqrt(exp(CX_sigma %*% gamma_sigma2)))#
+plot(CX %*% gamma_alpha~sizes)#
+plot(alphas~sizes)#
+#
+write.table(alphas, file = "alphas.csv", row.names = FALSE,  col.names = FALSE, sep = ",")#
+write.table(CX, file = "CX.csv", row.names = FALSE, col.names = FALSE, sep = ",")#
+write.table(CX_sigma, file = "CX_sigma.csv", row.names = FALSE, col.names = FALSE, sep = ",")
+Generate synthetic hospital data:#
+setwd("/Users/ville/Desktop/SYNTHETIC")#
+l1 = 5000#
+max.size = 100#
+#
+library(splines)#
+sizes = sample(1:max.size, l1, replace = TRUE)#
+sizes_scale = scale(sizes)[,1]#
+knots = quantile(sizes_scale, c(0.25, 0.5, 0.75))#
+CX = bs(sizes_scale, knots = knots, degree = 3, intercept = TRUE)#
+CX_sigma = matrix(1, l1, 2)#
+CX_sigma[,2] = sizes_scale#
+#
+gamma_alpha = -c(0.1, 0.2, 0.8, 0.9, 2, 3, 4)#
+gamma_sigma2 = c(0.5, -1)#
+alphas = rnorm(l1, CX %*% gamma_alpha, sqrt(exp(CX_sigma %*% gamma_sigma2)))#
+plot(CX %*% gamma_alpha~sizes)#
+plot(alphas~sizes)#
+#
+write.table(alphas, file = "alphas.csv", row.names = FALSE,  col.names = FALSE, sep = ",")#
+write.table(CX, file = "CX.csv", row.names = FALSE, col.names = FALSE, sep = ",")#
+write.table(CX_sigma, file = "CX_sigma.csv", row.names = FALSE, col.names = FALSE, sep = ",")
+CX_sigma * sigma2_gamma
+CX_sigma %*% sigma2_gamma
+Generate synthetic hospital data:#
+setwd("/Users/ville/Desktop/SYNTHETIC")#
+l1 = 5000#
+max.size = 100#
+#
+library(splines)#
+sizes = sample(1:max.size, l1, replace = TRUE)#
+sizes_scale = scale(sizes)[,1]#
+knots = quantile(sizes_scale, c(0.25, 0.5, 0.75))#
+CX = bs(sizes_scale, knots = knots, degree = 3, intercept = TRUE)#
+CX_sigma = matrix(1, l1, 2)#
+CX_sigma[,2] = sizes_scale#
+#
+gamma_alpha = c(-0.1, -0.2, -0.8, -0.9, -2, -3, -4)#
+gamma_sigma2 = c(0.5, -1)#
+alphas = rnorm(l1, CX %*% gamma_alpha, sqrt(exp(CX_sigma %*% gamma_sigma2)))#
+plot(CX %*% gamma_alpha~sizes)#
+plot(alphas~sizes)#
+#
+write.table(alphas, file = "alphas.csv", row.names = FALSE,  col.names = FALSE, sep = ",")#
+write.table(CX, file = "CX.csv", row.names = FALSE, col.names = FALSE, sep = ",")#
+write.table(CX_sigma, file = "CX_sigma.csv", row.names = FALSE, col.names = FALSE, sep = ",")
+Generate synthetic hospital data:#
+setwd("/Users/ville/Desktop/SYNTHETIC")#
+l1 = 5000#
+max.size = 100#
+#
+library(splines)#
+sizes = sample(1:max.size, l1, replace = TRUE)#
+sizes_scale = scale(sizes)[,1]#
+knots = quantile(sizes_scale, c(0.25, 0.5, 0.75))#
+CX = bs(sizes_scale, knots = knots, degree = 3, intercept = TRUE)#
+CX_sigma = matrix(1, l1, 2)#
+CX_sigma[,2] = sizes_scale#
+#
+gamma_alpha = c(-0.1, -0.2, -0.8, -0.9, -2, -3, -4)#
+gamma_sigma2 = c(0.5, -1)#
+#
+sigma2_alpha = exp(rnorm(l1, CX_sigma %*% gamma_sigma2, 0.1))#
+#
+alphas = rnorm(l1, CX %*% gamma_alpha, sqrt(sigma2_alpha))#
+plot(CX %*% gamma_alpha~sizes)#
+plot(alphas~sizes)#
+#
+write.table(alphas, file = "alphas.csv", row.names = FALSE,  col.names = FALSE, sep = ",")#
+write.table(CX, file = "CX.csv", row.names = FALSE, col.names = FALSE, sep = ",")#
+write.table(CX_sigma, file = "CX_sigma.csv", row.names = FALSE, col.names = FALSE, sep = ",")
+mu = 0.2#
+sigma = 1.6#
+#
+a = mu^2/sigma + 2#
+b = mu^3/sigma + mu#
+#
+b/(a-1)#
+b^2/ ((a-1)^2 * (a-2))
+Generate synthetic hospital data:#
+setwd("/Users/ville/Desktop/SYNTHETIC")#
+l1 = 10000#
+max.size = 100#
+#
+library(splines)#
+sizes = sample(1:max.size, l1, replace = TRUE)#
+sizes_scale = scale(sizes)[,1]#
+knots = quantile(sizes_scale, c(0.25, 0.5, 0.75))#
+CX = bs(sizes_scale, knots = knots, degree = 3, intercept = TRUE)#
+CX_sigma = matrix(1, l1, 2)#
+CX_sigma[,2] = sizes_scale#
+#
+gamma_alpha = c(-0.1, -0.2, -0.8, -0.9, -2, -3, -4)#
+gamma_sigma2 = c(0.5, -1)#
+#
+sigma2_alpha = exp(rnorm(l1, CX_sigma %*% gamma_sigma2, 0.1))#
+#
+alphas = rnorm(l1, CX %*% gamma_alpha, sqrt(sigma2_alpha))#
+plot(CX %*% gamma_alpha~sizes)#
+plot(alphas~sizes)#
+#
+write.table(alphas, file = "alphas.csv", row.names = FALSE,  col.names = FALSE, sep = ",")#
+write.table(CX, file = "CX.csv", row.names = FALSE, col.names = FALSE, sep = ",")#
+write.table(CX_sigma, file = "CX_sigma.csv", row.names = FALSE, col.names = FALSE, sep = ",")
+Generate synthetic hospital data:#
+setwd("/Users/ville/Desktop/SYNTHETIC")#
+l1 = 6000#
+max.size = 100#
+#
+library(splines)#
+sizes = sample(1:max.size, l1, replace = TRUE)#
+sizes_scale = scale(sizes)[,1]#
+knots = quantile(sizes_scale, c(0.25, 0.5, 0.75))#
+CX = bs(sizes_scale, knots = knots, degree = 3, intercept = TRUE)#
+CX_sigma = matrix(1, l1, 2)#
+CX_sigma[,2] = sizes_scale#
+#
+gamma_alpha = c(-0.1, -0.2, -0.8, -0.9, -2, -3, -4)#
+gamma_sigma2 = c(0.5, -1)#
+#
+sigma2_alpha = exp(rnorm(l1, CX_sigma %*% gamma_sigma2, 0.1))#
+#
+alphas = rnorm(l1, CX %*% gamma_alpha, sqrt(sigma2_alpha))#
+plot(CX %*% gamma_alpha~sizes)#
+plot(alphas~sizes)#
+#
+write.table(alphas, file = "alphas.csv", row.names = FALSE,  col.names = FALSE, sep = ",")#
+write.table(CX, file = "CX.csv", row.names = FALSE, col.names = FALSE, sep = ",")#
+write.table(CX_sigma, file = "CX_sigma.csv", row.names = FALSE, col.names = FALSE, sep = ",")
+plot(sigma2_alpha~sizes)
+gamma_alpha = c(-0.1, -0.2, -0.8, -0.9, -2, -3, -4)#
+gamma_sigma2 = c(2.5, -1)#
+#
+sigma2_alpha = exp(rnorm(l1, CX_sigma %*% gamma_sigma2, 0.1))
+plot(sigma2_alpha~sizes)
+gamma_alpha = c(-0.1, -0.2, -0.8, -0.9, -2, -3, -4)#
+gamma_sigma2 = c(1, -1)#
+#
+sigma2_alpha = exp(rnorm(l1, CX_sigma %*% gamma_sigma2, 0.1))
+plot(sigma2_alpha~sizes)
+Generate synthetic hospital data:#
+setwd("/Users/ville/Desktop/SYNTHETIC")#
+l1 = 6000#
+max.size = 100#
+#
+library(splines)#
+sizes = sample(1:max.size, l1, replace = TRUE)#
+sizes_scale = scale(sizes)[,1]#
+knots = quantile(sizes_scale, c(0.25, 0.5, 0.75))#
+CX = bs(sizes_scale, knots = knots, degree = 3, intercept = TRUE)#
+CX_sigma = matrix(1, l1, 2)#
+CX_sigma[,2] = sizes_scale#
+#
+gamma_alpha = c(-0.1, -0.2, -0.8, -0.9, -2, -3, -4)#
+gamma_sigma2 = c(1, -1)#
+#
+sigma2_alpha = exp(rnorm(l1, CX_sigma %*% gamma_sigma2, 0.1))#
+#
+alphas = rnorm(l1, CX %*% gamma_alpha, sqrt(sigma2_alpha))#
+plot(CX %*% gamma_alpha~sizes)#
+plot(alphas~sizes)#
+#
+write.table(alphas, file = "alphas.csv", row.names = FALSE,  col.names = FALSE, sep = ",")#
+write.table(CX, file = "CX.csv", row.names = FALSE, col.names = FALSE, sep = ",")#
+write.table(CX_sigma, file = "CX_sigma.csv", row.names = FALSE, col.names = FALSE, sep = ",")
+Generate synthetic hospital data:#
+setwd("/Users/ville/Desktop/SYNTHETIC")#
+l1 = 6000#
+max.size = 100#
+#
+library(splines)#
+sizes = sample(1:max.size, l1, replace = TRUE)#
+sizes_scale = scale(sizes)[,1]#
+knots = quantile(sizes_scale, c(0.25, 0.5, 0.75))#
+CX = bs(sizes_scale, knots = knots, degree = 3, intercept = TRUE)#
+CX_sigma = matrix(1, l1, 2)#
+CX_sigma[,2] = sizes_scale#
+#
+gamma_alpha = c(-0.1, -0.2, -0.8, -0.9, -2, -3, -4)#
+gamma_sigma2 = c(1, -1)#
+#
+#sigma2_alpha = exp(rnorm(l1, CX_sigma %*% gamma_sigma2, 0.1))#
+sigma2_alpha = exp(CX_sigma %*% gamma_sigma2)#
+#
+alphas = rnorm(l1, CX %*% gamma_alpha, sqrt(sigma2_alpha))#
+plot(CX %*% gamma_alpha~sizes)#
+plot(alphas~sizes)#
+#
+write.table(alphas, file = "alphas.csv", row.names = FALSE,  col.names = FALSE, sep = ",")#
+write.table(CX, file = "CX.csv", row.names = FALSE, col.names = FALSE, sep = ",")#
+write.table(CX_sigma, file = "CX_sigma.csv", row.names = FALSE, col.names = FALSE, sep = ",")
+sqrt(1/(1:100))
+1/(1:100)
+1/sqrt((1:100))
+1/sqrt((1:100))#
+## Generate synthetic hospital data:#
+setwd("/Users/ville/Desktop/SYNTHETIC")#
+l1 = 4000#
+max.size = 100#
+#
+library(splines)#
+sizes = sample(1:max.size, l1, replace = TRUE)#
+sizes_scale = scale(sizes)[,1]#
+knots = quantile(sizes_scale, c(0.25, 0.5, 0.75))#
+CX = bs(sizes_scale, knots = knots, degree = 3, intercept = TRUE)#
+CX_sigma = matrix(1, l1, 2)#
+CX_sigma[,2] = sizes_scale#
+#
+gamma_alpha = c(-0.1, -0.2, -0.8, -0.9, -2, -3, -4)#
+gamma_sigma2 = c(1, -1)#
+#
+#sigma2_alpha = exp(rnorm(l1, CX_sigma %*% gamma_sigma2, 0.1))#
+sigma2_alpha = exp(CX_sigma %*% gamma_sigma2)#
+#
+alphas = rnorm(l1, CX %*% gamma_alpha, sqrt(sigma2_alpha))#
+plot(CX %*% gamma_alpha~sizes)#
+plot(alphas~sizes)#
+#
+write.table(alphas, file = "alphas.csv", row.names = FALSE,  col.names = FALSE, sep = ",")#
+write.table(CX, file = "CX.csv", row.names = FALSE, col.names = FALSE, sep = ",")#
+write.table(CX_sigma, file = "CX_sigma.csv", row.names = FALSE, col.names = FALSE, sep = ",")
+Generate synthetic hospital data:#
+setwd("/Users/ville/Desktop/SYNTHETIC")#
+l1 = 6000#
+max.size = 100#
+#
+library(splines)#
+sizes = sample(1:max.size, l1, replace = TRUE)#
+sizes_scale = scale(sizes)[,1]#
+knots = quantile(sizes_scale, c(0.25, 0.5, 0.75))#
+CX = bs(sizes_scale, knots = knots, degree = 3, intercept = TRUE)#
+CX_sigma = matrix(1, l1, 2)#
+CX_sigma[,2] = sizes_scale#
+#
+gamma_alpha = c(-0.1, -0.2, -0.8, -0.9, -2, -3, -4)#
+gamma_sigma2 = c(1, -1)#
+#
+#sigma2_alpha = exp(rnorm(l1, CX_sigma %*% gamma_sigma2, 0.1))#
+sigma2_alpha = exp(CX_sigma %*% gamma_sigma2)#
+#
+alphas = rnorm(l1, CX %*% gamma_alpha, sqrt(sigma2_alpha))#
+plot(CX %*% gamma_alpha~sizes)#
+plot(alphas~sizes)#
+#
+write.table(alphas, file = "alphas.csv", row.names = FALSE,  col.names = FALSE, sep = ",")#
+write.table(CX, file = "CX.csv", row.names = FALSE, col.names = FALSE, sep = ",")#
+write.table(CX_sigma, file = "CX_sigma.csv", row.names = FALSE, col.names = FALSE, sep = ",")
+Generate synthetic hospital data:#
+setwd("/Users/ville/Desktop/SYNTHETIC")#
+l1 = 6000#
+max.size = 100#
+#
+library(splines)#
+sizes = sample(1:max.size, l1, replace = TRUE)#
+sizes_scale = scale(sizes)[,1]#
+knots = quantile(sizes_scale, c(0.25, 0.5, 0.75))#
+CX = ns(sizes_scale, knots = knots, degree = 3, intercept = TRUE)#
+CX_sigma = matrix(1, l1, 2)#
+CX_sigma[,2] = sizes_scale#
+#
+gamma_alpha = c(-0.1, -0.2, -0.8, -0.9, -2, -3, -4)#
+gamma_sigma2 = c(1, -1)#
+#
+#sigma2_alpha = exp(rnorm(l1, CX_sigma %*% gamma_sigma2, 0.1))#
+sigma2_alpha = exp(CX_sigma %*% gamma_sigma2)#
+#
+alphas = rnorm(l1, CX %*% gamma_alpha, sqrt(sigma2_alpha))#
+plot(CX %*% gamma_alpha~sizes)#
+plot(alphas~sizes)#
+#
+write.table(alphas, file = "alphas.csv", row.names = FALSE,  col.names = FALSE, sep = ",")#
+write.table(CX, file = "CX.csv", row.names = FALSE, col.names = FALSE, sep = ",")#
+write.table(CX_sigma, file = "CX_sigma.csv", row.names = FALSE, col.names = FALSE, sep = ",")
+?ns
+Generate synthetic hospital data:#
+setwd("/Users/ville/Desktop/SYNTHETIC")#
+l1 = 6000#
+max.size = 100#
+#
+library(splines)#
+sizes = sample(1:max.size, l1, replace = TRUE)#
+sizes_scale = scale(sizes)[,1]#
+knots = quantile(sizes_scale, c(0.25, 0.5, 0.75))#
+#CX = bs(sizes_scale, knots = knots, degree = 3, intercept = TRUE)#
+CX = ns(sizes_scale, knots = knots, intercept = TRUE)#
+CX_sigma = matrix(1, l1, 2)#
+CX_sigma[,2] = sizes_scale#
+#
+gamma_alpha = c(-0.1, -0.2, -0.8, -0.9, -2, -3, -4)#
+gamma_sigma2 = c(1, -1)#
+#
+#sigma2_alpha = exp(rnorm(l1, CX_sigma %*% gamma_sigma2, 0.1))#
+sigma2_alpha = exp(CX_sigma %*% gamma_sigma2)#
+#
+alphas = rnorm(l1, CX %*% gamma_alpha, sqrt(sigma2_alpha))#
+plot(CX %*% gamma_alpha~sizes)#
+plot(alphas~sizes)#
+#
+write.table(alphas, file = "alphas.csv", row.names = FALSE,  col.names = FALSE, sep = ",")#
+write.table(CX, file = "CX.csv", row.names = FALSE, col.names = FALSE, sep = ",")#
+write.table(CX_sigma, file = "CX_sigma.csv", row.names = FALSE, col.names = FALSE, sep = ",")
+dim(CX)
+?ns
+Generate synthetic hospital data:#
+setwd("/Users/ville/Desktop/SYNTHETIC")#
+l1 = 6000#
+max.size = 100#
+#
+library(splines)#
+sizes = sample(1:max.size, l1, replace = TRUE)#
+sizes_scale = scale(sizes)[,1]#
+knots = quantile(sizes_scale, c(0.25, 0.5, 0.75))#
+#CX = bs(sizes_scale, knots = knots, degree = 3, intercept = TRUE)#
+CX = ns(sizes_scale, knots = knots, df = 7, intercept = TRUE)#
+CX_sigma = matrix(1, l1, 2)#
+CX_sigma[,2] = sizes_scale#
+#
+gamma_alpha = c(-0.1, -0.2, -0.8, -0.9, -2, -3, -4)#
+gamma_sigma2 = c(1, -1)#
+#
+#sigma2_alpha = exp(rnorm(l1, CX_sigma %*% gamma_sigma2, 0.1))#
+sigma2_alpha = exp(CX_sigma %*% gamma_sigma2)#
+#
+alphas = rnorm(l1, CX %*% gamma_alpha, sqrt(sigma2_alpha))#
+plot(CX %*% gamma_alpha~sizes)#
+plot(alphas~sizes)#
+#
+write.table(alphas, file = "alphas.csv", row.names = FALSE,  col.names = FALSE, sep = ",")#
+write.table(CX, file = "CX.csv", row.names = FALSE, col.names = FALSE, sep = ",")#
+write.table(CX_sigma, file = "CX_sigma.csv", row.names = FALSE, col.names = FALSE, sep = ",")
+dim(CX)
+CX = ns(sizes_scale, knots = knots, df = 7, intercept = TRUE)
+head(CX)
+?ns
+poly
+poly(sizes_scale, 3)
+CX = cbind(1, poly(sizes_scale, 3))
+head(CX)
+pmax
+pmax(c(-2, 3, 4), 0)
+CX = cbind(1, poly(sizes_scale, 3))#
+for(i in 1:3){#
+  CX[,4+i] = pmax((sizes_scale - knots[i]), 0)^3#
 }
-folds
-unlist(folds)
-rbind(folds)
-unlist(rbind(folds))
-info
-fold.sets
-fold.sets = rep(1, length(fold.sets))
-fold.sets
-Ts.sub = Ts[fold.sets == i,]#
+CX = cbind(1, poly(sizes_scale, 3))#
+for(i in 1:3){#
+  CX = rbind(CX, pmax((sizes_scale - knots[i]), 0)^3)#
+}
+CX = cbind(1, poly(sizes_scale, 3))#
+for(i in 1:3){#
+  CX = cbind(CX, pmax((sizes_scale - knots[i]), 0)^3)#
+}
+head(CX)
+CX[order(size),]
+CX[order(sizes),]
+CX[order(sizes),]
+head(CX[order(sizes),])
+Generate synthetic hospital data:#
+setwd("/Users/ville/Desktop/SYNTHETIC")#
+l1 = 6000#
+max.size = 100#
 #
-  ones.train = zeros.train = factor(NA, levels = levels(Ts[,1]))#
-  ones.sum = zeros.sum = 0#
-  z = o = 1#
-  for(j in 1:nrow(Ts.sub)){#
-    if(ones.sum < zeros.sum){#
-      ones.sum = ones.sum + Ts.sub[j,2]#
-      ones.train[o] = Ts.sub[j,1]    #
-      o = o + 1#
-    } else {#
-      zeros.sum = zeros.sum + Ts.sub[j,2]#
-      zeros.train[z] = Ts.sub[j,1]#
-      z = z + 1#
-    }  #
-  }#
-  cat(paste("ONES:", ones.sum-1, ", ZEROS:", zeros.sum-1, "\n"))#
-  TTs[i] = ones.sum-1 + zeros.sum -1#
-  correctAnswer = answers[,c("Ifpid", "CorrectAnswer")]#
-  correctAnswer[,2] =  factor(correctAnswer[,2], levels = levels(data$AnswerOption))#
-  correctAnswer = correctAnswer[correctAnswer[,1] %in% Ts.sub[,1],]#
-  OptionAnswered = correctAnswer#
-  zeros.index = match(zeros.train, OptionAnswered[,1])#
-  OptionAnswered[zeros.index,2] = ifelse(OptionAnswered[zeros.index, 2] == "a", "b", "a")#
-  OptionAnswered$truth = correctAnswer[,2]#
-  OptionAnswered[,1] = factor(OptionAnswered[,1], levels = levels(data$Ifpid))#
-  OptionAnswered[,2] = factor(OptionAnswered[,2], levels = levels(data$AnswerOption))#
-  names(OptionAnswered) = c("Ifpid", "OptionAnswered", "CorrectAnswer")#
-  cat(paste(mean(OptionAnswered[,2] == OptionAnswered[,3]), "\n"))  #
-  folds[[i]] = OptionAnswered
-folds
-HELPER FUNCTIONS:#
-delogit = function(x) ifelse(x > 100, 1, exp(x)/(1+exp(x)))#
-logit = function(x) log(x/(1-x))#
-#
-delta.calibration.bri = function(delta){#
-  l = 0#
-  for(i in 1:num.probs){#
-    xx = unlist(X.post[[i]])#
-    xx = exp(delta*xx)#
-    xx = xx/(1+xx)#
-    l = l + sum( (xx - ANS.train[i])^2)#
-  }#
-  return(l)#
+library(splines)#
+sizes = sample(1:max.size, l1, replace = TRUE)#
+sizes_scale = scale(sizes)[,1]#
+knots = quantile(sizes_scale, c(0.25, 0.5, 0.75))#
+#CX = bs(sizes_scale, knots = knots, degree = 3, intercept = TRUE)#
+#CX = ns(sizes_scale, knots = knots, df = 7, intercept = TRUE)#
+CX = cbind(1, poly(sizes_scale, 3))#
+for(i in 1:3){#
+  CX = cbind(CX, pmax((sizes_scale - knots[i]), 0)^3)#
 }#
 #
-delta.calibration.log = function(delta){#
-  l = 0#
-  for(i in 1:num.probs){#
-    xx = unlist(X.post[[i]])#
-    xx = exp(delta*xx)#
-    xx = xx/(1+xx)#
-    l = l + sum(-(ANS.train[i]*log(xx) + (1-ANS.train[i])*log(1-xx)))#
-  }#
-  return(l)#
+CX_sigma = matrix(1, l1, 2)#
+CX_sigma[,2] = sizes_scale#
+#
+gamma_alpha = c(-0.1, -0.2, -0.8, -0.9, -2, -3, -4)#
+gamma_sigma2 = c(1, -1)#
+#
+#sigma2_alpha = exp(rnorm(l1, CX_sigma %*% gamma_sigma2, 0.1))#
+sigma2_alpha = exp(CX_sigma %*% gamma_sigma2)#
+#
+alphas = rnorm(l1, CX %*% gamma_alpha, sqrt(sigma2_alpha))#
+plot(CX %*% gamma_alpha~sizes)#
+plot(alphas~sizes)#
+#
+write.table(alphas, file = "alphas.csv", row.names = FALSE,  col.names = FALSE, sep = ",")#
+write.table(CX, file = "CX.csv", row.names = FALSE, col.names = FALSE, sep = ",")#
+write.table(CX_sigma, file = "CX_sigma.csv", row.names = FALSE, col.names = FALSE, sep = ",")
+poly(sizes_scale, 3)
+CX = cbind(1, poly(sizes_scale, 3))
+CX
+plot(gamma_alpha~sizes)
+Generate synthetic hospital data:#
+setwd("/Users/ville/Desktop/SYNTHETIC")#
+l1 = 6000#
+max.size = 100#
+#
+library(splines)#
+sizes = sample(1:max.size, l1, replace = TRUE)#
+sizes_scale = scale(sizes)[,1]#
+knots = quantile(sizes_scale, c(0.25, 0.5, 0.75))#
+#CX = bs(sizes_scale, knots = knots, degree = 3, intercept = TRUE)#
+#CX = ns(sizes_scale, knots = knots, df = 7, intercept = TRUE)#
+CX = cbind(1, poly(sizes_scale, 3))#
+for(i in 1:3){#
+  CX = cbind(CX, pmax((sizes_scale - knots[i]), 0)^3)#
 }#
-#####################################################################################################################################
 #
-home = TRUE#
-K.test = 20#
-NUM.CV.ITERS = 100#
-num.values = 100#
-burnin = 50#
-thin = 1#
-if(home){#
-  setwd("/Users/ville/Desktop/Dynamic_Logit_Model/ExpertAnalysis/")#
-  load("/Users/ville/Desktop/Dynamic_Logit_Model/data/answers.RData")#
-  load("/Users/ville/Desktop/Dynamic_Logit_Model/data/data.RData")#
-} else {#
-  setwd("~/DLogM/ExpertAnalysisPrediction/")#
-  load("~/DLogM/data/answers.RData")#
-  load("~/DLogM/data/data.RData")#
-}#
-answers = answers[order(answers$Ifpid),]#
-K.train = 166 - K.test#
+CX_sigma = matrix(1, l1, 2)#
+CX_sigma[,2] = sizes_scale#
 #
-## REMOVE 1150; This problem causes problems!!#
-answers = answers[answers$Ifpid != 1150,]#
-data = data[data$Ifpid != 1150,]#
+gamma_alpha = c(-0.1, -0.2, -0.8, -0.9, -2, -3, -4)#
+gamma_sigma2 = c(1, -1)#
 #
-PIDS = sort(unique(data$Ifpid))#
-counts = matrix(NA, length(PIDS), 5)#
-epsilon = 0.01#
-correctAnswer = factor(answers$CorrectAnswer, levels = levels(data$AnswerOption))#
-K = length(PIDS)#
-scores.sample.only = list()#
-scores.sample.then.optimize.brier = list()#
-scores.sample.then.optimize.log = list()#
-scores.none = list()#
-scores.ewma = list()#
-scores.belp = list()#
-scores.logit = list()
-cv = 1
-train.index = sample(1:K, K.train)#
-  test.index = c(1:K)[-c(train.index)]#
-  PIDS.test = PIDS[test.index]#
-  PIDS.train = PIDS[train.index]#
-  Ts = aggregate(data$created.at, by = list(data$Ifpid), function(x) as.numeric(diff(range(x))+1))#
-  Ts.train = Ts[train.index,]#
-  Ts.test = Ts[test.index,]#
-  ones.train = zeros.train = factor(NA, levels = levels(Ts.train[,1]))#
-  ones.sum = zeros.sum = 0#
-  z = o = 1#
-  for(i in 1:nrow(Ts.train)){#
-    if(ones.sum < zeros.sum){#
-      ones.sum = ones.sum + Ts.train[i,2]#
-      ones.train[o] = Ts.train[i,1]    #
-      o = o + 1#
-    } else {#
-      zeros.sum = zeros.sum + Ts.train[i,2]#
-      zeros.train[z] = Ts.train[i,1]#
-      z = z + 1#
-    }  #
-  }#
-  cat(paste("ONES:", ones.sum, ", ZEROS:", zeros.sum))#
-  ones.test = zeros.test = factor(NA, levels = levels(Ts.test[,1]))#
-  ones.sum = zeros.sum = 0#
-  z = o = 1#
-  for(i in 1:nrow(Ts.test)){#
-    if(ones.sum < zeros.sum){#
-      ones.sum = ones.sum + Ts.test[i,2]#
-      ones.test[o] = Ts.test[i,1]    #
-      o = o + 1#
-    } else {#
-      zeros.sum = zeros.sum + Ts.test[i,2]#
-      zeros.test[z] = Ts.test[i,1]#
-      z = z + 1#
-    }  #
-  }#
-  cat(paste("ONES:", ones.sum, ", ZEROS:", zeros.sum)) #
-  correctAnswer = answers[,c("CorrectAnswer", "Ifpid")]#
-  correctAnswer[,1] =  factor(correctAnswer[,1], levels = levels(data$AnswerOption))#
-  OptionAnswered.train = correctAnswer[train.index,]#
-  zeros.index = match(zeros.train, OptionAnswered.train[,2])#
-  OptionAnswered.train[zeros.index,1] = ifelse(OptionAnswered.train[zeros.index, 1] == "a", "b", "a")#
-  OptionAnswered.train[,1] = factor(OptionAnswered.train[,1], levels = levels(data$AnswerOption))#
-  ANS.train = as.numeric(OptionAnswered.train[,1] == correctAnswer[train.index,1])#
-  OptionAnswered.test = correctAnswer[test.index,]#
-  zeros.index = match(zeros.test, OptionAnswered.test[,2])#
-  OptionAnswered.test[zeros.index,1] = ifelse(OptionAnswered.test[zeros.index, 1] == "a", "b", "a")#
-  OptionAnswered.test[,1] = factor(OptionAnswered.test[,1], levels = levels(data$AnswerOption))#
-  ANS.test = as.numeric(OptionAnswered.test[,1] == correctAnswer[test.index,1])#
-  OptionAnswered = rbind(OptionAnswered.test, OptionAnswered.train)#
-  OptionAnswered = OptionAnswered[order(OptionAnswered[,2]), 1]#
-  P.means = Y.means =  P.means.exp =  list()#
-  if(home){#
-    setwd("/Users/ville/Desktop/Dynamic_Logit_Model/ExpertAnalysis/WOExp")#
-  } else {#
-    setwd("~/DLogM/ExpertAnalysisPrediction/WOExp")#
-  }
-home
-i
-i = 1
-pid = PIDS[i]#
-    subdata  = subset(data, data$Ifpid == pid)#
-    subdata =  subset(subdata, AnswerOption == OptionAnswered[i])#
-    subdata$created.at = as.Date(subdata$created.at)#
-    subdata = subset(subdata, TgjUserId != "NULL")#
-    subdata = subset(subdata, (expertise > 0) & (expertise < 6))#
-    T = as.numeric(diff(range(subdata$created.at)))#
-    users = unique(subdata$TgjUserId[order(subdata$expertise)])#
-    N = length(users)#
-    Y = matrix(NA, T+1, N)#
-    min.day = min(as.Date(subdata$created.at))#
-    max.day = max(as.Date(subdata$created.at))#
-    for(t in 0:T){#
-      today = min.day + t#
-      today.data = subset(subdata, subdata$created.at == today)#
-      if(nrow(today.data) > 0){#
-        today.data = today.data[!(duplicated(today.data$TgjUserId, fromLast = TRUE)),]#
-        vals = ifelse(today.data$Value == 0, epsilon, ifelse(today.data$Value == 1, 1-epsilon, today.data$Value))#
-        Y[t+1, match(today.data$TgjUserId, users)] = log(vals/(1-vals))#
-      }#
-    }#
-    exp.levels = subdata[match(users, subdata$TgjUserId), "expertise"] #
-    exp.counts =  c(table(exp.levels))#
-    Y.means[[paste(pid)]] = rowMeans(Y, na.rm = TRUE) ## FOR EWMA#
-    P.means[[paste(pid)]] = rowMeans(delogit(Y), na.rm = TRUE) ## FOR BELP#
+#sigma2_alpha = exp(rnorm(l1, CX_sigma %*% gamma_sigma2, 0.1))#
+sigma2_alpha = exp(CX_sigma %*% gamma_sigma2)#
 #
-    Ntk = apply(Y, 1, function(x) sum(!is.na(x)))#
-    P.means.exp[[paste(pid)]] = sapply(1:5, function(x) {## FOR LOGIT#
-      if(exp.counts[x] > 2){#
-        exp(rowSums(Y[,exp.levels == x], na.rm = TRUE)/Ntk)#
-      } else if (exp.counts[x] == 1){#
-        exp(Y[,exp.levels == x]/Ntk)#
-      } else {#
-        rep(NA, nrow(Y))#
-      }})
-head(Y)
-lapply()
-lapply(Y, 2, function(x) all(is.na(x)))
-apply(Y, 2, function(x) all(is.na(x)))
-apply(Y, 2, function(x) sum(~is.na(x)))
-apply(Y, 2, function(x) sum(!is.na(x)))
-x = NULL
-x = append(x, apply(Y, 2, function(x) sum(!is.na(x))))
-x
-x = append(x, apply(Y, 2, function(x) sum(!is.na(x))))
-x
-x = NULL#
-  for(i in 1:length(PIDS)){#
-    pid = PIDS[i]#
-    subdata  = subset(data, data$Ifpid == pid)#
-    subdata =  subset(subdata, AnswerOption == OptionAnswered[i])#
-    subdata$created.at = as.Date(subdata$created.at)#
-    subdata = subset(subdata, TgjUserId != "NULL")#
-    subdata = subset(subdata, (expertise > 0) & (expertise < 6))#
-    T = as.numeric(diff(range(subdata$created.at)))#
-    users = unique(subdata$TgjUserId[order(subdata$expertise)])#
-    N = length(users)#
-    Y = matrix(NA, T+1, N)#
-    min.day = min(as.Date(subdata$created.at))#
-    max.day = max(as.Date(subdata$created.at))#
-    for(t in 0:T){#
-      today = min.day + t#
-      today.data = subset(subdata, subdata$created.at == today)#
-      if(nrow(today.data) > 0){#
-        today.data = today.data[!(duplicated(today.data$TgjUserId, fromLast = TRUE)),]#
-        vals = ifelse(today.data$Value == 0, epsilon, ifelse(today.data$Value == 1, 1-epsilon, today.data$Value))#
-        Y[t+1, match(today.data$TgjUserId, users)] = log(vals/(1-vals))#
-      }#
-    }#
-    exp.levels = subdata[match(users, subdata$TgjUserId), "expertise"] #
-    exp.counts =  c(table(exp.levels))#
-    Y.means[[paste(pid)]] = rowMeans(Y, na.rm = TRUE) ## FOR EWMA#
-    P.means[[paste(pid)]] = rowMeans(delogit(Y), na.rm = TRUE) ## FOR BELP#
+alphas = rnorm(l1, CX %*% gamma_alpha, sqrt(sigma2_alpha))#
+plot(CX %*% gamma_alpha~sizes)#
+plot(alphas~sizes)#
 #
-    Ntk = apply(Y, 1, function(x) sum(!is.na(x)))#
-    P.means.exp[[paste(pid)]] = sapply(1:5, function(x) {## FOR LOGIT#
-      if(exp.counts[x] > 2){#
-        exp(rowSums(Y[,exp.levels == x], na.rm = TRUE)/Ntk)#
-      } else if (exp.counts[x] == 1){#
-        exp(Y[,exp.levels == x]/Ntk)#
-      } else {#
-        rep(NA, nrow(Y))#
-      }})#
+write.table(alphas, file = "alphas.csv", row.names = FALSE,  col.names = FALSE, sep = ",")#
+write.table(CX, file = "CX.csv", row.names = FALSE, col.names = FALSE, sep = ",")#
+write.table(CX_sigma, file = "CX_sigma.csv", row.names = FALSE, col.names = FALSE, sep = ",")
+plot(gamma_alpha~sizes)
+dim(CX)
+plot(CX %*% gamma_alpha~sizes)
+library(splines)#
+sizes = sample(1:max.size, l1, replace = TRUE)#
+sizes_scale = scale(sizes)[,1]#
+knots = quantile(sizes_scale, c(0.25, 0.5, 0.75))#
+CX = bs(sizes_scale, knots = knots, degree = 3, intercept = TRUE)#
+#CX = ns(sizes_scale, knots = knots, df = 7, intercept = TRUE)#
+#CX = cbind(1, poly(sizes_scale, 3))#
+#for(i in 1:3){#
+#  CX = cbind(CX, pmax((sizes_scale - knots[i]), 0)^3)#
+#}#
 #
-    x = append(x, apply(Y, 2, function(x) sum(!is.na(x))))#
-    Y[is.na(Y)] = -999#
-    write.table(Y, file = paste(pid, ".csv", sep = ""), quote = FALSE, row.names = FALSE, col.names = FALSE, sep = ",")#
-    write.table(exp.counts, file = paste("exps.", pid, ".csv", sep = ""), quote = FALSE, row.names = FALSE, col.names = FALSE, sep = ",")#
-                                        #print(pid)#
-  }
-x
-hist(x)
-table(x)
-mean(x)
-summary(x)
-i
-i = 1
-pid = PIDS[i]#
-    subdata  = subset(data, data$Ifpid == pid)#
-    subdata =  subset(subdata, AnswerOption == OptionAnswered[i])#
-    subdata$created.at = as.Date(subdata$created.at)#
-    subdata = subset(subdata, TgjUserId != "NULL")#
-    subdata = subset(subdata, (expertise > 0) & (expertise < 6))#
-    T = as.numeric(diff(range(subdata$created.at)))#
-    users = unique(subdata$TgjUserId[order(subdata$expertise)])#
-    N = length(users)#
-    Y = matrix(NA, T+1, N)#
-    min.day = min(as.Date(subdata$created.at))#
-    max.day = max(as.Date(subdata$created.at))#
-    for(t in 0:T){#
-      today = min.day + t#
-      today.data = subset(subdata, subdata$created.at == today)#
-      if(nrow(today.data) > 0){#
-        today.data = today.data[!(duplicated(today.data$TgjUserId, fromLast = TRUE)),]#
-        vals = ifelse(today.data$Value == 0, epsilon, ifelse(today.data$Value == 1, 1-epsilon, today.data$Value))#
-        Y[t+1, match(today.data$TgjUserId, users)] = log(vals/(1-vals))#
-      }#
-    }#
-    exp.levels = subdata[match(users, subdata$TgjUserId), "expertise"] #
-    exp.counts =  c(table(exp.levels))#
-    Y.means[[paste(pid)]] = rowMeans(Y, na.rm = TRUE) ## FOR EWMA#
-    P.means[[paste(pid)]] = rowMeans(delogit(Y), na.rm = TRUE) ## FOR BELP#
+CX_sigma = matrix(1, l1, 2)#
+CX_sigma[,2] = sizes_scale#
 #
-    Ntk = apply(Y, 1, function(x) sum(!is.na(x)))#
-    P.means.exp[[paste(pid)]] = sapply(1:5, function(x) {## FOR LOGIT#
-      if(exp.counts[x] > 2){#
-        exp(rowSums(Y[,exp.levels == x], na.rm = TRUE)/Ntk)#
-      } else if (exp.counts[x] == 1){#
-        exp(Y[,exp.levels == x]/Ntk)#
-      } else {#
-        rep(NA, nrow(Y))#
-      }})
-apply(Y, 1, )    x = append(x, apply(Y, 1, function(x) sum(!is.na(x))))
-x = append(x, apply(Y, 1, function(x) sum(!is.na(x))))
-x
-apply(Y, 1, function(x) sum(!is.na(x)))
-apply(Y, 1, function(x) sum(!is.na(x)))/ncol(Y)
-x = NULL#
-  for(i in 1:length(PIDS)){#
-    pid = PIDS[i]#
-    subdata  = subset(data, data$Ifpid == pid)#
-    subdata =  subset(subdata, AnswerOption == OptionAnswered[i])#
-    subdata$created.at = as.Date(subdata$created.at)#
-    subdata = subset(subdata, TgjUserId != "NULL")#
-    subdata = subset(subdata, (expertise > 0) & (expertise < 6))#
-    T = as.numeric(diff(range(subdata$created.at)))#
-    users = unique(subdata$TgjUserId[order(subdata$expertise)])#
-    N = length(users)#
-    Y = matrix(NA, T+1, N)#
-    min.day = min(as.Date(subdata$created.at))#
-    max.day = max(as.Date(subdata$created.at))#
-    for(t in 0:T){#
-      today = min.day + t#
-      today.data = subset(subdata, subdata$created.at == today)#
-      if(nrow(today.data) > 0){#
-        today.data = today.data[!(duplicated(today.data$TgjUserId, fromLast = TRUE)),]#
-        vals = ifelse(today.data$Value == 0, epsilon, ifelse(today.data$Value == 1, 1-epsilon, today.data$Value))#
-        Y[t+1, match(today.data$TgjUserId, users)] = log(vals/(1-vals))#
-      }#
-    }#
-    exp.levels = subdata[match(users, subdata$TgjUserId), "expertise"] #
-    exp.counts =  c(table(exp.levels))#
-    Y.means[[paste(pid)]] = rowMeans(Y, na.rm = TRUE) ## FOR EWMA#
-    P.means[[paste(pid)]] = rowMeans(delogit(Y), na.rm = TRUE) ## FOR BELP#
+gamma_alpha = c(-0.1, -0.2, -0.8, -0.9, -2, -3, -4)#
+gamma_sigma2 = c(1, -1)#
 #
-    Ntk = apply(Y, 1, function(x) sum(!is.na(x)))#
-    P.means.exp[[paste(pid)]] = sapply(1:5, function(x) {## FOR LOGIT#
-      if(exp.counts[x] > 2){#
-        exp(rowSums(Y[,exp.levels == x], na.rm = TRUE)/Ntk)#
-      } else if (exp.counts[x] == 1){#
-        exp(Y[,exp.levels == x]/Ntk)#
-      } else {#
-        rep(NA, nrow(Y))#
-      }})#
+#sigma2_alpha = exp(rnorm(l1, CX_sigma %*% gamma_sigma2, 0.1))#
+sigma2_alpha = exp(CX_sigma %*% gamma_sigma2)#
 #
-    x = append(x, apply(Y, 1, function(x) sum(!is.na(x)))/ncol(Y))#
-    Y[is.na(Y)] = -999#
-    write.table(Y, file = paste(pid, ".csv", sep = ""), quote = FALSE, row.names = FALSE, col.names = FALSE, sep = ",")#
-    write.table(exp.counts, file = paste("exps.", pid, ".csv", sep = ""), quote = FALSE, row.names = FALSE, col.names = FALSE, sep = ",")#
-                                        #print(pid)#
-  }
-x
-mean(X)
-mean(x)
-0.082/0.09
-0.008/0.09
-T = 100#
-Ks = c(20, 40, 60, 80, 100) ## Number of problems#
-betas = c(0.5, 0.75, 1, 1/0.75, 1/0.5) ## Expected bias mean: same effect around 1.0#
-sigma2s = c(0.5, 1.0, 1.5, 2.0, 2.5)#
-load("/Users/ville/Desktop/Dynamic_Logit_Model/ExpertAnalysis/X.losses.RData")#
-load("/Users/ville/Desktop/Dynamic_Logit_Model/ExpertAnalysis/b.losses.RData")#
-######## XXXXXXXXX#
-wsize = 2#
-hsize = 1.8#
-font = 8#
+alphas = rnorm(l1, CX %*% gamma_alpha, sqrt(sigma2_alpha))#
+plot(CX %*% gamma_alpha~sizes)#
+plot(alphas~sizes)#
 #
-setwd("/Users/ville/probability_aggregation/Figures/")#
-#CairoPDF(file = "SyntheticSigma2.pdf", width = size, height = size, onefile = TRUE, family = "Times", pointsize = font)#
-pdf("SyntheticSigma2.pdf", width = wsize, height = hsize, family = "Times", pointsize = font)#
-par(mgp = c(1.5,.5,0), mar=c(2.4,2.8,0.8,0.2))#
-BRI = apply(X.losses[[1]], 1, mean)#
-LOG = apply(X.losses[[2]], 1, mean)#
-#FULL = apply(X.losses[[3]], 1, mean)#
-plot(BRI~sigma2s, type = "l", col = 1, lwd = 2, ylim = range(BRI, LOG), xlab = expression(paste(sigma^2)), ylab = "Quadratic Loss: hidden process", axes = FALSE)#
-box()#
-axis(1, at = round(sigma2s,1))#
-axis(2)#
-#axis(2, at = signif(seq(min(BRI,LOG), max(BRI,LOG), length = 5)[2:4], 2))#
-lines(LOG~sigma2s, lty = 2, lwd = 2)#
-#lines(FULL~sigma2s, col = 3, lwd = 2)#
-dev.off()#
+write.table(alphas, file = "alphas.csv", row.names = FALSE,  col.names = FALSE, sep = ",")#
+write.table(CX, file = "CX.csv", row.names = FALSE, col.names = FALSE, sep = ",")#
+write.table(CX_sigma, file = "CX_sigma.csv", row.names = FALSE, col.names = FALSE, sep = ",")
+?ns
+ns(sizes, df = 7)
+dim(ns(sizes, df = 7))
+?ns
+dim(ns(sizes, df = 7, intercept = TRUE))
+Generate synthetic hospital data:#
+setwd("/Users/ville/Desktop/SYNTHETIC")#
+l1 = 6000#
+max.size = 100#
 #
-setwd("/Users/ville/probability_aggregation/Figures/")#
-#CairoPDF(file = "SyntheticBeta.pdf", width = size, height = size, onefile = TRUE, family = "Times", pointsize = font)#
-pdf(file = "SyntheticBeta.pdf", width = wsize, height = hsize, onefile = TRUE, family = "Times", pointsize = font)#
-par(mgp = c(1.5,.5,0), mar=c(2.4,2.8,0.8,0.2))#
-BRI = apply(X.losses[[1]], 2, mean)#
-LOG = apply(X.losses[[2]], 2, mean)#
-#FULL = apply(X.losses[[3]], 2, mean)#
-plot(BRI~betas, type = "l", col = 1, lwd = 2, ylim = range(BRI, LOG), xlab = expression(paste(beta)), ylab = "Quadratic Loss: hidden process", axes = FALSE)#
-box()#
-axis(1, at = round(betas,1))#
-#axis(2, at = signif(seq(min(BRI,LOG), max(BRI,LOG), length = 5)[2:4], 2))#
-axis(2)#
-lines(LOG~betas, lty = 2, lwd = 2)#
-#lines(FULL~betas, col = 3, lwd = 2)#
-dev.off()#
+library(splines)#
+sizes = sample(1:max.size, l1, replace = TRUE)#
+sizes_scale = scale(sizes)[,1]#
+knots = quantile(sizes_scale, c(0.25, 0.5, 0.75))#
+#CX = bs(sizes_scale, knots = knots, degree = 3, intercept = TRUE)#
+CX = ns(sizes, df = 7, intercept = TRUE)#
+#CX = ns(sizes_scale, knots = knots, df = 7, intercept = TRUE)#
+#CX = cbind(1, poly(sizes_scale, 3))#
+#for(i in 1:3){#
+#  CX = cbind(CX, pmax((sizes_scale - knots[i]), 0)^3)#
+#}#
 #
-setwd("/Users/ville/probability_aggregation/Figures/")#
-#CairoPDF(file = "SyntheticK.pdf", width = size, height = size, onefile = TRUE, family = "Times", pointsize = font)#
-pdf(file = "SyntheticK.pdf", width = wsize, height = hsize, onefile = TRUE, family = "Times", pointsize = font)#
-par(mgp = c(1.5,.5,0), mar=c(2.4,2.8,0.8,0.2))#
-BRI = apply(X.losses[[1]], 3, mean)#
-LOG = apply(X.losses[[2]], 3, mean)#
-#FULL = apply(X.losses[[3]], 3, mean)#
-plot(BRI~Ks, type = "l", col = 1, lwd = 2, ylim = range(BRI, LOG), xlab = "K", ylab = "Quadratic Loss: hidden process", axes = FALSE)#
-box()#
-axis(1, at = round(Ks, 1))#
-axis(2)#
-#axis(2, at = signif(seq(min(BRI,LOG), max(BRI,LOG), length = 5)[2:4], 2))#
-lines(LOG~Ks, lwd = 2, lty = 2)#
-#lines(FULL~Ks, col = 3, lwd = 2)#
-dev.off()#
-######## BBBBBBBBBBBB#
-setwd("/Users/ville/probability_aggregation/Figures/")#
-pdf("SyntheticSigma2bias.pdf", width = wsize, height = hsize, onefile = TRUE, family = "Times", pointsize = font)#
-par(mgp = c(1.5,.5,0), mar=c(2.4,2.8,0.8,0.2))#
-BRI = apply(b.losses[[1]], 1, mean)#
-LOG = apply(b.losses[[2]], 1, mean)#
-#FULL = apply(b.losses[[3]], 1, mean)#
-plot(BRI~sigma2s, type = "l", col = 1, lwd = 2, ylim = range(BRI, LOG), xlab = expression(paste(sigma^2)), ylab = "Quadratic Loss: bias vector", axes = FALSE)#
-box()#
-axis(1, at = round(sigma2s, 1))#
-#axis(2, at = signif(seq(min(BRI,LOG), max(BRI,LOG), length = 5)[2:4], 2))#
-axis(2)#
-lines(LOG~sigma2s, lwd = 2, lty = 2)#
-#lines(FULL~sigma2s, col = 3, lwd = 2)#
-dev.off()#
+CX_sigma = matrix(1, l1, 2)#
+CX_sigma[,2] = sizes_scale#
 #
-setwd("/Users/ville/probability_aggregation/Figures/")#
-pdf("SyntheticBetabias.pdf", width = wsize, height = hsize, onefile = TRUE, family = "Times", pointsize = font)#
-par(mgp = c(1.5,.5,0), mar=c(2.4,2.8,0.8,0.2))#
-BRI = apply(b.losses[[1]], 2, mean)#
-LOG = apply(b.losses[[2]], 2, mean)#
-#FULL = apply(b.losses[[3]], 2, mean)#
-plot(BRI~betas, type = "l", col = 1, lwd = 2, ylim = range(BRI, LOG), xlab = expression(paste(beta)), ylab = "Quadratic Loss: bias vector", axes = FALSE)#
-box()#
-axis(1, at = round(betas, 1))#
-axis(2)#
-#axis(2, at = signif(seq(min(BRI,LOG), max(BRI,LOG), length = 5)[2:4], 2))#
-lines(LOG~betas, lwd = 2, lty = 2)#
-#lines(FULL~betas, col = 3, lwd = 2)#
-dev.off()#
+gamma_alpha = c(-0.1, -0.2, -0.8, -0.9, -2, -3, -4)#
+gamma_sigma2 = c(1, -1)#
 #
-setwd("/Users/ville/probability_aggregation/Figures/")#
-pdf("SyntheticKbias.pdf", width = wsize, height = hsize, onefile = TRUE, family = "Times", pointsize = font)#
-par(mgp = c(1.5,.5,0), mar=c(2.4,2.8,0.8,0.2))#
-BRI = apply(b.losses[[1]], 3, mean)#
-LOG = apply(b.losses[[2]], 3, mean)#
-#FULL = apply(b.losses[[3]], 3, mean)#
-plot(BRI~Ks, type = "l", col = 1, lwd = 2, ylim = range(BRI, LOG), xlab = "K", ylab = "Quadratic Loss: bias vector", axes = FALSE)#
-box()#
-axis(1, at = round(Ks, 1))#
-axis(2)#
-#axis(2, at = signif(seq(min(BRI,LOG), max(BRI,LOG), length = 5)[2:4], 2))#
-lines(LOG~Ks,  lwd = 2, lty = 2)#
-#lines(FULL~Ks, col = 3, lwd = 2)#
-dev.off()
-load("/Users/ville/Desktop/Dynamic_Logit_Model/ExpertAnalysis/X.log.losses.RData")#
-load("/Users/ville/Desktop/Dynamic_Logit_Model/ExpertAnalysis/b.log.losses.RData")#
-######## XXXXXXXXX#
-wsize = 2#
-hsize = 1.8#
-font = 8#
+#sigma2_alpha = exp(rnorm(l1, CX_sigma %*% gamma_sigma2, 0.1))#
+sigma2_alpha = exp(CX_sigma %*% gamma_sigma2)#
 #
-setwd("/Users/ville/probability_aggregation/Figures/")#
-#CairoPDF(file = "SyntheticSigma2.pdf", width = size, height = size, onefile = TRUE, family = "Times", pointsize = font)#
-pdf("SyntheticSigma2.pdf", width = wsize, height = hsize, family = "Times", pointsize = font)#
-par(mgp = c(1.5,.5,0), mar=c(2.4,2.8,0.8,0.2))#
-BRI = apply(X.losses[[1]], 1, mean)#
-LOG = apply(X.losses[[2]], 1, mean)#
-#FULL = apply(X.losses[[3]], 1, mean)#
-plot(BRI~sigma2s, type = "l", col = 1, lwd = 2, ylim = range(BRI, LOG), xlab = expression(paste(sigma^2)), ylab = "Quadratic Loss: hidden process", axes = FALSE)#
-box()#
-axis(1, at = round(sigma2s,1))#
-axis(2)#
-#axis(2, at = signif(seq(min(BRI,LOG), max(BRI,LOG), length = 5)[2:4], 2))#
-lines(LOG~sigma2s, lty = 2, lwd = 2)#
-#lines(FULL~sigma2s, col = 3, lwd = 2)#
-dev.off()#
+alphas = rnorm(l1, CX %*% gamma_alpha, sqrt(sigma2_alpha))#
+plot(CX %*% gamma_alpha~sizes)#
+plot(alphas~sizes)#
 #
-setwd("/Users/ville/probability_aggregation/Figures/")#
-#CairoPDF(file = "SyntheticBeta.pdf", width = size, height = size, onefile = TRUE, family = "Times", pointsize = font)#
-pdf(file = "SyntheticBeta.pdf", width = wsize, height = hsize, onefile = TRUE, family = "Times", pointsize = font)#
-par(mgp = c(1.5,.5,0), mar=c(2.4,2.8,0.8,0.2))#
-BRI = apply(X.losses[[1]], 2, mean)#
-LOG = apply(X.losses[[2]], 2, mean)#
-#FULL = apply(X.losses[[3]], 2, mean)#
-plot(BRI~betas, type = "l", col = 1, lwd = 2, ylim = range(BRI, LOG), xlab = expression(paste(beta)), ylab = "Quadratic Loss: hidden process", axes = FALSE)#
-box()#
-axis(1, at = round(betas,1))#
-#axis(2, at = signif(seq(min(BRI,LOG), max(BRI,LOG), length = 5)[2:4], 2))#
-axis(2)#
-lines(LOG~betas, lty = 2, lwd = 2)#
-#lines(FULL~betas, col = 3, lwd = 2)#
-dev.off()#
+write.table(alphas, file = "alphas.csv", row.names = FALSE,  col.names = FALSE, sep = ",")#
+write.table(CX, file = "CX.csv", row.names = FALSE, col.names = FALSE, sep = ",")#
+write.table(CX_sigma, file = "CX_sigma.csv", row.names = FALSE, col.names = FALSE, sep = ",")
+Generate synthetic hospital data:#
+setwd("/Users/ville/Desktop/SYNTHETIC")#
+l1 = 6000#
+max.size = 100#
 #
-setwd("/Users/ville/probability_aggregation/Figures/")#
-#CairoPDF(file = "SyntheticK.pdf", width = size, height = size, onefile = TRUE, family = "Times", pointsize = font)#
-pdf(file = "SyntheticK.pdf", width = wsize, height = hsize, onefile = TRUE, family = "Times", pointsize = font)#
-par(mgp = c(1.5,.5,0), mar=c(2.4,2.8,0.8,0.2))#
-BRI = apply(X.losses[[1]], 3, mean)#
-LOG = apply(X.losses[[2]], 3, mean)#
-#FULL = apply(X.losses[[3]], 3, mean)#
-plot(BRI~Ks, type = "l", col = 1, lwd = 2, ylim = range(BRI, LOG), xlab = "K", ylab = "Quadratic Loss: hidden process", axes = FALSE)#
-box()#
-axis(1, at = round(Ks, 1))#
-axis(2)#
-#axis(2, at = signif(seq(min(BRI,LOG), max(BRI,LOG), length = 5)[2:4], 2))#
-lines(LOG~Ks, lwd = 2, lty = 2)#
-#lines(FULL~Ks, col = 3, lwd = 2)#
-dev.off()
-load("/Users/ville/Desktop/Dynamic_Logit_Model/ExpertAnalysis/X.log.losses.RData")#
-load("/Users/ville/Desktop/Dynamic_Logit_Model/ExpertAnalysis/b.log.losses.RData")#
-X.losses = X.log.losses#
-b.losses = b.log.losses#
+library(splines)#
+sizes = sample(1:max.size, l1, replace = TRUE)#
+sizes_scale = scale(sizes)[,1]#
+knots = quantile(sizes_scale, c(0.25, 0.5, 0.75))#
+CX = bs(sizes_scale, knots = knots, degree = 3, intercept = TRUE)#
+#CX = ns(sizes, df = 7, intercept = TRUE)#
+#CX = ns(sizes_scale, knots = knots, df = 7, intercept = TRUE)#
+#CX = cbind(1, poly(sizes_scale, 3))#
+#for(i in 1:3){#
+#  CX = cbind(CX, pmax((sizes_scale - knots[i]), 0)^3)#
+#}#
 #
-######## XXXXXXXXX#
-wsize = 2#
-hsize = 1.8#
-font = 8#
+CX_sigma = matrix(1, l1, 2)#
+CX_sigma[,2] = sizes_scale#
 #
-setwd("/Users/ville/probability_aggregation/Figures/")#
-#CairoPDF(file = "SyntheticSigma2.pdf", width = size, height = size, onefile = TRUE, family = "Times", pointsize = font)#
-pdf("SyntheticSigma2.pdf", width = wsize, height = hsize, family = "Times", pointsize = font)#
-par(mgp = c(1.5,.5,0), mar=c(2.4,2.8,0.8,0.2))#
-BRI = apply(X.losses[[1]], 1, mean)#
-LOG = apply(X.losses[[2]], 1, mean)#
-#FULL = apply(X.losses[[3]], 1, mean)#
-plot(BRI~sigma2s, type = "l", col = 1, lwd = 2, ylim = range(BRI, LOG), xlab = expression(paste(sigma^2)), ylab = "Quadratic Loss: hidden process", axes = FALSE)#
-box()#
-axis(1, at = round(sigma2s,1))#
-axis(2)#
-#axis(2, at = signif(seq(min(BRI,LOG), max(BRI,LOG), length = 5)[2:4], 2))#
-lines(LOG~sigma2s, lty = 2, lwd = 2)#
-#lines(FULL~sigma2s, col = 3, lwd = 2)#
-dev.off()#
+gamma_alpha = c(-0.1, -0.2, -0.8, -0.9, -2, -3, -4)#
+gamma_sigma2 = c(1, -1)#
 #
-setwd("/Users/ville/probability_aggregation/Figures/")#
-#CairoPDF(file = "SyntheticBeta.pdf", width = size, height = size, onefile = TRUE, family = "Times", pointsize = font)#
-pdf(file = "SyntheticBeta.pdf", width = wsize, height = hsize, onefile = TRUE, family = "Times", pointsize = font)#
-par(mgp = c(1.5,.5,0), mar=c(2.4,2.8,0.8,0.2))#
-BRI = apply(X.losses[[1]], 2, mean)#
-LOG = apply(X.losses[[2]], 2, mean)#
-#FULL = apply(X.losses[[3]], 2, mean)#
-plot(BRI~betas, type = "l", col = 1, lwd = 2, ylim = range(BRI, LOG), xlab = expression(paste(beta)), ylab = "Quadratic Loss: hidden process", axes = FALSE)#
-box()#
-axis(1, at = round(betas,1))#
-#axis(2, at = signif(seq(min(BRI,LOG), max(BRI,LOG), length = 5)[2:4], 2))#
-axis(2)#
-lines(LOG~betas, lty = 2, lwd = 2)#
-#lines(FULL~betas, col = 3, lwd = 2)#
-dev.off()#
+#sigma2_alpha = exp(rnorm(l1, CX_sigma %*% gamma_sigma2, 0.1))#
+sigma2_alpha = exp(CX_sigma %*% gamma_sigma2)#
 #
-setwd("/Users/ville/probability_aggregation/Figures/")#
-#CairoPDF(file = "SyntheticK.pdf", width = size, height = size, onefile = TRUE, family = "Times", pointsize = font)#
-pdf(file = "SyntheticK.pdf", width = wsize, height = hsize, onefile = TRUE, family = "Times", pointsize = font)#
-par(mgp = c(1.5,.5,0), mar=c(2.4,2.8,0.8,0.2))#
-BRI = apply(X.losses[[1]], 3, mean)#
-LOG = apply(X.losses[[2]], 3, mean)#
-#FULL = apply(X.losses[[3]], 3, mean)#
-plot(BRI~Ks, type = "l", col = 1, lwd = 2, ylim = range(BRI, LOG), xlab = "K", ylab = "Quadratic Loss: hidden process", axes = FALSE)#
-box()#
-axis(1, at = round(Ks, 1))#
-axis(2)#
-#axis(2, at = signif(seq(min(BRI,LOG), max(BRI,LOG), length = 5)[2:4], 2))#
-lines(LOG~Ks, lwd = 2, lty = 2)#
-#lines(FULL~Ks, col = 3, lwd = 2)#
-dev.off()#
-######## BBBBBBBBBBBB#
-setwd("/Users/ville/probability_aggregation/Figures/")#
-pdf("SyntheticSigma2bias.pdf", width = wsize, height = hsize, onefile = TRUE, family = "Times", pointsize = font)#
-par(mgp = c(1.5,.5,0), mar=c(2.4,2.8,0.8,0.2))#
-BRI = apply(b.losses[[1]], 1, mean)#
-LOG = apply(b.losses[[2]], 1, mean)#
-#FULL = apply(b.losses[[3]], 1, mean)#
-plot(BRI~sigma2s, type = "l", col = 1, lwd = 2, ylim = range(BRI, LOG), xlab = expression(paste(sigma^2)), ylab = "Quadratic Loss: bias vector", axes = FALSE)#
-box()#
-axis(1, at = round(sigma2s, 1))#
-#axis(2, at = signif(seq(min(BRI,LOG), max(BRI,LOG), length = 5)[2:4], 2))#
-axis(2)#
-lines(LOG~sigma2s, lwd = 2, lty = 2)#
-#lines(FULL~sigma2s, col = 3, lwd = 2)#
-dev.off()#
+alphas = rnorm(l1, CX %*% gamma_alpha, sqrt(sigma2_alpha))#
+plot(CX %*% gamma_alpha~sizes)#
+plot(alphas~sizes)#
 #
-setwd("/Users/ville/probability_aggregation/Figures/")#
-pdf("SyntheticBetabias.pdf", width = wsize, height = hsize, onefile = TRUE, family = "Times", pointsize = font)#
-par(mgp = c(1.5,.5,0), mar=c(2.4,2.8,0.8,0.2))#
-BRI = apply(b.losses[[1]], 2, mean)#
-LOG = apply(b.losses[[2]], 2, mean)#
-#FULL = apply(b.losses[[3]], 2, mean)#
-plot(BRI~betas, type = "l", col = 1, lwd = 2, ylim = range(BRI, LOG), xlab = expression(paste(beta)), ylab = "Quadratic Loss: bias vector", axes = FALSE)#
-box()#
-axis(1, at = round(betas, 1))#
-axis(2)#
-#axis(2, at = signif(seq(min(BRI,LOG), max(BRI,LOG), length = 5)[2:4], 2))#
-lines(LOG~betas, lwd = 2, lty = 2)#
-#lines(FULL~betas, col = 3, lwd = 2)#
-dev.off()#
+write.table(alphas, file = "alphas.csv", row.names = FALSE,  col.names = FALSE, sep = ",")#
+write.table(CX, file = "CX.csv", row.names = FALSE, col.names = FALSE, sep = ",")#
+write.table(CX_sigma, file = "CX_sigma.csv", row.names = FALSE, col.names = FALSE, sep = ",")
+setwd("/Users/ville/Desktop/SYNTHETIC")#
 #
-setwd("/Users/ville/probability_aggregation/Figures/")#
-pdf("SyntheticKbias.pdf", width = wsize, height = hsize, onefile = TRUE, family = "Times", pointsize = font)#
-par(mgp = c(1.5,.5,0), mar=c(2.4,2.8,0.8,0.2))#
-BRI = apply(b.losses[[1]], 3, mean)#
-LOG = apply(b.losses[[2]], 3, mean)#
-#FULL = apply(b.losses[[3]], 3, mean)#
-plot(BRI~Ks, type = "l", col = 1, lwd = 2, ylim = range(BRI, LOG), xlab = "K", ylab = "Quadratic Loss: bias vector", axes = FALSE)#
-box()#
-axis(1, at = round(Ks, 1))#
-axis(2)#
-#axis(2, at = signif(seq(min(BRI,LOG), max(BRI,LOG), length = 5)[2:4], 2))#
-lines(LOG~Ks,  lwd = 2, lty = 2)#
-#lines(FULL~Ks, col = 3, lwd = 2)#
-dev.off()
-T = 100#
-Ks = c(20, 40, 60, 80, 100) ## Number of problems#
-betas = c(0.5, 0.75, 1, 1/0.75, 1/0.5) ## Expected bias mean: same effect around 1.0#
-sigma2s = c(0.5, 1.0, 1.5, 2.0, 2.5)#
-load("/Users/ville/Desktop/Dynamic_Logit_Model/ExpertAnalysis/X.losses.RData")#
-load("/Users/ville/Desktop/Dynamic_Logit_Model/ExpertAnalysis/b.losses.RData")
-wsize = 2#
-hsize = 1.8#
-font = 8#
+## Generate synthetic hospital data:#
+l1 = 1000#
+m = 27#
+max.size = 20#
 #
-setwd("/Users/ville/probability_aggregation/Figures/")#
-#CairoPDF(file = "SyntheticSigma2.pdf", width = size, height = size, onefile = TRUE, family = "Times", pointsize = font)#
-pdf("SyntheticSigma2.pdf", width = wsize, height = hsize, family = "Times", pointsize = font)#
-par(mgp = c(1.5,.5,0), mar=c(2.4,2.8,0.8,0.2))#
-BRI = apply(X.losses[[1]], 1, mean)#
-LOG = apply(X.losses[[2]], 1, mean)#
-#FULL = apply(X.losses[[3]], 1, mean)#
-plot(BRI~sigma2s, type = "l", col = 1, lwd = 2, ylim = range(BRI, LOG), xlab = expression(paste(sigma^2)), ylab = "Quadratic Loss: hidden process", axes = FALSE)#
-box()#
-axis(1, at = round(sigma2s,1))#
-axis(2)#
-#axis(2, at = signif(seq(min(BRI,LOG), max(BRI,LOG), length = 5)[2:4], 2))#
-lines(LOG~sigma2s, lty = 2, lwd = 2)#
-#lines(FULL~sigma2s, col = 3, lwd = 2)#
-dev.off()#
+library(splines)#
+sizes = sample(1:max.size, l1, replace = TRUE)#
+sizes_scale = scale(sizes)[,1]#
+knots = quantile(sizes_scale, c(0.25, 0.5, 0.75))#
+CX = bs(sizes_scale, knots = knots, degree = 3, intercept = TRUE)#
+CX_sigma = matrix(1, l1, 2)#
+CX_sigma[,2] = sizes_scale#
 #
-setwd("/Users/ville/probability_aggregation/Figures/")#
-#CairoPDF(file = "SyntheticBeta.pdf", width = size, height = size, onefile = TRUE, family = "Times", pointsize = font)#
-pdf(file = "SyntheticBeta.pdf", width = wsize, height = hsize, onefile = TRUE, family = "Times", pointsize = font)#
-par(mgp = c(1.5,.5,0), mar=c(2.4,2.8,0.8,0.2))#
-BRI = apply(X.losses[[1]], 2, mean)#
-LOG = apply(X.losses[[2]], 2, mean)#
-#FULL = apply(X.losses[[3]], 2, mean)#
-plot(BRI~betas, type = "l", col = 1, lwd = 2, ylim = range(BRI, LOG), xlab = expression(paste(beta)), ylab = "Quadratic Loss: hidden process", axes = FALSE)#
-box()#
-axis(1, at = round(betas,1))#
-#axis(2, at = signif(seq(min(BRI,LOG), max(BRI,LOG), length = 5)[2:4], 2))#
-axis(2)#
-lines(LOG~betas, lty = 2, lwd = 2)#
-#lines(FULL~betas, col = 3, lwd = 2)#
-dev.off()#
+gamma_alpha = -c(1:7)#
+gamma_sigma2 = c(1, -0.2)#
+alphas = rnorm(l1, CX %*% gamma_alpha, sqrt(exp(CX_sigma %*% gamma_sigma2)))#
+l = sum(sizes)#
+beta = round(rnorm(27), 1)#
+X = matrix(sample(0:1, l*m, replace = TRUE), l, m)#
+t_mean = alphas[rep(1:l1, sizes)] + X %*% beta#
+nu = 8#
+Z = t_mean + rnorm(l) * sqrt(nu/rchisq(l, nu))#
+Y = ifelse(Z >= 0, 1, 0)#
+dataset = data.frame(Y, hosp_id = c(1:l1)[rep(1:l1, sizes)], X, size = sizes[rep(1:l1, sizes)])
+head(dataset)
+dataset = data.frame(hosp_id = c(1:l1)[rep(1:l1, sizes)], Y, , X, size = sizes[rep(1:l1, sizes)])
+head()
+dataset = data.frame(hosp_id = c(1:l1)[rep(1:l1, sizes)], Y, X, size = sizes[rep(1:l1, sizes)])
+head(dataset)
+dataset = data.frame(hosp_id = c(1:l1)[rep(1:l1, sizes)], Y, X, size = sizes[rep(1:l1, sizes, sizes, sizes, sizes)])
+dataset = data.frame(hosp_id = c(1:l1)[rep(1:l1, sizes)], Y, X, size = sizes[rep(1:l1, sizes)], 0, 0, size = sizes[rep(1:l1, sizes)])
+dim(dataset)
+head(dataset)
+setwd("/Users/ville/Desktop/SYNTHETIC")#
 #
-setwd("/Users/ville/probability_aggregation/Figures/")#
-#CairoPDF(file = "SyntheticK.pdf", width = size, height = size, onefile = TRUE, family = "Times", pointsize = font)#
-pdf(file = "SyntheticK.pdf", width = wsize, height = hsize, onefile = TRUE, family = "Times", pointsize = font)#
-par(mgp = c(1.5,.5,0), mar=c(2.4,2.8,0.8,0.2))#
-BRI = apply(X.losses[[1]], 3, mean)#
-LOG = apply(X.losses[[2]], 3, mean)#
-#FULL = apply(X.losses[[3]], 3, mean)#
-plot(BRI~Ks, type = "l", col = 1, lwd = 2, ylim = range(BRI, LOG), xlab = "K", ylab = "Quadratic Loss: hidden process", axes = FALSE)#
-box()#
-axis(1, at = round(Ks, 1))#
-axis(2)#
-#axis(2, at = signif(seq(min(BRI,LOG), max(BRI,LOG), length = 5)[2:4], 2))#
-lines(LOG~Ks, lwd = 2, lty = 2)#
-#lines(FULL~Ks, col = 3, lwd = 2)#
-dev.off()#
-######## BBBBBBBBBBBB#
-setwd("/Users/ville/probability_aggregation/Figures/")#
-pdf("SyntheticSigma2bias.pdf", width = wsize, height = hsize, onefile = TRUE, family = "Times", pointsize = font)#
-par(mgp = c(1.5,.5,0), mar=c(2.4,2.8,0.8,0.2))#
-BRI = apply(b.losses[[1]], 1, mean)#
-LOG = apply(b.losses[[2]], 1, mean)#
-#FULL = apply(b.losses[[3]], 1, mean)#
-plot(BRI~sigma2s, type = "l", col = 1, lwd = 2, ylim = range(BRI, LOG), xlab = expression(paste(sigma^2)), ylab = "Quadratic Loss: bias vector", axes = FALSE)#
-box()#
-axis(1, at = round(sigma2s, 1))#
-#axis(2, at = signif(seq(min(BRI,LOG), max(BRI,LOG), length = 5)[2:4], 2))#
-axis(2)#
-lines(LOG~sigma2s, lwd = 2, lty = 2)#
-#lines(FULL~sigma2s, col = 3, lwd = 2)#
-dev.off()#
+## Generate synthetic hospital data:#
+l1 = 1000#
+m = 27#
+max.size = 20#
 #
-setwd("/Users/ville/probability_aggregation/Figures/")#
-pdf("SyntheticBetabias.pdf", width = wsize, height = hsize, onefile = TRUE, family = "Times", pointsize = font)#
-par(mgp = c(1.5,.5,0), mar=c(2.4,2.8,0.8,0.2))#
-BRI = apply(b.losses[[1]], 2, mean)#
-LOG = apply(b.losses[[2]], 2, mean)#
-#FULL = apply(b.losses[[3]], 2, mean)#
-plot(BRI~betas, type = "l", col = 1, lwd = 2, ylim = range(BRI, LOG), xlab = expression(paste(beta)), ylab = "Quadratic Loss: bias vector", axes = FALSE)#
-box()#
-axis(1, at = round(betas, 1))#
-axis(2)#
-#axis(2, at = signif(seq(min(BRI,LOG), max(BRI,LOG), length = 5)[2:4], 2))#
-lines(LOG~betas, lwd = 2, lty = 2)#
-#lines(FULL~betas, col = 3, lwd = 2)#
-dev.off()#
+library(splines)#
+sizes = sample(1:max.size, l1, replace = TRUE)#
+sizes_scale = scale(sizes)[,1]#
+knots = quantile(sizes_scale, c(0.25, 0.5, 0.75))#
+CX = bs(sizes_scale, knots = knots, degree = 3, intercept = TRUE)#
+CX_sigma = matrix(1, l1, 2)#
+CX_sigma[,2] = sizes_scale#
 #
-setwd("/Users/ville/probability_aggregation/Figures/")#
-pdf("SyntheticKbias.pdf", width = wsize, height = hsize, onefile = TRUE, family = "Times", pointsize = font)#
-par(mgp = c(1.5,.5,0), mar=c(2.4,2.8,0.8,0.2))#
-BRI = apply(b.losses[[1]], 3, mean)#
-LOG = apply(b.losses[[2]], 3, mean)#
-#FULL = apply(b.losses[[3]], 3, mean)#
-plot(BRI~Ks, type = "l", col = 1, lwd = 2, ylim = range(BRI, LOG), xlab = "K", ylab = "Quadratic Loss: bias vector", axes = FALSE)#
-box()#
-axis(1, at = round(Ks, 1))#
-axis(2)#
-#axis(2, at = signif(seq(min(BRI,LOG), max(BRI,LOG), length = 5)[2:4], 2))#
-lines(LOG~Ks,  lwd = 2, lty = 2)#
-#lines(FULL~Ks, col = 3, lwd = 2)#
-dev.off()
-load("/Users/ville/Desktop/Dynamic_Logit_Model/ExpertAnalysis/X.log.losses.RData")#
-load("/Users/ville/Desktop/Dynamic_Logit_Model/ExpertAnalysis/b.log.losses.RData")#
-X.losses = X.log.losses#
-b.losses = b.log.losses#
+gamma_alpha = -c(1:7)#
+gamma_sigma2 = c(1, -0.2)#
+alphas = rnorm(l1, CX %*% gamma_alpha, sqrt(exp(CX_sigma %*% gamma_sigma2)))#
+l = sum(sizes)#
+beta = round(rnorm(27), 1)#
+X = matrix(sample(0:1, l*m, replace = TRUE), l, m)#
+t_mean = alphas[rep(1:l1, sizes)] + X %*% beta#
+nu = 8#
+Z = t_mean + rnorm(l) * sqrt(nu/rchisq(l, nu))#
+Y = ifelse(Z >= 0, 1, 0)#
+dataset = data.frame(hosp_id = c(1:l1)[rep(1:l1, sizes)], Y, X, size = sizes[rep(1:l1, sizes)], 0, 0, size = sizes[rep(1:l1, sizes)])#
+save(alphas, file = "alphas.true.RData")#
+save(beta, file = "beta.true.RData")#
+save(gamma_alpha, file = "gamma_alpha.true.RData")#
+save(gamma_sigma2, file = "gamma_sigma2.true.RData")#
+write.table(CX, file = "CX.csv", row.names = FALSE, col.names = FALSE, sep = ",")#
+write.table(dataset, file = "dataset.csv", row.names = FALSE, col.names = FALSE, sep = ",")
+write.table(knots, file = "knots.csv", row.names = FALSE, col.names = FALSE, sep = ",")
+setwd("/Users/ville/Desktop/SYNTHETIC")#
 #
-######## XXXXXXXXX#
-wsize = 2#
-hsize = 1.8#
-font = 8#
+## Generate synthetic hospital data:#
+l1 = 1000#
+m = 27#
+max.size = 20#
 #
-setwd("/Users/ville/probability_aggregation/Figures/")#
-#CairoPDF(file = "SyntheticSigma2.pdf", width = size, height = size, onefile = TRUE, family = "Times", pointsize = font)#
-pdf("SyntheticSigma2.pdf", width = wsize, height = hsize, family = "Times", pointsize = font)#
-par(mgp = c(1.5,.5,0), mar=c(2.4,2.8,0.8,0.2))#
-BRI = apply(X.losses[[1]], 1, mean)#
-LOG = apply(X.losses[[2]], 1, mean)#
-#FULL = apply(X.losses[[3]], 1, mean)#
-plot(BRI~sigma2s, type = "l", col = 1, lwd = 2, ylim = range(BRI, LOG), xlab = expression(paste(sigma^2)), ylab = "Quadratic Loss: hidden process", axes = FALSE)#
-box()#
-axis(1, at = round(sigma2s,1))#
-axis(2)#
-#axis(2, at = signif(seq(min(BRI,LOG), max(BRI,LOG), length = 5)[2:4], 2))#
-lines(LOG~sigma2s, lty = 2, lwd = 2)#
-#lines(FULL~sigma2s, col = 3, lwd = 2)#
-dev.off()#
+library(splines)#
+sizes = sample(1:max.size, l1, replace = TRUE)#
+sizes_scale = scale(sizes)[,1]#
+knots = quantile(sizes_scale, c(0.25, 0.5, 0.75))#
+CX = bs(sizes_scale, knots = knots, degree = 3, intercept = TRUE)#
+CX_sigma = matrix(1, l1, 2)#
+CX_sigma[,2] = sizes_scale#
 #
-setwd("/Users/ville/probability_aggregation/Figures/")#
-#CairoPDF(file = "SyntheticBeta.pdf", width = size, height = size, onefile = TRUE, family = "Times", pointsize = font)#
-pdf(file = "SyntheticBeta.pdf", width = wsize, height = hsize, onefile = TRUE, family = "Times", pointsize = font)#
-par(mgp = c(1.5,.5,0), mar=c(2.4,2.8,0.8,0.2))#
-BRI = apply(X.losses[[1]], 2, mean)#
-LOG = apply(X.losses[[2]], 2, mean)#
-#FULL = apply(X.losses[[3]], 2, mean)#
-plot(BRI~betas, type = "l", col = 1, lwd = 2, ylim = range(BRI, LOG), xlab = expression(paste(beta)), ylab = "Quadratic Loss: hidden process", axes = FALSE)#
-box()#
-axis(1, at = round(betas,1))#
-#axis(2, at = signif(seq(min(BRI,LOG), max(BRI,LOG), length = 5)[2:4], 2))#
-axis(2)#
-lines(LOG~betas, lty = 2, lwd = 2)#
-#lines(FULL~betas, col = 3, lwd = 2)#
-dev.off()#
+gamma_alpha = c(-0.1, -0.2, -0.8, -0.9, -2, -3, -4)#
+gamma_sigma2 = c(1, -1)#
+alphas = rnorm(l1, CX %*% gamma_alpha, sqrt(exp(CX_sigma %*% gamma_sigma2)))#
+l = sum(sizes)#
+beta = 1:27#
+X = matrix(sample(0:1, l*m, replace = TRUE), l, m)#
+t_mean = alphas[rep(1:l1, sizes)] + X %*% beta#
+nu = 8#
+Z = t_mean + rnorm(l) * sqrt(nu/rchisq(l, nu))#
+Y = ifelse(Z >= 0, 1, 0)#
+dataset = data.frame(hosp_id = c(1:l1)[rep(1:l1, sizes)], Y, X, size = sizes[rep(1:l1, sizes)], 0, 0, size = sizes[rep(1:l1, sizes)])#
+save(alphas, file = "alphas.true.RData")#
+save(beta, file = "beta.true.RData")#
+save(gamma_alpha, file = "gamma_alpha.true.RData")#
+save(gamma_sigma2, file = "gamma_sigma2.true.RData")#
+write.table(CX, file = "CX.csv", row.names = FALSE, col.names = FALSE, sep = ",")#
+write.table(dataset, file = "dataset.csv", row.names = FALSE, col.names = FALSE, sep = ",")#
+write.table(knots, file = "knots.csv", row.names = FALSE, col.names = FALSE, sep = ",")
+setwd("/Users/ville/Desktop/SYNTHETIC")#
 #
-setwd("/Users/ville/probability_aggregation/Figures/")#
-#CairoPDF(file = "SyntheticK.pdf", width = size, height = size, onefile = TRUE, family = "Times", pointsize = font)#
-pdf(file = "SyntheticK.pdf", width = wsize, height = hsize, onefile = TRUE, family = "Times", pointsize = font)#
-par(mgp = c(1.5,.5,0), mar=c(2.4,2.8,0.8,0.2))#
-BRI = apply(X.losses[[1]], 3, mean)#
-LOG = apply(X.losses[[2]], 3, mean)#
-#FULL = apply(X.losses[[3]], 3, mean)#
-plot(BRI~Ks, type = "l", col = 1, lwd = 2, ylim = range(BRI, LOG), xlab = "K", ylab = "Quadratic Loss: hidden process", axes = FALSE)#
-box()#
-axis(1, at = round(Ks, 1))#
-axis(2)#
-#axis(2, at = signif(seq(min(BRI,LOG), max(BRI,LOG), length = 5)[2:4], 2))#
-lines(LOG~Ks, lwd = 2, lty = 2)#
-#lines(FULL~Ks, col = 3, lwd = 2)#
-dev.off()#
-######## BBBBBBBBBBBB#
-setwd("/Users/ville/probability_aggregation/Figures/")#
-pdf("SyntheticSigma2bias.pdf", width = wsize, height = hsize, onefile = TRUE, family = "Times", pointsize = font)#
-par(mgp = c(1.5,.5,0), mar=c(2.4,2.8,0.8,0.2))#
-BRI = apply(b.losses[[1]], 1, mean)#
-LOG = apply(b.losses[[2]], 1, mean)#
-#FULL = apply(b.losses[[3]], 1, mean)#
-plot(BRI~sigma2s, type = "l", col = 1, lwd = 2, ylim = range(BRI, LOG), xlab = expression(paste(sigma^2)), ylab = "Quadratic Loss: bias vector", axes = FALSE)#
-box()#
-axis(1, at = round(sigma2s, 1))#
-#axis(2, at = signif(seq(min(BRI,LOG), max(BRI,LOG), length = 5)[2:4], 2))#
-axis(2)#
-lines(LOG~sigma2s, lwd = 2, lty = 2)#
-#lines(FULL~sigma2s, col = 3, lwd = 2)#
-dev.off()#
+## Generate synthetic hospital data:#
+l1 = 4000#
+m = 27#
+max.size = 100#
 #
-setwd("/Users/ville/probability_aggregation/Figures/")#
-pdf("SyntheticBetabias.pdf", width = wsize, height = hsize, onefile = TRUE, family = "Times", pointsize = font)#
-par(mgp = c(1.5,.5,0), mar=c(2.4,2.8,0.8,0.2))#
-BRI = apply(b.losses[[1]], 2, mean)#
-LOG = apply(b.losses[[2]], 2, mean)#
-#FULL = apply(b.losses[[3]], 2, mean)#
-plot(BRI~betas, type = "l", col = 1, lwd = 2, ylim = range(BRI, LOG), xlab = expression(paste(beta)), ylab = "Quadratic Loss: bias vector", axes = FALSE)#
-box()#
-axis(1, at = round(betas, 1))#
-axis(2)#
-#axis(2, at = signif(seq(min(BRI,LOG), max(BRI,LOG), length = 5)[2:4], 2))#
-lines(LOG~betas, lwd = 2, lty = 2)#
-#lines(FULL~betas, col = 3, lwd = 2)#
-dev.off()#
+library(splines)#
+sizes = sample(1:max.size, l1, replace = TRUE)#
+sizes_scale = scale(sizes)[,1]#
+knots = quantile(sizes_scale, c(0.25, 0.5, 0.75))#
+CX = bs(sizes_scale, knots = knots, degree = 3, intercept = TRUE)#
+CX_sigma = matrix(1, l1, 2)#
+CX_sigma[,2] = sizes_scale#
 #
-setwd("/Users/ville/probability_aggregation/Figures/")#
-pdf("SyntheticKbias.pdf", width = wsize, height = hsize, onefile = TRUE, family = "Times", pointsize = font)#
-par(mgp = c(1.5,.5,0), mar=c(2.4,2.8,0.8,0.2))#
-BRI = apply(b.losses[[1]], 3, mean)#
-LOG = apply(b.losses[[2]], 3, mean)#
-#FULL = apply(b.losses[[3]], 3, mean)#
-plot(BRI~Ks, type = "l", col = 1, lwd = 2, ylim = range(BRI, LOG), xlab = "K", ylab = "Quadratic Loss: bias vector", axes = FALSE)#
-box()#
-axis(1, at = round(Ks, 1))#
-axis(2)#
-#axis(2, at = signif(seq(min(BRI,LOG), max(BRI,LOG), length = 5)[2:4], 2))#
-lines(LOG~Ks,  lwd = 2, lty = 2)#
-#lines(FULL~Ks, col = 3, lwd = 2)#
-dev.off()
-T = 100#
-Ks = c(20, 40, 60, 80, 100) ## Number of problems#
-betas = c(0.5, 0.75, 1, 1/0.75, 1/0.5) ## Expected bias mean: same effect around 1.0#
-sigma2s = c(0.5, 1.0, 1.5, 2.0, 2.5)#
-load("/Users/ville/Desktop/Dynamic_Logit_Model/ExpertAnalysis/X.losses.RData")#
-load("/Users/ville/Desktop/Dynamic_Logit_Model/ExpertAnalysis/b.losses.RData")
-wsize = 2#
-hsize = 1.8#
-font = 8#
+gamma_alpha = c(-0.1, -0.2, -0.8, -0.9, -2, -3, -4)#
+gamma_sigma2 = c(1, -1)#
+alphas = rnorm(l1, CX %*% gamma_alpha, sqrt(exp(CX_sigma %*% gamma_sigma2)))#
+l = sum(sizes)#
+beta = 1:27#
+X = matrix(sample(0:1, l*m, replace = TRUE), l, m)#
+t_mean = alphas[rep(1:l1, sizes)] + X %*% beta#
+nu = 8#
+Z = t_mean + rnorm(l) * sqrt(nu/rchisq(l, nu))#
+Y = ifelse(Z >= 0, 1, 0)#
+dataset = data.frame(hosp_id = c(1:l1)[rep(1:l1, sizes)], Y, X, size = sizes[rep(1:l1, sizes)], 0, 0, size = sizes[rep(1:l1, sizes)])#
+save(alphas, file = "alphas.true.RData")#
+save(beta, file = "beta.true.RData")#
+save(gamma_alpha, file = "gamma_alpha.true.RData")#
+save(gamma_sigma2, file = "gamma_sigma2.true.RData")#
+write.table(CX, file = "CX.csv", row.names = FALSE, col.names = FALSE, sep = ",")#
+write.table(dataset, file = "dataset.csv", row.names = FALSE, col.names = FALSE, sep = ",")#
+write.table(knots, file = "knots.csv", row.names = FALSE, col.names = FALSE, sep = ",")
+Generate synthetic hospital data:#
+l1 = 2000#
+m = 27#
+max.size = 100#
 #
-setwd("/Users/ville/probability_aggregation/Figures/")#
-#CairoPDF(file = "SyntheticSigma2.pdf", width = size, height = size, onefile = TRUE, family = "Times", pointsize = font)#
-pdf("SyntheticSigma2.pdf", width = wsize, height = hsize, family = "Times", pointsize = font)#
-par(mgp = c(1.5,.5,0), mar=c(2.4,2.8,0.8,0.2))#
-BRI = apply(X.losses[[1]], 1, mean)#
-LOG = apply(X.losses[[2]], 1, mean)#
-#FULL = apply(X.losses[[3]], 1, mean)#
-plot(BRI~sigma2s, type = "l", col = 1, lwd = 2, ylim = range(BRI, LOG), xlab = expression(paste(sigma^2)), ylab = "Quadratic Loss: hidden process", axes = FALSE)#
-box()#
-axis(1, at = round(sigma2s,1))#
-axis(2)#
-#axis(2, at = signif(seq(min(BRI,LOG), max(BRI,LOG), length = 5)[2:4], 2))#
-lines(LOG~sigma2s, lty = 2, lwd = 2)#
-#lines(FULL~sigma2s, col = 3, lwd = 2)#
-dev.off()#
+library(splines)#
+sizes = sample(1:max.size, l1, replace = TRUE)#
+sizes_scale = scale(sizes)[,1]#
+knots = quantile(sizes_scale, c(0.25, 0.5, 0.75))#
+CX = bs(sizes_scale, knots = knots, degree = 3, intercept = TRUE)#
+CX_sigma = matrix(1, l1, 2)#
+CX_sigma[,2] = sizes_scale#
 #
-setwd("/Users/ville/probability_aggregation/Figures/")#
-#CairoPDF(file = "SyntheticBeta.pdf", width = size, height = size, onefile = TRUE, family = "Times", pointsize = font)#
-pdf(file = "SyntheticBeta.pdf", width = wsize, height = hsize, onefile = TRUE, family = "Times", pointsize = font)#
-par(mgp = c(1.5,.5,0), mar=c(2.4,2.8,0.8,0.2))#
-BRI = apply(X.losses[[1]], 2, mean)#
-LOG = apply(X.losses[[2]], 2, mean)#
-#FULL = apply(X.losses[[3]], 2, mean)#
-plot(BRI~betas, type = "l", col = 1, lwd = 2, ylim = range(BRI, LOG), xlab = expression(paste(beta)), ylab = "Quadratic Loss: hidden process", axes = FALSE)#
-box()#
-axis(1, at = round(betas,1))#
-#axis(2, at = signif(seq(min(BRI,LOG), max(BRI,LOG), length = 5)[2:4], 2))#
-axis(2)#
-lines(LOG~betas, lty = 2, lwd = 2)#
-#lines(FULL~betas, col = 3, lwd = 2)#
-dev.off()#
+gamma_alpha = c(-0.1, -0.2, -0.8, -0.9, -2, -3, -4)#
+gamma_sigma2 = c(1, -1)#
+alphas = rnorm(l1, CX %*% gamma_alpha, sqrt(exp(CX_sigma %*% gamma_sigma2)))#
+l = sum(sizes)#
+beta = 1:27#
+X = matrix(sample(0:1, l*m, replace = TRUE), l, m)#
+t_mean = alphas[rep(1:l1, sizes)] + X %*% beta#
+nu = 8#
+Z = t_mean + rnorm(l) * sqrt(nu/rchisq(l, nu))#
+Y = ifelse(Z >= 0, 1, 0)#
+dataset = data.frame(hosp_id = c(1:l1)[rep(1:l1, sizes)], Y, X, size = sizes[rep(1:l1, sizes)], 0, 0, size = sizes[rep(1:l1, sizes)])#
+save(alphas, file = "alphas.true.RData")#
+save(beta, file = "beta.true.RData")#
+save(gamma_alpha, file = "gamma_alpha.true.RData")#
+save(gamma_sigma2, file = "gamma_sigma2.true.RData")#
+write.table(CX, file = "CX.csv", row.names = FALSE, col.names = FALSE, sep = ",")#
+write.table(dataset, file = "dataset.csv", row.names = FALSE, col.names = FALSE, sep = ",")#
+write.table(knots, file = "knots.csv", row.names = FALSE, col.names = FALSE, sep = ",")
+rpois(50)
+rpois(1, 50)
+rpois(1, 50)
+rpois(1, 50)
+rpois(1, 10)
+rpois(1, 10)
+beta = (1:27)*0.1#
+X = matrix(sample(0:1, l*m, replace = TRUE), l, m)
+beta
+t_mean = alphas[rep(1:l1, sizes)] + X %*% beta#
+nu = 8#
+lambda = rgamma(l, nu/2, 2/nu)
+lambda
+length(lambda)
+Generate synthetic hospital data:#
+l1 = 2000#
+m = 27#
+max.size = 100#
 #
-setwd("/Users/ville/probability_aggregation/Figures/")#
-#CairoPDF(file = "SyntheticK.pdf", width = size, height = size, onefile = TRUE, family = "Times", pointsize = font)#
-pdf(file = "SyntheticK.pdf", width = wsize, height = hsize, onefile = TRUE, family = "Times", pointsize = font)#
-par(mgp = c(1.5,.5,0), mar=c(2.4,2.8,0.8,0.2))#
-BRI = apply(X.losses[[1]], 3, mean)#
-LOG = apply(X.losses[[2]], 3, mean)#
-#FULL = apply(X.losses[[3]], 3, mean)#
-plot(BRI~Ks, type = "l", col = 1, lwd = 2, ylim = range(BRI, LOG), xlab = "K", ylab = "Quadratic Loss: hidden process", axes = FALSE)#
-box()#
-axis(1, at = round(Ks, 1))#
-axis(2)#
-#axis(2, at = signif(seq(min(BRI,LOG), max(BRI,LOG), length = 5)[2:4], 2))#
-lines(LOG~Ks, lwd = 2, lty = 2)#
-#lines(FULL~Ks, col = 3, lwd = 2)#
-dev.off()#
-######## BBBBBBBBBBBB#
-setwd("/Users/ville/probability_aggregation/Figures/")#
-pdf("SyntheticSigma2bias.pdf", width = wsize, height = hsize, onefile = TRUE, family = "Times", pointsize = font)#
-par(mgp = c(1.5,.5,0), mar=c(2.4,2.8,0.8,0.2))#
-BRI = apply(b.losses[[1]], 1, mean)#
-LOG = apply(b.losses[[2]], 1, mean)#
-#FULL = apply(b.losses[[3]], 1, mean)#
-plot(BRI~sigma2s, type = "l", col = 1, lwd = 2, ylim = range(BRI, LOG), xlab = expression(paste(sigma^2)), ylab = "Quadratic Loss: bias vector", axes = FALSE)#
-box()#
-axis(1, at = round(sigma2s, 1))#
-#axis(2, at = signif(seq(min(BRI,LOG), max(BRI,LOG), length = 5)[2:4], 2))#
-axis(2)#
-lines(LOG~sigma2s, lwd = 2, lty = 2)#
-#lines(FULL~sigma2s, col = 3, lwd = 2)#
-dev.off()#
+library(splines)#
+sizes = sample(1:max.size, l1, replace = TRUE)#
+sizes_scale = scale(sizes)[,1]#
+knots = quantile(sizes_scale, c(0.25, 0.5, 0.75))#
+CX = bs(sizes_scale, knots = knots, degree = 3, intercept = TRUE)#
+CX_sigma = matrix(1, l1, 2)#
+CX_sigma[,2] = sizes_scale#
 #
-setwd("/Users/ville/probability_aggregation/Figures/")#
-pdf("SyntheticBetabias.pdf", width = wsize, height = hsize, onefile = TRUE, family = "Times", pointsize = font)#
-par(mgp = c(1.5,.5,0), mar=c(2.4,2.8,0.8,0.2))#
-BRI = apply(b.losses[[1]], 2, mean)#
-LOG = apply(b.losses[[2]], 2, mean)#
-#FULL = apply(b.losses[[3]], 2, mean)#
-plot(BRI~betas, type = "l", col = 1, lwd = 2, ylim = range(BRI, LOG), xlab = expression(paste(beta)), ylab = "Quadratic Loss: bias vector", axes = FALSE)#
-box()#
-axis(1, at = round(betas, 1))#
-axis(2)#
-#axis(2, at = signif(seq(min(BRI,LOG), max(BRI,LOG), length = 5)[2:4], 2))#
-lines(LOG~betas, lwd = 2, lty = 2)#
-#lines(FULL~betas, col = 3, lwd = 2)#
-dev.off()#
+gamma_alpha = c(-0.1, -0.2, -0.8, -0.9, -2, -3, -4)#
+gamma_sigma2 = c(1, -1)#
+alphas = rnorm(l1, CX %*% gamma_alpha, sqrt(exp(CX_sigma %*% gamma_sigma2)))#
+l = sum(sizes)#
+beta = (1:27)*0.1#
+X = matrix(sample(0:1, l*m, replace = TRUE), l, m)#
+t_mean = alphas[rep(1:l1, sizes)] + X %*% beta#
+nu = 8#
+lambda = rgamma(l, nu/2, 2/nu)#
+Z = rnorm(l, t_mean, sqrt(1/lambda))#
+Y = ifelse(Z >= 0, 1, 0)#
+dataset = data.frame(hosp_id = c(1:l1)[rep(1:l1, sizes)], Y, X, size = sizes[rep(1:l1, sizes)], 0, 0, size = sizes[rep(1:l1, sizes)])#
+save(alphas, file = "alphas.true.RData")#
+save(beta, file = "beta.true.RData")#
+save(gamma_alpha, file = "gamma_alpha.true.RData")#
+save(gamma_sigma2, file = "gamma_sigma2.true.RData")#
+write.table(CX, file = "CX.csv", row.names = FALSE, col.names = FALSE, sep = ",")#
+write.table(dataset, file = "dataset.csv", row.names = FALSE, col.names = FALSE, sep = ",")#
+write.table(knots, file = "knots.csv", row.names = FALSE, col.names = FALSE, sep = ",")
+beta
+write.table(alphas, file = "alphas.csv", row.names = FALSE,  col.names = FALSE, sep = ",")
+beta = seq(-10, 10, length = 27)
+beta
+setwd("/Users/ville/Desktop/SYNTHETIC")#
 #
-setwd("/Users/ville/probability_aggregation/Figures/")#
-pdf("SyntheticKbias.pdf", width = wsize, height = hsize, onefile = TRUE, family = "Times", pointsize = font)#
-par(mgp = c(1.5,.5,0), mar=c(2.4,2.8,0.8,0.2))#
-BRI = apply(b.losses[[1]], 3, mean)#
-LOG = apply(b.losses[[2]], 3, mean)#
-#FULL = apply(b.losses[[3]], 3, mean)#
-plot(BRI~Ks, type = "l", col = 1, lwd = 2, ylim = range(BRI, LOG), xlab = "K", ylab = "Quadratic Loss: bias vector", axes = FALSE)#
-box()#
-axis(1, at = round(Ks, 1))#
-axis(2)#
-#axis(2, at = signif(seq(min(BRI,LOG), max(BRI,LOG), length = 5)[2:4], 2))#
-lines(LOG~Ks,  lwd = 2, lty = 2)#
-#lines(FULL~Ks, col = 3, lwd = 2)#
-dev.off()
+## Generate synthetic hospital data:#
+l1 = 2000#
+m = 27#
+max.size = 100#
+#
+library(splines)#
+sizes = sample(1:max.size, l1, replace = TRUE)#
+sizes_scale = scale(sizes)[,1]#
+knots = quantile(sizes_scale, c(0.25, 0.5, 0.75))#
+CX = bs(sizes_scale, knots = knots, degree = 3, intercept = TRUE)#
+CX_sigma = matrix(1, l1, 2)#
+CX_sigma[,2] = sizes_scale#
+#
+gamma_alpha = c(-0.1, -0.2, -0.8, -0.9, -2, -3, -4)#
+gamma_sigma2 = c(1, -1)#
+alphas = rnorm(l1, CX %*% gamma_alpha, sqrt(exp(CX_sigma %*% gamma_sigma2)))#
+l = sum(sizes)#
+beta = seq(-4, 7, length = 27)#
+X = matrix(sample(0:1, l*m, replace = TRUE), l, m)#
+t_mean = alphas[rep(1:l1, sizes)] + X %*% beta#
+nu = 8#
+lambda = rgamma(l, nu/2, 2/nu)#
+Z = rnorm(l, t_mean, sqrt(1/lambda))#
+Y = ifelse(Z >= 0, 1, 0)#
+dataset = data.frame(hosp_id = c(1:l1)[rep(1:l1, sizes)], Y, X, size = sizes[rep(1:l1, sizes)], 0, 0, size = sizes[rep(1:l1, sizes)])#
+save(alphas, file = "alphas.true.RData")#
+save(beta, file = "beta.true.RData")#
+save(gamma_alpha, file = "gamma_alpha.true.RData")#
+save(gamma_sigma2, file = "gamma_sigma2.true.RData")#
+write.table(CX, file = "CX.csv", row.names = FALSE, col.names = FALSE, sep = ",")#
+write.table(dataset, file = "dataset.csv", row.names = FALSE, col.names = FALSE, sep = ",")#
+write.table(knots, file = "knots.csv", row.names = FALSE, col.names = FALSE, sep = ",")#
+write.table(alphas, file = "alphas.csv", row.names = FALSE,  col.names = FALSE, sep = ",")
+beta
+dim(Data)
+dim(dataset)
+betas
+beta
+betas = read.csv(file.choose())
+dim(betas)
+plot(betas[,1])
+plot(betas[,2])
+plot(betas[,3])
+plot(betas[,4])
+plot(betas[,4])
+plot(betas[,5])
+plot(betas[,6])
+plot(betas[,7])
+colMeans(tail(betas, 500))
+beta
 T = 100#
 Ks = c(20, 40, 60, 80, 100) ## Number of problems#
 betas = c(0.5, 0.75, 1, 1/0.75, 1/0.5) ## Expected bias mean: same effect around 1.0#
@@ -2981,6 +2281,12 @@ load("/Users/ville/Desktop/Dynamic_Logit_Model/ExpertAnalysis/b.losses.RData")#
 #b.losses = b.log.losses#
 #
 ######## XXXXXXXXX#
+#
+#betas.x = sapply(betas, function(x) exp(mean(log(x*c(0.5, 0.75, 1, 1/0.75, 1/0.5)))) )#
+#betas.x = sapply(betas, function(x) mean(x*c(0.5, 0.75, 1, 1/0.75, 1/0.5)) )#
+#betas.x = sapply(betas, function(x) sd(x*c(0.5, 0.75, 1, 1/0.75, 1/0.5)) )#
+#betas.x = sapply(betas, function(x) mean(abs(x*c(0.5, 0.75, 1, 1/0.75, 1/0.5)-1)) )#
+betas.x = betas#
 wsize = 2#
 hsize = 1.8#
 font = 8#
@@ -2991,13 +2297,17 @@ pdf("SyntheticSigma2.pdf", width = wsize, height = hsize, family = "Times", poin
 par(mgp = c(1.5,.5,0), mar=c(2.4,2.8,0.8,0.2))#
 BRI = apply(X.losses[[1]], 1, mean)#
 LOG = apply(X.losses[[2]], 1, mean)#
+#EWMLA = apply(X.losses[[3]], 1, mean)#
+EWMA = apply(X.losses[[4]], 1, mean)#
 #FULL = apply(X.losses[[3]], 1, mean)#
-plot(BRI~sigma2s, type = "l", col = 1, lwd = 2, ylim = range(BRI, LOG), xlab = expression(paste(sigma^2)), ylab = "Quadratic Loss: hidden process", axes = FALSE)#
+plot(BRI~sigma2s, type = "l", col = 1, lwd = 2, ylim = range(BRI, LOG, EWMA), xlab = expression(paste(sigma^2)), ylab = "Quadratic Loss", axes = FALSE)#
 box()#
 axis(1, at = round(sigma2s,1))#
 axis(2)#
 #axis(2, at = signif(seq(min(BRI,LOG), max(BRI,LOG), length = 5)[2:4], 2))#
 lines(LOG~sigma2s, lty = 2, lwd = 2)#
+#lines(EWMLA~sigma2s, lty = 2, lwd = 2, col = 2)#
+lines(EWMA~sigma2s, lty = 3, lwd = 2)#
 #lines(FULL~sigma2s, col = 3, lwd = 2)#
 dev.off()#
 #
@@ -3007,13 +2317,17 @@ pdf(file = "SyntheticBeta.pdf", width = wsize, height = hsize, onefile = TRUE, f
 par(mgp = c(1.5,.5,0), mar=c(2.4,2.8,0.8,0.2))#
 BRI = apply(X.losses[[1]], 2, mean)#
 LOG = apply(X.losses[[2]], 2, mean)#
+#EWMLA = apply(X.losses[[3]], 2, mean)#
+EWMA = apply(X.losses[[4]], 2, mean)#
 #FULL = apply(X.losses[[3]], 2, mean)#
-plot(BRI~betas, type = "l", col = 1, lwd = 2, ylim = range(BRI, LOG), xlab = expression(paste(beta)), ylab = "Quadratic Loss: hidden process", axes = FALSE)#
+plot(BRI~betas.x, type = "l", col = 1, lwd = 2, ylim =range(BRI, LOG, EWMA), xlab = expression(paste(beta)), ylab = "Quadratic Loss", axes = FALSE)#
 box()#
-axis(1, at = round(betas,1))#
+axis(1, at = round(betas.x,1))#
 #axis(2, at = signif(seq(min(BRI,LOG), max(BRI,LOG), length = 5)[2:4], 2))#
 axis(2)#
-lines(LOG~betas, lty = 2, lwd = 2)#
+lines(LOG~betas.x, lty = 2, lwd = 2)#
+#lines(EWMLA~betas.x, lty = 2, lwd = 2, col = 2)#
+lines(EWMA~betas.x, lty = 3, lwd = 2)#
 #lines(FULL~betas, col = 3, lwd = 2)#
 dev.off()#
 #
@@ -3023,13 +2337,17 @@ pdf(file = "SyntheticK.pdf", width = wsize, height = hsize, onefile = TRUE, fami
 par(mgp = c(1.5,.5,0), mar=c(2.4,2.8,0.8,0.2))#
 BRI = apply(X.losses[[1]], 3, mean)#
 LOG = apply(X.losses[[2]], 3, mean)#
+#EWMLA = apply(X.losses[[3]], 3, mean)#
+EWMA = apply(X.losses[[4]], 3, mean)#
 #FULL = apply(X.losses[[3]], 3, mean)#
-plot(BRI~Ks, type = "l", col = 1, lwd = 2, ylim = range(BRI, LOG), xlab = "K", ylab = "Quadratic Loss: hidden process", axes = FALSE)#
+plot(BRI~Ks, type = "l", col = 1, lwd = 2, ylim = range(BRI, LOG, EWMA), xlab = "K", ylab = "Quadratic Loss", axes = FALSE)#
 box()#
 axis(1, at = round(Ks, 1))#
 axis(2)#
 #axis(2, at = signif(seq(min(BRI,LOG), max(BRI,LOG), length = 5)[2:4], 2))#
 lines(LOG~Ks, lwd = 2, lty = 2)#
+#lines(EWMLA~Ks, lty = 2, lwd = 2, col = 2)#
+lines(EWMA~Ks, lty = 3, lwd = 2)#
 #lines(FULL~Ks, col = 3, lwd = 2)#
 dev.off()#
 ######## BBBBBBBBBBBB#
@@ -3039,7 +2357,7 @@ par(mgp = c(1.5,.5,0), mar=c(2.4,2.8,0.8,0.2))#
 BRI = apply(b.losses[[1]], 1, mean)#
 LOG = apply(b.losses[[2]], 1, mean)#
 #FULL = apply(b.losses[[3]], 1, mean)#
-plot(BRI~sigma2s, type = "l", col = 1, lwd = 2, ylim = range(BRI, LOG), xlab = expression(paste(sigma^2)), ylab = "Quadratic Loss: bias vector", axes = FALSE)#
+plot(BRI~sigma2s, type = "l", col = 1, lwd = 2, ylim = range(BRI, LOG), xlab = expression(paste(sigma^2)), ylab = "Quadratic Loss", axes = FALSE)#
 box()#
 axis(1, at = round(sigma2s, 1))#
 #axis(2, at = signif(seq(min(BRI,LOG), max(BRI,LOG), length = 5)[2:4], 2))#
@@ -3054,12 +2372,12 @@ par(mgp = c(1.5,.5,0), mar=c(2.4,2.8,0.8,0.2))#
 BRI = apply(b.losses[[1]], 2, mean)#
 LOG = apply(b.losses[[2]], 2, mean)#
 #FULL = apply(b.losses[[3]], 2, mean)#
-plot(BRI~betas, type = "l", col = 1, lwd = 2, ylim = range(BRI, LOG), xlab = expression(paste(beta)), ylab = "Quadratic Loss: bias vector", axes = FALSE)#
+plot(BRI~betas.x, type = "l", col = 1, lwd = 2, ylim = range(BRI, LOG), xlab = expression(paste(beta)), ylab = "Quadratic Loss", axes = FALSE)#
 box()#
-axis(1, at = round(betas, 1))#
+axis(1, at = round(betas.x, 1))#
 axis(2)#
 #axis(2, at = signif(seq(min(BRI,LOG), max(BRI,LOG), length = 5)[2:4], 2))#
-lines(LOG~betas, lwd = 2, lty = 2)#
+lines(LOG~betas.x, lwd = 2, lty = 2)#
 #lines(FULL~betas, col = 3, lwd = 2)#
 dev.off()#
 #
@@ -3069,7 +2387,7 @@ par(mgp = c(1.5,.5,0), mar=c(2.4,2.8,0.8,0.2))#
 BRI = apply(b.losses[[1]], 3, mean)#
 LOG = apply(b.losses[[2]], 3, mean)#
 #FULL = apply(b.losses[[3]], 3, mean)#
-plot(BRI~Ks, type = "l", col = 1, lwd = 2, ylim = range(BRI, LOG), xlab = "K", ylab = "Quadratic Loss: bias vector", axes = FALSE)#
+plot(BRI~Ks, type = "l", col = 1, lwd = 2, ylim = range(BRI, LOG), xlab = "K", ylab = "Quadratic Loss", axes = FALSE)#
 box()#
 axis(1, at = round(Ks, 1))#
 axis(2)#
@@ -3077,332 +2395,3 @@ axis(2)#
 lines(LOG~Ks,  lwd = 2, lty = 2)#
 #lines(FULL~Ks, col = 3, lwd = 2)#
 dev.off()
-T = 100#
-Ks = c(20, 40, 60, 80, 100) ## Number of problems#
-betas = c(0.5, 0.75, 1, 1/0.75, 1/0.5) ## Expected bias mean: same effect around 1.0#
-sigma2s = c(0.5, 1.0, 1.5, 2.0, 2.5)#
-load("/Users/ville/Desktop/Dynamic_Logit_Model/ExpertAnalysis/X.losses.RData")#
-load("/Users/ville/Desktop/Dynamic_Logit_Model/ExpertAnalysis/b.losses.RData")#
-#
-#load("/Users/ville/Desktop/Dynamic_Logit_Model/ExpertAnalysis/X.log.losses.RData")#
-#load("/Users/ville/Desktop/Dynamic_Logit_Model/ExpertAnalysis/b.log.losses.RData")#
-#X.losses = X.log.losses#
-#b.losses = b.log.losses#
-#
-######## XXXXXXXXX#
-wsize = 2#
-hsize = 1.8#
-font = 8#
-#
-setwd("/Users/ville/probability_aggregation/Figures/")#
-#CairoPDF(file = "SyntheticSigma2.pdf", width = size, height = size, onefile = TRUE, family = "Times", pointsize = font)#
-pdf("SyntheticSigma2.pdf", width = wsize, height = hsize, family = "Times", pointsize = font)#
-par(mgp = c(1.5,.5,0), mar=c(2.4,2.8,0.8,0.2))#
-BRI = apply(X.losses[[1]], 1, mean)#
-LOG = apply(X.losses[[2]], 1, mean)#
-#FULL = apply(X.losses[[3]], 1, mean)#
-plot(BRI~sigma2s, type = "l", col = 1, lwd = 2, ylim = range(BRI, LOG), xlab = expression(paste(sigma^2)), ylab = "Quadratic Loss: hidden process", axes = FALSE)#
-box()#
-axis(1, at = round(sigma2s,1))#
-axis(2)#
-#axis(2, at = signif(seq(min(BRI,LOG), max(BRI,LOG), length = 5)[2:4], 2))#
-lines(LOG~sigma2s, lty = 2, lwd = 2)#
-#lines(FULL~sigma2s, col = 3, lwd = 2)#
-dev.off()#
-#
-setwd("/Users/ville/probability_aggregation/Figures/")#
-#CairoPDF(file = "SyntheticBeta.pdf", width = size, height = size, onefile = TRUE, family = "Times", pointsize = font)#
-pdf(file = "SyntheticBeta.pdf", width = wsize, height = hsize, onefile = TRUE, family = "Times", pointsize = font)#
-par(mgp = c(1.5,.5,0), mar=c(2.4,2.8,0.8,0.2))#
-BRI = apply(X.losses[[1]], 2, mean)#
-LOG = apply(X.losses[[2]], 2, mean)#
-#FULL = apply(X.losses[[3]], 2, mean)#
-plot(BRI~betas, type = "l", col = 1, lwd = 2, ylim = range(BRI, LOG), xlab = expression(paste(beta)), ylab = "Quadratic Loss: hidden process", axes = FALSE)#
-box()#
-axis(1, at = round(betas,1))#
-#axis(2, at = signif(seq(min(BRI,LOG), max(BRI,LOG), length = 5)[2:4], 2))#
-axis(2)#
-lines(LOG~betas, lty = 2, lwd = 2)#
-#lines(FULL~betas, col = 3, lwd = 2)#
-dev.off()#
-#
-setwd("/Users/ville/probability_aggregation/Figures/")#
-#CairoPDF(file = "SyntheticK.pdf", width = size, height = size, onefile = TRUE, family = "Times", pointsize = font)#
-pdf(file = "SyntheticK.pdf", width = wsize, height = hsize, onefile = TRUE, family = "Times", pointsize = font)#
-par(mgp = c(1.5,.5,0), mar=c(2.4,2.8,0.8,0.2))#
-BRI = apply(X.losses[[1]], 3, mean)#
-LOG = apply(X.losses[[2]], 3, mean)#
-#FULL = apply(X.losses[[3]], 3, mean)#
-plot(BRI~Ks, type = "l", col = 1, lwd = 2, ylim = range(BRI, LOG), xlab = "K", ylab = "Quadratic Loss: hidden process", axes = FALSE)#
-box()#
-axis(1, at = round(Ks, 1))#
-axis(2)#
-#axis(2, at = signif(seq(min(BRI,LOG), max(BRI,LOG), length = 5)[2:4], 2))#
-lines(LOG~Ks, lwd = 2, lty = 2)#
-#lines(FULL~Ks, col = 3, lwd = 2)#
-dev.off()#
-######## BBBBBBBBBBBB#
-setwd("/Users/ville/probability_aggregation/Figures/")#
-pdf("SyntheticSigma2bias.pdf", width = wsize, height = hsize, onefile = TRUE, family = "Times", pointsize = font)#
-par(mgp = c(1.5,.5,0), mar=c(2.4,2.8,0.8,0.2))#
-BRI = apply(b.losses[[1]], 1, mean)#
-LOG = apply(b.losses[[2]], 1, mean)#
-#FULL = apply(b.losses[[3]], 1, mean)#
-plot(BRI~sigma2s, type = "l", col = 1, lwd = 2, ylim = range(BRI, LOG), xlab = expression(paste(sigma^2)), ylab = "Quadratic Loss: bias vector", axes = FALSE)#
-box()#
-axis(1, at = round(sigma2s, 1))#
-#axis(2, at = signif(seq(min(BRI,LOG), max(BRI,LOG), length = 5)[2:4], 2))#
-axis(2)#
-lines(LOG~sigma2s, lwd = 2, lty = 2)#
-#lines(FULL~sigma2s, col = 3, lwd = 2)#
-dev.off()#
-#
-setwd("/Users/ville/probability_aggregation/Figures/")#
-pdf("SyntheticBetabias.pdf", width = wsize, height = hsize, onefile = TRUE, family = "Times", pointsize = font)#
-par(mgp = c(1.5,.5,0), mar=c(2.4,2.8,0.8,0.2))#
-BRI = apply(b.losses[[1]], 2, mean)#
-LOG = apply(b.losses[[2]], 2, mean)#
-#FULL = apply(b.losses[[3]], 2, mean)#
-plot(BRI~betas, type = "l", col = 1, lwd = 2, ylim = range(BRI, LOG), xlab = expression(paste(beta)), ylab = "Quadratic Loss: bias vector", axes = FALSE)#
-box()#
-axis(1, at = round(betas, 1))#
-axis(2)#
-#axis(2, at = signif(seq(min(BRI,LOG), max(BRI,LOG), length = 5)[2:4], 2))#
-lines(LOG~betas, lwd = 2, lty = 2)#
-#lines(FULL~betas, col = 3, lwd = 2)#
-dev.off()#
-#
-setwd("/Users/ville/probability_aggregation/Figures/")#
-pdf("SyntheticKbias.pdf", width = wsize, height = hsize, onefile = TRUE, family = "Times", pointsize = font)#
-par(mgp = c(1.5,.5,0), mar=c(2.4,2.8,0.8,0.2))#
-BRI = apply(b.losses[[1]], 3, mean)#
-LOG = apply(b.losses[[2]], 3, mean)#
-#FULL = apply(b.losses[[3]], 3, mean)#
-plot(BRI~Ks, type = "l", col = 1, lwd = 2, ylim = range(BRI, LOG), xlab = "K", ylab = "Quadratic Loss: bias vector", axes = FALSE)#
-box()#
-axis(1, at = round(Ks, 1))#
-axis(2)#
-#axis(2, at = signif(seq(min(BRI,LOG), max(BRI,LOG), length = 5)[2:4], 2))#
-lines(LOG~Ks,  lwd = 2, lty = 2)#
-#lines(FULL~Ks, col = 3, lwd = 2)#
-dev.off()
-T = 100#
-Ks = c(20, 40, 60, 80, 100) ## Number of problems#
-betas = c(0.5, 0.75, 1, 1/0.75, 1/0.5) ## Expected bias mean: same effect around 1.0#
-sigma2s = c(0.5, 1.0, 1.5, 2.0, 2.5)#
-load("/Users/ville/Desktop/Dynamic_Logit_Model/ExpertAnalysis/X.losses.RData")#
-load("/Users/ville/Desktop/Dynamic_Logit_Model/ExpertAnalysis/b.losses.RData")#
-#
-#load("/Users/ville/Desktop/Dynamic_Logit_Model/ExpertAnalysis/X.log.losses.RData")#
-#load("/Users/ville/Desktop/Dynamic_Logit_Model/ExpertAnalysis/b.log.losses.RData")#
-#X.losses = X.log.losses#
-#b.losses = b.log.losses#
-#
-######## XXXXXXXXX#
-wsize = 2#
-hsize = 1.8#
-font = 8#
-#
-setwd("/Users/ville/probability_aggregation/Figures/")#
-#CairoPDF(file = "SyntheticSigma2.pdf", width = size, height = size, onefile = TRUE, family = "Times", pointsize = font)#
-pdf("SyntheticSigma2.pdf", width = wsize, height = hsize, family = "Times", pointsize = font)#
-par(mgp = c(1.5,.5,0), mar=c(2.4,2.8,0.8,0.2))#
-BRI = apply(X.losses[[1]], 1, mean)#
-LOG = apply(X.losses[[2]], 1, mean)#
-#FULL = apply(X.losses[[3]], 1, mean)#
-plot(BRI~sigma2s, type = "l", col = 1, lwd = 2, ylim = range(BRI, LOG), xlab = expression(paste(sigma^2)), ylab = "Quadratic Loss: hidden process", axes = FALSE)#
-box()#
-axis(1, at = round(sigma2s,1))#
-axis(2)#
-#axis(2, at = signif(seq(min(BRI,LOG), max(BRI,LOG), length = 5)[2:4], 2))#
-lines(LOG~sigma2s, lty = 2, lwd = 2)#
-#lines(FULL~sigma2s, col = 3, lwd = 2)#
-dev.off()#
-#
-setwd("/Users/ville/probability_aggregation/Figures/")#
-#CairoPDF(file = "SyntheticBeta.pdf", width = size, height = size, onefile = TRUE, family = "Times", pointsize = font)#
-pdf(file = "SyntheticBeta.pdf", width = wsize, height = hsize, onefile = TRUE, family = "Times", pointsize = font)#
-par(mgp = c(1.5,.5,0), mar=c(2.4,2.8,0.8,0.2))#
-BRI = apply(X.losses[[1]], 2, mean)#
-LOG = apply(X.losses[[2]], 2, mean)#
-#FULL = apply(X.losses[[3]], 2, mean)#
-plot(BRI~betas, type = "l", col = 1, lwd = 2, ylim = range(BRI, LOG), xlab = expression(paste(beta)), ylab = "Quadratic Loss: hidden process", axes = FALSE)#
-box()#
-axis(1, at = round(betas,1))#
-#axis(2, at = signif(seq(min(BRI,LOG), max(BRI,LOG), length = 5)[2:4], 2))#
-axis(2)#
-lines(LOG~betas, lty = 2, lwd = 2)#
-#lines(FULL~betas, col = 3, lwd = 2)#
-dev.off()#
-#
-setwd("/Users/ville/probability_aggregation/Figures/")#
-#CairoPDF(file = "SyntheticK.pdf", width = size, height = size, onefile = TRUE, family = "Times", pointsize = font)#
-pdf(file = "SyntheticK.pdf", width = wsize, height = hsize, onefile = TRUE, family = "Times", pointsize = font)#
-par(mgp = c(1.5,.5,0), mar=c(2.4,2.8,0.8,0.2))#
-BRI = apply(X.losses[[1]], 3, mean)#
-LOG = apply(X.losses[[2]], 3, mean)#
-#FULL = apply(X.losses[[3]], 3, mean)#
-plot(BRI~Ks, type = "l", col = 1, lwd = 2, ylim = range(BRI, LOG), xlab = "K", ylab = "Quadratic Loss: hidden process", axes = FALSE)#
-box()#
-axis(1, at = round(Ks, 1))#
-axis(2)#
-#axis(2, at = signif(seq(min(BRI,LOG), max(BRI,LOG), length = 5)[2:4], 2))#
-lines(LOG~Ks, lwd = 2, lty = 2)#
-#lines(FULL~Ks, col = 3, lwd = 2)#
-dev.off()#
-######## BBBBBBBBBBBB#
-setwd("/Users/ville/probability_aggregation/Figures/")#
-pdf("SyntheticSigma2bias.pdf", width = wsize, height = hsize, onefile = TRUE, family = "Times", pointsize = font)#
-par(mgp = c(1.5,.5,0), mar=c(2.4,2.8,0.8,0.2))#
-BRI = apply(b.losses[[1]], 1, mean)#
-LOG = apply(b.losses[[2]], 1, mean)#
-#FULL = apply(b.losses[[3]], 1, mean)#
-plot(BRI~sigma2s, type = "l", col = 1, lwd = 2, ylim = range(BRI, LOG), xlab = expression(paste(sigma^2)), ylab = "Quadratic Loss: bias vector", axes = FALSE)#
-box()#
-axis(1, at = round(sigma2s, 1))#
-#axis(2, at = signif(seq(min(BRI,LOG), max(BRI,LOG), length = 5)[2:4], 2))#
-axis(2)#
-lines(LOG~sigma2s, lwd = 2, lty = 2)#
-#lines(FULL~sigma2s, col = 3, lwd = 2)#
-dev.off()#
-#
-setwd("/Users/ville/probability_aggregation/Figures/")#
-pdf("SyntheticBetabias.pdf", width = wsize, height = hsize, onefile = TRUE, family = "Times", pointsize = font)#
-par(mgp = c(1.5,.5,0), mar=c(2.4,2.8,0.8,0.2))#
-BRI = apply(b.losses[[1]], 2, mean)#
-LOG = apply(b.losses[[2]], 2, mean)#
-#FULL = apply(b.losses[[3]], 2, mean)#
-plot(BRI~betas, type = "l", col = 1, lwd = 2, ylim = range(BRI, LOG), xlab = expression(paste(beta)), ylab = "Quadratic Loss: bias vector", axes = FALSE)#
-box()#
-axis(1, at = round(betas, 1))#
-axis(2)#
-#axis(2, at = signif(seq(min(BRI,LOG), max(BRI,LOG), length = 5)[2:4], 2))#
-lines(LOG~betas, lwd = 2, lty = 2)#
-#lines(FULL~betas, col = 3, lwd = 2)#
-dev.off()#
-#
-setwd("/Users/ville/probability_aggregation/Figures/")#
-pdf("SyntheticKbias.pdf", width = wsize, height = hsize, onefile = TRUE, family = "Times", pointsize = font)#
-par(mgp = c(1.5,.5,0), mar=c(2.4,2.8,0.8,0.2))#
-BRI = apply(b.losses[[1]], 3, mean)#
-LOG = apply(b.losses[[2]], 3, mean)#
-#FULL = apply(b.losses[[3]], 3, mean)#
-plot(BRI~Ks, type = "l", col = 1, lwd = 2, ylim = range(BRI, LOG), xlab = "K", ylab = "Quadratic Loss: bias vector", axes = FALSE)#
-box()#
-axis(1, at = round(Ks, 1))#
-axis(2)#
-#axis(2, at = signif(seq(min(BRI,LOG), max(BRI,LOG), length = 5)[2:4], 2))#
-lines(LOG~Ks,  lwd = 2, lty = 2)#
-#lines(FULL~Ks, col = 3, lwd = 2)#
-dev.off()
-T = 100#
-Ks = c(20, 40, 60, 80, 100) ## Number of problems#
-betas = c(0.5, 0.75, 1, 1/0.75, 1/0.5) ## Expected bias mean: same effect around 1.0#
-sigma2s = c(0.5, 1.0, 1.5, 2.0, 2.5)#
-load("/Users/ville/Desktop/Dynamic_Logit_Model/ExpertAnalysis/X.losses.RData")#
-load("/Users/ville/Desktop/Dynamic_Logit_Model/ExpertAnalysis/b.losses.RData")#
-#
-#load("/Users/ville/Desktop/Dynamic_Logit_Model/ExpertAnalysis/X.log.losses.RData")#
-#load("/Users/ville/Desktop/Dynamic_Logit_Model/ExpertAnalysis/b.log.losses.RData")#
-#X.losses = X.log.losses#
-#b.losses = b.log.losses#
-#
-######## XXXXXXXXX#
-wsize = 2#
-hsize = 1.8#
-font = 8#
-#
-setwd("/Users/ville/probability_aggregation/Figures/")#
-#CairoPDF(file = "SyntheticSigma2.pdf", width = size, height = size, onefile = TRUE, family = "Times", pointsize = font)#
-pdf("SyntheticSigma2.pdf", width = wsize, height = hsize, family = "Times", pointsize = font)#
-par(mgp = c(1.5,.5,0), mar=c(2.4,2.8,0.8,0.2))#
-BRI = apply(X.losses[[1]], 1, mean)#
-LOG = apply(X.losses[[2]], 1, mean)#
-#FULL = apply(X.losses[[3]], 1, mean)#
-plot(BRI~sigma2s, type = "l", col = 1, lwd = 2, ylim = range(BRI, LOG), xlab = expression(paste(sigma^2)), ylab = "Quadratic Loss: hidden process", axes = FALSE)#
-box()#
-axis(1, at = round(sigma2s,1))#
-axis(2)#
-#axis(2, at = signif(seq(min(BRI,LOG), max(BRI,LOG), length = 5)[2:4], 2))#
-lines(LOG~sigma2s, lty = 2, lwd = 2)#
-#lines(FULL~sigma2s, col = 3, lwd = 2)#
-dev.off()#
-#
-setwd("/Users/ville/probability_aggregation/Figures/")#
-#CairoPDF(file = "SyntheticBeta.pdf", width = size, height = size, onefile = TRUE, family = "Times", pointsize = font)#
-pdf(file = "SyntheticBeta.pdf", width = wsize, height = hsize, onefile = TRUE, family = "Times", pointsize = font)#
-par(mgp = c(1.5,.5,0), mar=c(2.4,2.8,0.8,0.2))#
-BRI = apply(X.losses[[1]], 2, mean)#
-LOG = apply(X.losses[[2]], 2, mean)#
-#FULL = apply(X.losses[[3]], 2, mean)#
-plot(BRI~betas, type = "l", col = 1, lwd = 2, ylim = range(BRI, LOG), xlab = expression(paste(beta)), ylab = "Quadratic Loss: hidden process", axes = FALSE)#
-box()#
-axis(1, at = round(betas,1))#
-#axis(2, at = signif(seq(min(BRI,LOG), max(BRI,LOG), length = 5)[2:4], 2))#
-axis(2)#
-lines(LOG~betas, lty = 2, lwd = 2)#
-#lines(FULL~betas, col = 3, lwd = 2)#
-dev.off()#
-#
-setwd("/Users/ville/probability_aggregation/Figures/")#
-#CairoPDF(file = "SyntheticK.pdf", width = size, height = size, onefile = TRUE, family = "Times", pointsize = font)#
-pdf(file = "SyntheticK.pdf", width = wsize, height = hsize, onefile = TRUE, family = "Times", pointsize = font)#
-par(mgp = c(1.5,.5,0), mar=c(2.4,2.8,0.8,0.2))#
-BRI = apply(X.losses[[1]], 3, mean)#
-LOG = apply(X.losses[[2]], 3, mean)#
-#FULL = apply(X.losses[[3]], 3, mean)#
-plot(BRI~Ks, type = "l", col = 1, lwd = 2, ylim = range(BRI, LOG), xlab = "K", ylab = "Quadratic Loss: hidden process", axes = FALSE)#
-box()#
-axis(1, at = round(Ks, 1))#
-axis(2)#
-#axis(2, at = signif(seq(min(BRI,LOG), max(BRI,LOG), length = 5)[2:4], 2))#
-lines(LOG~Ks, lwd = 2, lty = 2)#
-#lines(FULL~Ks, col = 3, lwd = 2)#
-dev.off()#
-######## BBBBBBBBBBBB#
-setwd("/Users/ville/probability_aggregation/Figures/")#
-pdf("SyntheticSigma2bias.pdf", width = wsize, height = hsize, onefile = TRUE, family = "Times", pointsize = font)#
-par(mgp = c(1.5,.5,0), mar=c(2.4,2.8,0.8,0.2))#
-BRI = apply(b.losses[[1]], 1, mean)#
-LOG = apply(b.losses[[2]], 1, mean)#
-#FULL = apply(b.losses[[3]], 1, mean)#
-plot(BRI~sigma2s, type = "l", col = 1, lwd = 2, ylim = range(BRI, LOG), xlab = expression(paste(sigma^2)), ylab = "Quadratic Loss: bias vector", axes = FALSE)#
-box()#
-axis(1, at = round(sigma2s, 1))#
-#axis(2, at = signif(seq(min(BRI,LOG), max(BRI,LOG), length = 5)[2:4], 2))#
-axis(2)#
-lines(LOG~sigma2s, lwd = 2, lty = 2)#
-#lines(FULL~sigma2s, col = 3, lwd = 2)#
-dev.off()#
-#
-setwd("/Users/ville/probability_aggregation/Figures/")#
-pdf("SyntheticBetabias.pdf", width = wsize, height = hsize, onefile = TRUE, family = "Times", pointsize = font)#
-par(mgp = c(1.5,.5,0), mar=c(2.4,2.8,0.8,0.2))#
-BRI = apply(b.losses[[1]], 2, mean)#
-LOG = apply(b.losses[[2]], 2, mean)#
-#FULL = apply(b.losses[[3]], 2, mean)#
-plot(BRI~betas, type = "l", col = 1, lwd = 2, ylim = range(BRI, LOG), xlab = expression(paste(beta)), ylab = "Quadratic Loss: bias vector", axes = FALSE)#
-box()#
-axis(1, at = round(betas, 1))#
-axis(2)#
-#axis(2, at = signif(seq(min(BRI,LOG), max(BRI,LOG), length = 5)[2:4], 2))#
-lines(LOG~betas, lwd = 2, lty = 2)#
-#lines(FULL~betas, col = 3, lwd = 2)#
-dev.off()#
-#
-setwd("/Users/ville/probability_aggregation/Figures/")#
-pdf("SyntheticKbias.pdf", width = wsize, height = hsize, onefile = TRUE, family = "Times", pointsize = font)#
-par(mgp = c(1.5,.5,0), mar=c(2.4,2.8,0.8,0.2))#
-BRI = apply(b.losses[[1]], 3, mean)#
-LOG = apply(b.losses[[2]], 3, mean)#
-#FULL = apply(b.losses[[3]], 3, mean)#
-plot(BRI~Ks, type = "l", col = 1, lwd = 2, ylim = range(BRI, LOG), xlab = "K", ylab = "Quadratic Loss: bias vector", axes = FALSE)#
-box()#
-axis(1, at = round(Ks, 1))#
-axis(2)#
-#axis(2, at = signif(seq(min(BRI,LOG), max(BRI,LOG), length = 5)[2:4], 2))#
-lines(LOG~Ks,  lwd = 2, lty = 2)#
-#lines(FULL~Ks, col = 3, lwd = 2)#
-dev.off()
-data.matrix
-?data.matrix
