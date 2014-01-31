@@ -1,0 +1,275 @@
+\documentclass[aoas, preprint]{imsart}
+
+%\long\def\authornote#1{%
+%        \leavevmode\unskip\raisebox{-3.5pt}{\rlap{$\scriptstyle\diamond$}}%
+%        \marginpar{\raggedright\hbadness=10000
+%        \def\baselinestretch{0.8}\tiny
+%        \it #1\par}}
+%\newcommand{\ville}[1]{\authornote{NOTE TO SELF: #1}}
+
+%\usepackage{amsthm,amsmath,natbib}
+%\RequirePackage[colorlinks,citecolor=blue,urlcolor=blue]{hyperref}
+
+% provide arXiv number if available:
+%\arxiv{arXiv:0000.0000}
+
+% put your definitions there:
+\startlocaldefs
+\endlocaldefs
+
+
+\newcommand{\argmin}{\operatornamewithlimits{arg\ min}}
+\newcommand{\argmax}{\operatornamewithlimits{arg\ max}}
+\newcommand\ville[1]{{\color{red} #1 }}
+%    \mymarginpar{\raggedright\hbadness=10000\tiny\it #1\par}}
+
+%\usepackage[section]{placeins}
+%\usepackage{amsmath} 
+\usepackage{times}
+\usepackage{amsmath,amsthm,amssymb}
+\usepackage{fancyhdr}
+\usepackage{moreverb}
+\usepackage{graphicx}
+\usepackage{amssymb}
+\usepackage{array}
+\usepackage{url}
+\usepackage{multirow} 
+\usepackage[boxed, section]{algorithm}
+%\usepackage{algorithm}
+%\usepackage{algorithmic}
+%\usepackage{cite}
+\usepackage{multirow} 
+\usepackage{rotating}
+%\usepackage[margin=1.2in]{geometry}
+%\usepackage{geometry}
+%\usepackage{fix-cm}
+\usepackage{subfigure}
+\usepackage{bbm}
+\usepackage{color} 
+%\usepackage{natbib}
+\usepackage{xcolor,xparse}
+\usepackage{xparse}
+%\usepackage{setspace}
+%\usepackage{booktabs}
+%\usepackage{subfig}
+%\usepackage{caption, subcaption}
+\usepackage[OT1]{fontenc}
+\usepackage[colorlinks,citecolor=blue,urlcolor=blue]{hyperref}
+\usepackage{natbib}
+\usepackage{algorithmicx}
+\usepackage{algpseudocode}
+
+\startlocaldefs
+\numberwithin{equation}{section}
+\theoremstyle{plain}
+\newtheorem{thm}{Theorem}[section]
+\endlocaldefs
+
+
+%\renewcommand{\baselinestretch}{1.2}
+%\setlength{\topmargin}{-0.3in}
+%\setlength{\textwidth}{6in}
+%\setlength{\textheight}{8.5in}
+%\setlength{\oddsidemargin}{0.25in}
+%\setlength{\evensidemargin}{0.25in}
+%\raggedbottom
+
+%\doublespacing
+
+\allowdisplaybreaks
+
+% Math Macros.  It would be better to use the AMS LaTeX package,
+% including the Bbb fonts, but I'm showing how to get by with the most
+% primitive version of LaTeX.  I follow the naming convention to begin
+% user-defined macro and variable names with the prefix "my" to make it
+% easier to distiguish user-defined macros from LaTeX commands.
+%
+\newtheorem{mydef}{Definition}
+\newcommand{\myN}{\hbox{N\hspace*{-.9em}I\hspace*{.4em}}}
+\newcommand{\myZ}{\hbox{Z}^+}
+\newcommand{\R}{\mathbb{R}}
+\renewcommand{\P}{\mathbb{P}}
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\logit}{\text{logit}}
+\NewDocumentCommand{\framecolorbox}{oommm}
+ {% #1 = width (optional)
+  % #2 = inner alignment (optional)
+  % #3 = frame color
+  % #4 = background color
+  % #5 = text
+  \IfValueTF{#1}
+   {%
+    \IfValueTF{#2}
+     {\fcolorbox{#3}{#4}{\makebox[#1][#2]{#5}}}
+     {\fcolorbox{#3}{#4}{\makebox[#1]{#5}}}%
+   }
+   {\fcolorbox{#3}{#4}{#5}}%
+ }
+
+\newcommand{\myfunction}[3]
+{${#1} : {#2} \rightarrow {#3}$ }
+
+\newcommand{\myzrfunction}[1]
+{\myfunction{#1}{{\myZ}}{{\myR}}}
+
+\newcommand{\mysection}[1]
+{\noindent {\bf {#1}}}
+
+%%%%%% Begin document with header and title %%%%%%%%%
+
+\begin{document}
+\begin{frontmatter}
+% "Title of the paper"
+\title{Probability Aggregation in Time-Series: Dynamic Hierarchical Modeling of Sparse Expert Beliefs: Online Supplement}
+\runtitle{Probability Aggregation in Time-Series: Online Supplement}
+
+% indicate corresponding author with \corref{}
+% \author{\fnms{John} \snm{Smith}\corref{}\ead[label=e1]{smith@foo.com}\thanksref{t1}}
+% \thankstext{t1}{Thanks to somebody} 
+% \address{line 1\\ line 2\\ printead{e1}}
+% \affiliation{Some University}
+
+
+%\begin{aug}
+%  \author{\fnms{First}  \snm{Author}\corref{}\thanksref{t2}\ead[label=e1]{first@somewhere.com}},
+%  \author{\fnms{Second} \snm{Author}\ead[label=e2]{second@somewhere.com}}
+%  \and
+%  \author{\fnms{Third}  \snm{Author}%
+%  \ead[label=e3]{third@somewhere.com}%
+%  \ead[label=u1,url]{http://www.foo.com}}
+%
+%  \thankstext{t2}{Footnote to the first author with the `thankstext' command.}
+%
+%  \runauthor{F. Author et al.}
+%
+%  \affiliation{Some University and Another University}
+%
+%  \address{Address of the First and Second authors,\\ 
+%          \printead{e1,e2}}
+%
+%  \address{Address of the Third author,\\
+%          \printead{e3,u1}}
+%
+%\end{aug}
+
+\begin{aug}
+\author{\fnms{Ville A.} \snm{Satop\"a\"a}\corref{}\ead[label=e1]{satopaa@wharton.upenn.edu}},
+\author{\fnms{Shane T.} \snm{Jensen}\ead[label=e3]{stjensen@wharton.upenn.edu}},
+\author{\fnms{Barbara A.} \snm{Mellers}\ead[label=e4]{mellers@wharton.upenn.edu}},
+\author{\fnms{Philip E.} \snm{Tetlock}\ead[label=e5]{tetlock@wharton.upenn.edu}},
+\and
+\author{\fnms{Lyle H.} \snm{Ungar}\ead[label=e2]{ungar@cis.upenn.edu}}
+
+\runauthor{Satop\"a\"a et al.}
+
+% \affiliation{Department of Statistics, The Wharton School of the University of Pennsylvania\\   \printead{e1,e3}}
+% \affiliation{Department of Psychology, University of Pennsylvania\\ \printead{e4,e5}}
+% \affiliation{Department of Computer and Information Science, University of Pennsylvania\\ \printead{e2}}
+% \address{Philadelphia, PA 19104- 6340, USA\\  \printead{e1}}
+%  
+\end{aug}
+
+
+\end{frontmatter}
+
+
+This supplementary material accompanies the paper ``Probability Aggregation in Time-Series: Dynamic Hierarchical Modeling of Sparse Expert Beliefs''. It provides a technical description of the sampling step of the   SAC-algorithm.
+
+\section{Technical Details of the Sampling Step}
+\label{appendix}
+
+The Gibbs sampler (\citet{geman1984stochastic}) iteratively samples all the unknown parameters from their full-conditional posterior distributions one block of parameters at a time. Given that this is performed under the constraint $b_3 = 1$ to ensure model identifiability, the constrained parameter estimates should be denoted with a trailing $(1)$ to maintain consistency with earlier notation. For instance, the constrained estimate of $\gamma_k$ should be denoted by $\hat{\gamma}_k(1)$ while the unconstrained estimate is denoted by $\hat{\gamma}_k$. For the sake of clarity, however, the constraint suffix is omitted in this section. Nonetheless, it is important to keep in mind that all the estimates in this section are constrained.
+
+\begin{center}
+\framecolorbox[\textwidth]{gray}{gray!15}{Sample $X_{t,k}$}
+\end{center}
+The hidden states are sampled via the \textit{Forward-Filtering-Backward-Sampling} (FFBS) algorithm that first predicts the hidden states using a Kalman Filter and then performs a backward sampling procedure that treats these predicted states as additional observations (see, e.g., \cite{carter1994gibbs, migon2005dynamic} for details on FFBS). More specifically, the first part, namely the Kalman Filter, is deterministic and consists of a predict and an update step. Given all the other parameters except the hidden states, the predict step for the $k$th question is
+\begin{align*}
+X_{t|t-1,k} &= \gamma_k X_{t-1|t-1,k} \\
+P_{t|t-1, k} &= \gamma_k^2 P_{t-1|t-1, k} + \tau_k^2,
+\end{align*}
+where the initial values, $X_{0|0,k}$ and $P_{0|0, k}$, are equal to $0$ and $1$, respectively. 
+
+\begin{algorithm}
+\caption{The update step of the FFBS algorithm. $N_{t,k}$ denotes the number of forecasts made at time $t$ for question $k$. The subindex  $j(i)$ denotes the $i$th expert's self-assessed expertise group.}
+\label{update}
+\begin{algorithmic}
+\For{$i = 1, 2, \dots, N_{t,k}$}  
+\State $e_{i, t,k} = Y_{i,t,k} - b_{j(i)} X_{t | t-1, k}$
+\State $S_{i,t,k} =  \sigma_k^2 + b_{j(i)}^2 P_{t|t-1, k}$
+\State $K_{i,t,k} =  P_{t|t-1, k} b_{j(i)} S_{i,t,k}^{-1}$
+\State $X_{t|t, k} = X_{t|t-1, k} + K_{i, t,k} e_{i,t,k}$
+\State $P_{t|t,k} = (1 - K_{i, t,k} b_{j(i)}) P_{t|t-1,k}$
+\If {$i \neq N_{t,k}$}
+\State $X_{t|t-1, k} = X_{t|t, k}$
+\State $P_{t|t-1, k} = P_{t|t, k}$
+\EndIf
+%\If {$i\geq maxval$}
+%    \State $i\gets 0$
+%\Else
+%    \If {$i+k\leq maxval$}
+%        \State $i\gets i+k$
+%    \EndIf
+%\EndIf
+\EndFor
+\end{algorithmic}
+\end{algorithm}
+%\textbf{repeat} for $i = 1, 2, \dots, N_{t,k}$:
+%\begin{align*}
+%e_{i, t,k} &= Y_{i,t,k} - b_{j(i)} X_{t | t-1, k} \\
+%S_{i,t,k} &=  \sigma_k^2 + b_{j(i)}^2 P_{t|t-1, k}\\
+%K_{i,t,k} &=  P_{t|t-1, k} b_{j(i)} S_{i,t,k}^{-1} \\
+%X_{t|t, k} &= X_{t|t-1, k} + K_{t,k} e_{i,t,k} \\
+%P_{t|t,k} &= (1 - K_{t,k} b_{i,k}) P_{t|t-1,k}\\
+%\end{align*}
+The update step is given by Algorithm \ref{update}.  The update is repeated sequentially for each observation $Y_{i,t,k}$ given at time $t$. For each such repetition, the previous posterior values, $X_{t|t, k}$ and $P_{t|t, k}$, are considered as the new prior values, $X_{t|t-1, k}$ and $P_{t|t-1, k}$. If the observation $\boldsymbol{Y}_{t,k}$ is completely missing at time $t$, the update step is skipped and 
+\begin{align*}
+X_{t|t, k} &= X_{t|t-1, k}\\
+P_{t|t,k} &= P_{t|t-1,k}
+\end{align*}
+After running the Kalman Filter up to the final time point at $t = T_k$, the final hidden state is sampled from $X_{T_k,k} \sim \mathcal{N}(X_{T_k|T_k, k}, P_{T_k|T_k, k})$. The remaining states are obtained via the backward sampling that is performed in reverse from
+\begin{align*}
+X_{t-1, k} &\sim  \mathcal{N} \left(V\left( \frac{\gamma_kX_{t,k}}{\tau_k^2}  + \frac{X_{t|t,k}}{P_{t|t,k} } \right),  V\right),
+\end{align*}
+where
+\begin{align*}
+V &= \left( \frac{\gamma_k^2}{\tau_k^2} + \frac{1}{P_{t|t,k}}\right)^{-1}
+\end{align*}
+This can be viewed as backward updating that considers the Kalman Filter estimates as additional observations at each given time point. 
+
+%
+%If the observation $\boldsymbol{Y}_{t,k}$ is completely missing at time $t$, the update step is skipped and the state estimates are sampled from
+%\begin{align*}
+%\mathcal{N}\left(\gamma_k X_{t-1|t-1,k}, \gamma_k^2 P_{t-1|t-1,k} + \tau_k^2\right)
+%\end{align*}
+
+\begin{center}
+\framecolorbox[\textwidth]{gray}{gray!15}{Sample $\boldsymbol{b}$ and $\sigma^2_k$}
+\end{center}
+First, vectorize all the response vectors $\boldsymbol{Y}_{t,k}$ into a single vector denoted $\boldsymbol{Y}_k = \left[\boldsymbol{Y}_{1,k}^T, \dots, \boldsymbol{Y}_{T_k,k}^T\right]^T$. Given that each $\boldsymbol{Y}_{t,k}$ is matched with $X_{t,k}$ via the time index $t$, we can form a $|\boldsymbol{Y}_k| \times J$ design-matrix by letting $$\boldsymbol{X}_k = \left[ (\boldsymbol{M}_kX_{1,k})^T, \dots, (\boldsymbol{M}_kX_{T_k,k})^T \right]^T$$ Given that the goal is to borrow strength across questions by assuming a common bias vector $\boldsymbol{b}$, the parameter values must be estimated in parallel for each question such that the matrices $\boldsymbol{X}_k$ can be further concatenated into $\boldsymbol{X} = [\boldsymbol{X}_1^T, \dots, \boldsymbol{X}_K^T]^T$ during every iteration. Similarly, $\boldsymbol{Y}_k$ must be further vectorized into a vector $\boldsymbol{Y} = [\boldsymbol{Y}_1^T, \dots, \boldsymbol{Y}_K^T]^T$. The question-specific variance terms are taken into account by letting $\boldsymbol{\Sigma} = \text{diag}(\sigma^2_1 \boldsymbol{1}_{1 \times T_1}, \dots, \sigma^2_K \boldsymbol{1}_{1 \times T_K})$.  After adopting the non-informative prior $p(\boldsymbol{b}, \sigma_k^2 | \boldsymbol{X}_k) \propto \sigma_k^{-2}$ for each $k = 1, \dots, K$, the bias vector is sampled from
+\begin{eqnarray}
+\boldsymbol{b} | \dots &\sim& \mathcal{N}_J \left( (\boldsymbol{X}^T \boldsymbol{\Sigma}^{-1} \boldsymbol{X})^{-1} \boldsymbol{X}^T \boldsymbol{\Sigma}^{-1} \boldsymbol{Y}, (\boldsymbol{X}^T \boldsymbol{\Sigma}^{-1} \boldsymbol{X})^{-1} \right) \label{BiasVector}
+\end{eqnarray}
+Given that the covariance matrix in Equation (\ref{BiasVector}) is diagonal, the identifiability constraint can be enforced after sampling a new value of $\boldsymbol{b}$ by letting $b_3 = 1$. The variance parameters are then sampled from
+\begin{eqnarray*}
+\sigma^2_k | \dots &\sim& \text{Inv-}\chi^2\left(|\boldsymbol{Y}_k| - J, \frac{1}{|\boldsymbol{Y}_k| - J} (\boldsymbol{Y}_k - \boldsymbol{X}_k \boldsymbol{b})^T (\boldsymbol{Y}_k - \boldsymbol{X}_k \boldsymbol{b}) \right),
+\end{eqnarray*}
+where the distribution is a scaled inverse-$\chi^2$ (see, e.g., \citet{gelman2003bayesian}). Given that the experts are not required to give a new forecast at every time unit, the design matrices must be trimmed accordingly such that their dimensions match up with the dimensions of the observed matrices. 
+
+
+\begin{center}
+\framecolorbox[\textwidth]{gray}{gray!15}{Sample $\gamma_k$ and $\tau^2_k$}
+\end{center}
+The parameters of the hidden process are estimated via a regression setup. More specifically, after adopting the non-informative prior $p(\gamma_k, \tau_k^2 | \boldsymbol{X}_k) \propto \tau_k^{-2}$, the parameter values are sampled from
+\begin{eqnarray*}
+\gamma_k | \dots  &\sim&  \mathcal{N} \left( \frac{\sum_{t=2}^{T_k} X_{t,k}X_{t-1,k}}{\sum_{t=1}^{T_k-1} X_{t,k}^2} , \frac{\tau_k^2}{\sum_{t=1}^{T_k-1} X_{t,k}^2} \right)\\
+\tau_k^2 | \dots &\sim& \text{Inv-}\chi^2 \left(T_k-1, \frac{1}{T_k-1} \sum_{t=2}^{T_k} \left(X_{t,k} - \gamma_k X_{t-1,k} \right)^2 \right),
+\end{eqnarray*}
+where the final distribution is a scaled inverse-$\chi^2$ (see, e.g., \citet{gelman2003bayesian}).
+
+
+\bibliographystyle{imsart-nameyear}
+\bibliography{biblio}		% expects file "myrefs.bib"
+
+
+\end{document}

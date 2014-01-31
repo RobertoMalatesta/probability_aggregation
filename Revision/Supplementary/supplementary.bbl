@@ -1,0 +1,58 @@
+\begin{thebibliography}{4}
+% BibTex style file: imsart-nameyear.bst, 2013-01-28
+% Default style options (sort=1,type=nameyear).
+% Used options (sort=1,type=nameyear).
+
+\bibitem[\protect\citeauthoryear{Carter and Kohn}{1994}]{carter1994gibbs}
+\begin{barticle}[author]
+\bauthor{\bsnm{Carter},~\bfnm{Chris~K}\binits{C.~K.}} \AND
+  \bauthor{\bsnm{Kohn},~\bfnm{Robert}\binits{R.}}
+(\byear{1994}).
+\btitle{On Gibbs Sampling for State Space Models}.
+\bjournal{Biometrika}
+\bvolume{81}
+\bpages{541--553}.
+\end{barticle}
+\endbibitem
+
+\bibitem[\protect\citeauthoryear{Gelman et~al.}{2003}]{gelman2003bayesian}
+\begin{bbook}[author]
+\bauthor{\bsnm{Gelman},~\bfnm{Andrew}\binits{A.}},
+  \bauthor{\bsnm{Carlin},~\bfnm{John~B}\binits{J.~B.}},
+  \bauthor{\bsnm{Stern},~\bfnm{Hal~S}\binits{H.~S.}} \AND
+  \bauthor{\bsnm{Rubin},~\bfnm{Donald~B}\binits{D.~B.}}
+(\byear{2003}).
+\btitle{Bayesian Data Analysis}.
+\bpublisher{CRC press}.
+\end{bbook}
+\endbibitem
+
+\bibitem[\protect\citeauthoryear{Geman and Geman}{1984}]{geman1984stochastic}
+\begin{barticle}[author]
+\bauthor{\bsnm{Geman},~\bfnm{Stuart}\binits{S.}} \AND
+  \bauthor{\bsnm{Geman},~\bfnm{Donald}\binits{D.}}
+(\byear{1984}).
+\btitle{Stochastic Relaxation, Gibbs Distributions, and the Bayesian
+  Restoration of Images}.
+\bjournal{Institute of Electrical and Electronics Engineer (IEEE) Transactions
+  on Pattern Analysis and Machine Intelligence}
+\bvolume{6}
+\bpages{721--741}.
+\end{barticle}
+\endbibitem
+
+\bibitem[\protect\citeauthoryear{Migon et~al.}{2005}]{migon2005dynamic}
+\begin{barticle}[author]
+\bauthor{\bsnm{Migon},~\bfnm{Helio~S}\binits{H.~S.}},
+  \bauthor{\bsnm{Gamerman},~\bfnm{Dani}\binits{D.}},
+  \bauthor{\bsnm{Lopes},~\bfnm{Hedibert~F}\binits{H.~F.}} \AND
+  \bauthor{\bsnm{Ferreira},~\bfnm{Marco~AR}\binits{M.~A.}}
+(\byear{2005}).
+\btitle{Dynamic Models}.
+\bjournal{Handbook of Statistics}
+\bvolume{25}
+\bpages{553--588}.
+\end{barticle}
+\endbibitem
+
+\end{thebibliography}

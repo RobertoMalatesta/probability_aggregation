@@ -1,0 +1,32 @@
+\begin{thebibliography}{2}
+% BibTex style file: imsart-nameyear.bst, 2013-01-28
+% Default style options (sort=1,type=nameyear).
+% Used options (sort=1,type=nameyear).
+
+\bibitem[\protect\citeauthoryear{Carter and Kohn}{1994}]{carter1994gibbs}
+\begin{barticle}[author]
+\bauthor{\bsnm{Carter},~\bfnm{Chris~K}\binits{C.~K.}} \AND
+  \bauthor{\bsnm{Kohn},~\bfnm{Robert}\binits{R.}}
+(\byear{1994}).
+\btitle{On Gibbs sampling for state space models}.
+\bjournal{Biometrika}
+\bvolume{81}
+\bpages{541--553}.
+\end{barticle}
+\endbibitem
+
+\bibitem[\protect\citeauthoryear{Migon et~al.}{2005}]{migon2005dynamic}
+\begin{barticle}[author]
+\bauthor{\bsnm{Migon},~\bfnm{Helio~S}\binits{H.~S.}},
+  \bauthor{\bsnm{Gamerman},~\bfnm{Dani}\binits{D.}},
+  \bauthor{\bsnm{Lopes},~\bfnm{Hedibert~F}\binits{H.~F.}} \AND
+  \bauthor{\bsnm{Ferreira},~\bfnm{Marco~AR}\binits{M.~A.}}
+(\byear{2005}).
+\btitle{Dynamic models}.
+\bjournal{Handbook of Statistics}
+\bvolume{25}
+\bpages{553--588}.
+\end{barticle}
+\endbibitem
+
+\end{thebibliography}

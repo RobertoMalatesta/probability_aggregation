@@ -1,0 +1,2852 @@
+result1$iter
+result1$iters
+names(result1)
+result1$niters
+result2$niters
+names(result1)
+dim(result1$betas)
+dim(result2$betas)
+v0s
+beta
+head(result2$betas)
+head(result2$betas[,1:5])
+head(result1$betas[,1:5])
+v0s<-seq(0.1,1,by=0.01)#
+v1<-100#
+v1_g<-100#
+a<-1#
+b<-1#
+#
+###############################################################
+# ********* Beta-binomial prior *****************************##
+#
+# UNIT STARTING VALUES#
+#
+beta_init<-rep(1,p)#
+source("/Users/ville/Desktop/EMVS/EMVS_code2 (2).R")#
+result1<-EMVS2(Y,#
+               X,#
+               v0s=v0s,#
+               v1=v1,#
+               type="betabinomial",#
+               sigma_init=1,#
+               epsilon=10^-4,#
+               p = 0.5,#
+               beta_init = beta_init,#
+               a=a,#
+               b=b,#
+               v1_g=v1_g)
+system.time(result1<-EMVS2(Y,#
+               X,#
+               v0s=v0s,#
+               v1=v1,#
+               type="betabinomial",#
+               sigma_init=1,#
+               epsilon=10^-4,#
+               p = 0.5,#
+               beta_init = beta_init,#
+               a=a,#
+               b=b,#
+               v1_g=v1_g))
+system.time(result2 = EMVS(Y=Y[,1],#
+  X=X,#
+  v0s = v0s,#
+  v1 = v1,#
+  type = "betabinomial",#
+  beta_init = beta_init,#
+  sigma_init = 1,#
+  epsilon  = 10^-4,#
+  temperature = NULL,#
+  Z = NULL,#
+  mu = NULL,#
+  Sigma = NULL,#
+  p = 0.5,#
+  a = a,#
+  b = b,#
+  a_v1 = NULL,#
+  b_v1 = NULL,#
+  v1_g = v1_g))
+system.time(#
+result2 = EMVS(Y=Y[,1],#
+  X=X,#
+  v0s = v0s,#
+  v1 = v1,#
+  type = "betabinomial",#
+  beta_init = beta_init,#
+  sigma_init = 1,#
+  epsilon  = 10^-4,#
+  temperature = NULL,#
+  Z = NULL,#
+  mu = NULL,#
+  Sigma = NULL,#
+  p = 0.5,#
+  a = a,#
+  b = b,#
+  a_v1 = NULL,#
+  b_v1 = NULL,#
+  v1_g = v1_g))
+system.time(#
+result2 <- EMVS(Y=Y[,1],#
+  X=X,#
+  v0s = v0s,#
+  v1 = v1,#
+  type = "betabinomial",#
+  beta_init = beta_init,#
+  sigma_init = 1,#
+  epsilon  = 10^-4,#
+  temperature = NULL,#
+  Z = NULL,#
+  mu = NULL,#
+  Sigma = NULL,#
+  p = 0.5,#
+  a = a,#
+  b = b,#
+  a_v1 = NULL,#
+  b_v1 = NULL,#
+  v1_g = v1_g))
+47/78
+result1
+names(result1)
+head(result2$log_post)
+head(result1$log_post)
+head(result1$intersects)
+head(result2$intersects)
+head(result1$sigmas)
+head(result2$sigmas)
+beta_k
+beta_init
+beta_k = c(1,2,3)#
+sigma = 2#
+v0 = 0.2#
+v1 = 0.8#
+t = 0.8#
+p = 0.5#
+E_v0v1(beta_k, sigma, v0, v1, p, t)
+Testing:#
+library(EMVSpackage)#
+library(mvtnorm)#
+#
+n<-10000#
+p<-500#
+beta<-c(1,2,3,rep(0,p-3))#
+#
+rho<-0.5#
+Sig<-rho^abs(rep(1,p)%o%1:p-(1:p))#
+sigma<-sqrt(3)#
+#
+X<-rmvnorm(n,numeric(p),Sig)#
+Y<-X%*%beta+rnorm(n,0,sd=sigma)#
+#
+v0s<-seq(0.1,1,by=0.01)#
+v1<-100#
+v1_g<-100#
+a<-1#
+b<-1
+v0s<-seq(0.1,1,by=0.1)#
+v1<-100#
+v1_g<-100#
+a<-1#
+b<-1
+result2 <- EMVS(Y=Y[,1],#
+  X=X,#
+  v0s = v0s,#
+  v1 = v1,#
+  type = "betabinomial",#
+  beta_init = beta_init,#
+  sigma_init = 1,#
+  epsilon  = 10^-4,#
+  temperature = NULL,#
+  Z = NULL,#
+  mu = NULL,#
+  Sigma = NULL,#
+  p = 0.5,#
+  a = a,#
+  b = b,#
+  a_v1 = NULL,#
+  b_v1 = NULL,#
+  v1_g = v1_g)
+beta_init<-rep(1,p)
+result2 <- EMVS(Y=Y[,1],#
+  X=X,#
+  v0s = v0s,#
+  v1 = v1,#
+  type = "betabinomial",#
+  beta_init = beta_init,#
+  sigma_init = 1,#
+  epsilon  = 10^-4,#
+  temperature = NULL,#
+  Z = NULL,#
+  mu = NULL,#
+  Sigma = NULL,#
+  p = 0.5,#
+  a = a,#
+  b = b,#
+  a_v1 = NULL,#
+  b_v1 = NULL,#
+  v1_g = v1_g)
+inv_var = c(1,2,3)#
+M_beta(t(X)%*%Y, X, t(X)%*%X, inv_var)
+source("/Users/ville/Desktop/EMVS/EMVS_code2 (2).R")
+inv_var = c(1,2,3)#
+M_beta(t(X)%*%Y, X, t(X)%*%X, inv_var)
+dim(X)
+inv_var = rep(1, 500)
+inv_var = c(1,2,3)#
+M_beta(t(X)%*%Y, X, t(X)%*%X, inv_var)
+inv_var = rep(1, 500)#
+M_beta(t(X)%*%Y, X, t(X)%*%X, inv_var)
+head(M_beta(t(X)%*%Y, X, t(X)%*%X, inv_var))
+Testing:#
+library(EMVSpackage)#
+library(mvtnorm)#
+#
+n<-10000#
+p<-500#
+beta<-c(1,2,3,rep(0,p-3))#
+#
+rho<-0.5#
+Sig<-rho^abs(rep(1,p)%o%1:p-(1:p))#
+sigma<-sqrt(3)#
+#
+X<-rmvnorm(n,numeric(p),Sig)#
+Y<-X%*%beta+rnorm(n,0,sd=sigma)#
+#
+v0s<-seq(0.1,1,by=0.1)#
+v1<-100#
+v1_g<-100#
+a<-1#
+b<-1#
+#
+###############################################################
+# ********* Beta-binomial prior *****************************##
+#
+# UNIT STARTING VALUES#
+#
+beta_init<-rep(1,p)#
+source("/Users/ville/Desktop/EMVS/EMVS_code2 (2).R")
+result2 = EMVS(Y=Y[,1],#
+  X=X,#
+  v0s = v0s,#
+  v1 = v1,#
+  type = "betabinomial",#
+  beta_init = beta_init,#
+  sigma_init = 1,#
+  epsilon  = 10^-4,#
+  temperature = NULL,#
+  Z = NULL,#
+  mu = NULL,#
+  Sigma = NULL,#
+  p = 0.5,#
+  a = a,#
+  b = b,#
+  a_v1 = NULL,#
+  b_v1 = NULL,#
+  v1_g = v1_g)
+Testing:#
+library(EMVSpackage)#
+library(mvtnorm)#
+#
+n<-10000#
+p<-500#
+beta<-c(1,2,3,rep(0,p-3))#
+#
+rho<-0.5#
+Sig<-rho^abs(rep(1,p)%o%1:p-(1:p))#
+sigma<-sqrt(3)#
+#
+X<-rmvnorm(n,numeric(p),Sig)#
+Y<-X%*%beta+rnorm(n,0,sd=sigma)#
+#
+v0s<-seq(0.1,1,by=0.1)#
+v1<-100#
+v1_g<-100#
+a<-1#
+b<-1#
+#
+###############################################################
+# ********* Beta-binomial prior *****************************##
+#
+# UNIT STARTING VALUES#
+#
+beta_init<-rep(1,p)
+result2 = EMVS(Y=Y[,1],#
+  X=X,#
+  v0s = v0s,#
+  v1 = v1,#
+  type = "betabinomial",#
+  beta_init = beta_init,#
+  sigma_init = 1,#
+  epsilon  = 10^-4,#
+  temperature = NULL,#
+  Z = NULL,#
+  mu = NULL,#
+  Sigma = NULL,#
+  p = 0.5,#
+  a = a,#
+  b = b,#
+  a_v1 = NULL,#
+  b_v1 = NULL,#
+  v1_g = v1_g)
+detach("EWMS", unload=TRUE)
+detach("EWMSpackage", unload=TRUE)
+detach(EMVSpackage, unload=TRUE)
+detach("EWMSpackage", unload=TRUE)
+detach("EMVSpackage", unload=TRUE)
+library(Rliblinear)
+install.packages(Rliblinear)
+install.packages("Rliblinear")
+detach("package:EMVSpackage", unload = TRUE)#
+library.dynam.unload("EMVSpackage", system.file(package = "EMVSpackage"))
+library()
+Testing:#
+library(EMVSpackage)#
+library(mvtnorm)#
+#
+n<-10000#
+p<-500#
+beta<-c(1,2,3,rep(0,p-3))#
+#
+rho<-0.5#
+Sig<-rho^abs(rep(1,p)%o%1:p-(1:p))#
+sigma<-sqrt(3)#
+#
+X<-rmvnorm(n,numeric(p),Sig)#
+Y<-X%*%beta+rnorm(n,0,sd=sigma)#
+#
+v0s<-seq(0.1,1,by=0.1)#
+v1<-100#
+v1_g<-100#
+a<-1#
+b<-1#
+beta_init<-rep(1,p)
+result2 = EMVS(Y=Y[,1],#
+  X=X,#
+  v0s = v0s,#
+  v1 = v1,#
+  type = "betabinomial",#
+  beta_init = beta_init,#
+  sigma_init = 1,#
+  epsilon  = 10^-4,#
+  temperature = NULL,#
+  Z = NULL,#
+  mu = NULL,#
+  Sigma = NULL,#
+  p = 0.5,#
+  a = a,#
+  b = b,#
+  a_v1 = NULL,#
+  b_v1 = NULL,#
+  v1_g = v1_g)
+M_sigma(Y, X, inv_var, eta = 1, lambda = 1)
+source("/Users/ville/Desktop/EMVS/EMVS_code2 (2).R")
+M_sigma(Y, X, inv_var, eta = 1, lambda = 1)
+inv_var = rep(1, 500)
+M_sigma(Y, X, inv_var, eta = 1, lambda = 1)
+inv_var = rep(1, 500)
+M_sigma(Y, X, inv_var, eta = 1, lambda = 1)
+inv_var
+M_sigma
+M_sigma(Y, X, beta_k, inv_var, eta = 1, lambda = 1)
+beta_k = rep(2.1, 500)#
+M_sigma(Y, X, beta_k, inv_var, eta = 1, lambda = 1)
+Testing:#
+library(EMVSpackage)#
+library(mvtnorm)#
+#
+n<-10000#
+p<-500#
+beta<-c(1,2,3,rep(0,p-3))#
+#
+rho<-0.5#
+Sig<-rho^abs(rep(1,p)%o%1:p-(1:p))#
+sigma<-sqrt(3)#
+#
+X<-rmvnorm(n,numeric(p),Sig)#
+Y<-X%*%beta+rnorm(n,0,sd=sigma)#
+#
+v0s<-seq(0.1,1,by=0.1)#
+v1<-100#
+v1_g<-100#
+a<-1#
+b<-1#
+beta_init<-rep(1,p)#
+#
+###############################################################
+# ********* Beta-binomial prior *****************************##
+#
+# UNIT STARTING VALUES#
+#
+beta_init<-rep(1,p)#
+source("/Users/ville/Desktop/EMVS/EMVS_code2 (2).R")
+result2 = EMVS(Y=Y[,1],#
+  X=X,#
+  v0s = v0s,#
+  v1 = v1,#
+  type = "betabinomial",#
+  beta_init = beta_init,#
+  sigma_init = 1,#
+  epsilon  = 10^-4,#
+  temperature = NULL,#
+  Z = NULL,#
+  mu = NULL,#
+  Sigma = NULL,#
+  p = 0.5,#
+  a = a,#
+  b = b,#
+  a_v1 = NULL,#
+  b_v1 = NULL,#
+  v1_g = v1_g)
+Testing:#
+library(EMVSpackage)#
+library(mvtnorm)#
+#
+n<-10000#
+p<-500#
+beta<-c(1,2,3,rep(0,p-3))#
+#
+rho<-0.5#
+Sig<-rho^abs(rep(1,p)%o%1:p-(1:p))#
+sigma<-sqrt(3)#
+#
+X<-rmvnorm(n,numeric(p),Sig)#
+Y<-X%*%beta+rnorm(n,0,sd=sigma)#
+#
+v0s<-seq(0.1,1,by=0.1)#
+v1<-100#
+v1_g<-100#
+a<-1#
+b<-1#
+beta_init<-rep(1,p)#
+#
+###############################################################
+# ********* Beta-binomial prior *****************************##
+#
+# UNIT STARTING VALUES#
+#
+beta_init<-rep(1,p)#
+source("/Users/ville/Desktop/EMVS/EMVS_code2 (2).R")
+result2 = EMVS(Y=Y[,1],#
+  X=X,#
+  v0s = v0s,#
+  v1 = v1,#
+  type = "betabinomial",#
+  beta_init = beta_init,#
+  sigma_init = 1,#
+  epsilon  = 10^-4,#
+  temperature = NULL,#
+  Z = NULL,#
+  mu = NULL,#
+  Sigma = NULL,#
+  p = 0.5,#
+  a = a,#
+  b = b,#
+  a_v1 = NULL,#
+  b_v1 = NULL,#
+  v1_g = v1_g)
+M_p
+M_p(1:3, 1.2, 3.5)
+Testing:#
+library(EMVSpackage)#
+library(mvtnorm)#
+#
+n<-10000#
+p<-500#
+beta<-c(1,2,3,rep(0,p-3))#
+#
+rho<-0.5#
+Sig<-rho^abs(rep(1,p)%o%1:p-(1:p))#
+sigma<-sqrt(3)#
+#
+X<-rmvnorm(n,numeric(p),Sig)#
+Y<-X%*%beta+rnorm(n,0,sd=sigma)#
+#
+v0s<-seq(0.1,1,by=0.1)#
+v1<-100#
+v1_g<-100#
+a<-1#
+b<-1#
+beta_init<-rep(1,p)#
+#
+###############################################################
+# ********* Beta-binomial prior *****************************##
+#
+# UNIT STARTING VALUES#
+#
+beta_init<-rep(1,p)#
+source("/Users/ville/Desktop/EMVS/EMVS_code2 (2).R")
+result2 <- EMVS(Y=Y[,1],#
+  X=X,#
+  v0s = v0s,#
+  v1 = v1,#
+  type = "betabinomial",#
+  beta_init = beta_init,#
+  sigma_init = 1,#
+  epsilon  = 10^-4,#
+  temperature = NULL,#
+  Z = NULL,#
+  mu = NULL,#
+  Sigma = NULL,#
+  p = 0.5,#
+  a = a,#
+  b = b,#
+  a_v1 = NULL,#
+  b_v1 = NULL,#
+  v1_g = v1_g)
+numeric(5)
+Testing:#
+library(EMVSpackage)#
+library(mvtnorm)#
+#
+n<-10000#
+p<-500#
+beta<-c(1,2,3,rep(0,p-3))#
+#
+rho<-0.5#
+Sig<-rho^abs(rep(1,p)%o%1:p-(1:p))#
+sigma<-sqrt(3)#
+#
+X<-rmvnorm(n,numeric(p),Sig)#
+Y<-X%*%beta+rnorm(n,0,sd=sigma)#
+#
+v0s<-seq(0.1,1,by=0.5)#
+v1<-100#
+v1_g<-100#
+a<-1#
+b<-1#
+beta_init<-rep(1,p)
+beta_init<-rep(1,p)#
+source("/Users/ville/Desktop/EMVS/EMVS_code2 (2).R")#
+result1<-EMVS2(Y,#
+               X,#
+               v0s=v0s,#
+               v1=v1,#
+               type="betabinomial",#
+               sigma_init=1,#
+               epsilon=10^-4,#
+               p = 0.5,#
+               beta_init = beta_init,#
+               a=a,#
+               b=b,#
+               v1_g=v1_g)
+result2 = EMVS(Y=Y[,1],#
+  X=X,#
+  v0s = v0s,#
+  v1 = v1,#
+  type = "betabinomial",#
+  beta_init = beta_init,#
+  sigma_init = 1,#
+  epsilon  = 10^-4,#
+  temperature = NULL,#
+  Z = NULL,#
+  mu = NULL,#
+  Sigma = NULL,#
+  p = 0.5,#
+  a = a,#
+  b = b,#
+  a_v1 = NULL,#
+  b_v1 = NULL,#
+  v1_g = v1_g)
+result2
+result1
+result2
+names(result1)
+result1$log_post
+result2$log_post
+result1$posts
+result2$posts
+result1$posts
+result2$posts
+result1
+n<-10#
+p<-5#
+beta<-c(1,2,3,rep(0,p-3))#
+#
+rho<-0.5#
+Sig<-rho^abs(rep(1,p)%o%1:p-(1:p))#
+sigma<-sqrt(3)#
+#
+X<-rmvnorm(n,numeric(p),Sig)#
+Y<-X%*%beta+rnorm(n,0,sd=sigma)#
+#
+v0s<-seq(0.1,1,by=0.5)#
+v1<-100#
+v1_g<-100#
+a<-1#
+b<-1#
+beta_init<-rep(1,p)#
+#
+###############################################################
+# ********* Beta-binomial prior *****************************##
+#
+# UNIT STARTING VALUES#
+#
+beta_init<-rep(1,p)
+result1<-EMVS2(Y,#
+               X,#
+               v0s=v0s,#
+               v1=v1,#
+               type="betabinomial",#
+               sigma_init=1,#
+               epsilon=10^-4,#
+               p = 0.5,#
+               beta_init = beta_init,#
+               a=a,#
+               b=b,#
+               v1_g=v1_g)
+result1
+result2 = EMVS(Y=Y[,1],#
+  X=X,#
+  v0s = v0s,#
+  v1 = v1,#
+  type = "betabinomial",#
+  beta_init = beta_init,#
+  sigma_init = 1,#
+  epsilon  = 10^-4,#
+  temperature = NULL,#
+  Z = NULL,#
+  mu = NULL,#
+  Sigma = NULL,#
+  p = 0.5,#
+  a = a,#
+  b = b,#
+  a_v1 = NULL,#
+  b_v1 = NULL,#
+  v1_g = v1_g)
+result2
+result1
+head(result1)
+head(result2)
+v0s<-seq(0.1,1,by=1)
+v0s
+Testing:#
+library(EMVSpackage)#
+library(mvtnorm)#
+#
+n<-10#
+p<-5#
+beta<-c(1,2,3,rep(0,p-3))#
+#
+rho<-0.5#
+Sig<-rho^abs(rep(1,p)%o%1:p-(1:p))#
+sigma<-sqrt(3)#
+#
+X<-rmvnorm(n,numeric(p),Sig)#
+Y<-X%*%beta+rnorm(n,0,sd=sigma)#
+#
+v0s<-seq(0.1,1,by=1)#
+v1<-100#
+v1_g<-100#
+a<-1#
+b<-1#
+beta_init<-rep(1,p)#
+#
+###############################################################
+# ********* Beta-binomial prior *****************************##
+#
+# UNIT STARTING VALUES#
+#
+beta_init<-rep(1,p)
+result1<-EMVS2(Y,#
+               X,#
+               v0s=v0s,#
+               v1=v1,#
+               type="betabinomial",#
+               sigma_init=1,#
+               epsilon=10^-4,#
+               p = 0.5,#
+               beta_init = beta_init,#
+               a=a,#
+               b=b,#
+               v1_g=v1_g)
+result2 = EMVS(Y=Y[,1],#
+  X=X,#
+  v0s = v0s,#
+  v1 = v1,#
+  type = "betabinomial",#
+  beta_init = beta_init,#
+  sigma_init = 1,#
+  epsilon  = 10^-4,#
+  temperature = NULL,#
+  Z = NULL,#
+  mu = NULL,#
+  Sigma = NULL,#
+  p = 0.5,#
+  a = a,#
+  b = b,#
+  a_v1 = NULL,#
+  b_v1 = NULL,#
+  v1_g = v1_g)
+result1
+tail(result1)
+tail(result2)
+Testing:#
+library(EMVSpackage)#
+library(mvtnorm)#
+#
+n<-10#
+p<-5#
+beta<-c(1,2,3,rep(0,p-3))#
+#
+rho<-0.5#
+Sig<-rho^abs(rep(1,p)%o%1:p-(1:p))#
+sigma<-sqrt(3)#
+#
+X<-rmvnorm(n,numeric(p),Sig)#
+Y<-X%*%beta+rnorm(n,0,sd=sigma)#
+#
+v0s<-seq(0.1,1,by=1)#
+v1<-100#
+v1_g<-100#
+a<-1#
+b<-1#
+beta_init<-rep(1,p)
+UNIT STARTING VALUES#
+#
+beta_init<-rep(1,p)#
+source("/Users/ville/Desktop/EMVS/EMVS_code2 (2).R")
+result2 = EMVS(Y=Y[,1],#
+  X=X,#
+  v0s = v0s,#
+  v1 = v1,#
+  type = "betabinomial",#
+  beta_init = beta_init,#
+  sigma_init = 1,#
+  epsilon  = 10^-4,#
+  temperature = NULL,#
+  Z = NULL,#
+  mu = NULL,#
+  Sigma = NULL,#
+  p = 0.5,#
+  a = a,#
+  b = b,#
+  a_v1 = NULL,#
+  b_v1 = NULL,#
+  v1_g = v1_g)#
+reg_plot(result2)
+Testing:#
+library(EMVSpackage)#
+library(mvtnorm)#
+#
+n<-10#
+p<-5#
+beta<-c(1,2,3,rep(0,p-3))#
+#
+rho<-0.5#
+Sig<-rho^abs(rep(1,p)%o%1:p-(1:p))#
+sigma<-sqrt(3)#
+#
+X<-rmvnorm(n,numeric(p),Sig)#
+Y<-X%*%beta+rnorm(n,0,sd=sigma)#
+#
+v0s<-seq(0.1,1,by=1)#
+v1<-100#
+v1_g<-100#
+a<-1#
+b<-1#
+beta_init<-rep(1,p)#
+#
+###############################################################
+# ********* Beta-binomial prior *****************************##
+#
+# UNIT STARTING VALUES#
+#
+beta_init<-rep(1,p)#
+source("/Users/ville/Desktop/EMVS/EMVS_code2 (2).R")#
+result1<-EMVS2(Y,#
+               X,#
+               v0s=v0s,#
+               v1=v1,#
+               type="betabinomial",#
+               sigma_init=1,#
+               epsilon=10^-4,#
+               p = 0.5,#
+               beta_init = beta_init,#
+               a=a,#
+               b=b,#
+               v1_g=v1_g)
+result2 = EMVS(Y=Y[,1],#
+  X=X,#
+  v0s = v0s,#
+  v1 = v1,#
+  type = "betabinomial",#
+  beta_init = beta_init,#
+  sigma_init = 1,#
+  epsilon  = 10^-4,#
+  temperature = NULL,#
+  Z = NULL,#
+  mu = NULL,#
+  Sigma = NULL,#
+  p = 0.5,#
+  a = a,#
+  b = b,#
+  a_v1 = NULL,#
+  b_v1 = NULL,#
+  v1_g = v1_g)
+Testing:#
+library(EMVSpackage)#
+library(mvtnorm)#
+#
+n<-10#
+p<-5#
+beta<-c(1,2,3,rep(0,p-3))#
+#
+rho<-0.5#
+Sig<-rho^abs(rep(1,p)%o%1:p-(1:p))#
+sigma<-sqrt(3)#
+#
+X<-rmvnorm(n,numeric(p),Sig)#
+Y<-X%*%beta+rnorm(n,0,sd=sigma)#
+#
+v0s<-seq(0.1,1,by=1)#
+v1<-100#
+v1_g<-100#
+a<-1#
+b<-1#
+beta_init<-rep(1,p)#
+#
+###############################################################
+# ********* Beta-binomial prior *****************************##
+#
+# UNIT STARTING VALUES#
+#
+beta_init<-rep(1,p)#
+source("/Users/ville/Desktop/EMVS/EMVS_code2 (2).R")#
+result1<-EMVS2(Y,#
+               X,#
+               v0s=v0s,#
+               v1=v1,#
+               type="betabinomial",#
+               sigma_init=1,#
+               epsilon=10^-4,#
+               p = 0.5,#
+               beta_init = beta_init,#
+               a=a,#
+               b=b,#
+               v1_g=v1_g)
+result2 = EMVS(Y=Y[,1],#
+  X=X,#
+  v0s = v0s,#
+  v1 = v1,#
+  type = "betabinomial",#
+  beta_init = beta_init,#
+  sigma_init = 1,#
+  epsilon  = 10^-4,#
+  temperature = NULL,#
+  Z = NULL,#
+  mu = NULL,#
+  Sigma = NULL,#
+  p = 0.5,#
+  a = a,#
+  b = b,#
+  a_v1 = NULL,#
+  b_v1 = NULL,#
+  v1_g = v1_g)
+result1
+Testing:#
+library(EMVSpackage)#
+library(mvtnorm)#
+#
+n<-10#
+p<-5#
+beta<-c(1,2,3,rep(0,p-3))#
+#
+rho<-0.5#
+Sig<-rho^abs(rep(1,p)%o%1:p-(1:p))#
+sigma<-sqrt(3)#
+#
+X<-rmvnorm(n,numeric(p),Sig)#
+Y<-X%*%beta+rnorm(n,0,sd=sigma)#
+#
+v0s<-seq(0.1,1,by=1)#
+v1<-100#
+v1_g<-100#
+a<-1#
+b<-1#
+beta_init<-rep(1,p)#
+#
+###############################################################
+# ********* Beta-binomial prior *****************************##
+#
+# UNIT STARTING VALUES#
+#
+beta_init<-rep(1,p)#
+source("/Users/ville/Desktop/EMVS/EMVS_code2 (2).R")#
+result1<-EMVS2(Y,#
+               X,#
+               v0s=v0s,#
+               v1=v1,#
+               type="betabinomial",#
+               sigma_init=1,#
+               epsilon=10^-4,#
+               p = 0.5,#
+               beta_init = beta_init,#
+               a=a,#
+               b=b,#
+               v1_g=v1_g)
+result2 = EMVS(Y=Y[,1],#
+  X=X,#
+  v0s = v0s,#
+  v1 = v1,#
+  type = "betabinomial",#
+  beta_init = beta_init,#
+  sigma_init = 1,#
+  epsilon  = 10^-4,#
+  temperature = NULL,#
+  Z = NULL,#
+  mu = NULL,#
+  Sigma = NULL,#
+  p = 0.5,#
+  a = a,#
+  b = b,#
+  a_v1 = NULL,#
+  b_v1 = NULL,#
+  v1_g = v1_g)
+Testing:#
+library(EMVSpackage)#
+library(mvtnorm)#
+#
+n<-10#
+p<-5#
+beta<-c(1,2,3,rep(0,p-3))#
+#
+rho<-0.5#
+Sig<-rho^abs(rep(1,p)%o%1:p-(1:p))#
+sigma<-sqrt(3)#
+#
+X<-rmvnorm(n,numeric(p),Sig)#
+Y<-X%*%beta+rnorm(n,0,sd=sigma)#
+#
+v0s<-seq(0.1,1,by=1)#
+v1<-100#
+v1_g<-100#
+a<-1#
+b<-1#
+beta_init<-rep(1,p)#
+#
+###############################################################
+# ********* Beta-binomial prior *****************************##
+#
+# UNIT STARTING VALUES#
+#
+beta_init<-rep(1,p)#
+source("/Users/ville/Desktop/EMVS/EMVS_code2 (2).R")#
+result1<-EMVS2(Y,#
+               X,#
+               v0s=v0s,#
+               v1=v1,#
+               type="betabinomial",#
+               sigma_init=1,#
+               epsilon=10^-4,#
+               p = 0.5,#
+               beta_init = beta_init,#
+               a=a,#
+               b=b,#
+               v1_g=v1_g)
+result2 = EMVS(Y=Y[,1],#
+  X=X,#
+  v0s = v0s,#
+  v1 = v1,#
+  type = "betabinomial",#
+  beta_init = beta_init,#
+  sigma_init = 1,#
+  epsilon  = 10^-4,#
+  temperature = NULL,#
+  Z = NULL,#
+  mu = NULL,#
+  Sigma = NULL,#
+  p = 0.5,#
+  a = a,#
+  b = b,#
+  a_v1 = NULL,#
+  b_v1 = NULL,#
+  v1_g = v1_g)
+Testing:#
+library(EMVSpackage)#
+library(mvtnorm)#
+#
+n<-10#
+p<-5#
+beta<-c(1,2,3,rep(0,p-3))#
+#
+rho<-0.5#
+Sig<-rho^abs(rep(1,p)%o%1:p-(1:p))#
+sigma<-sqrt(3)#
+#
+X<-rmvnorm(n,numeric(p),Sig)#
+Y<-X%*%beta+rnorm(n,0,sd=sigma)#
+#
+v0s<-seq(0.1,1,by=1)#
+v1<-100#
+v1_g<-100#
+a<-1#
+b<-1#
+beta_init<-rep(1,p)#
+#
+###############################################################
+# ********* Beta-binomial prior *****************************##
+#
+# UNIT STARTING VALUES#
+#
+beta_init<-rep(1,p)#
+source("/Users/ville/Desktop/EMVS/EMVS_code2 (2).R")#
+result1<-EMVS2(Y,#
+               X,#
+               v0s=v0s,#
+               v1=v1,#
+               type="betabinomial",#
+               sigma_init=1,#
+               epsilon=10^-4,#
+               p = 0.5,#
+               beta_init = beta_init,#
+               a=a,#
+               b=b,#
+               v1_g=v1_g)
+result2 = EMVS(Y=Y[,1],#
+  X=X,#
+  v0s = v0s,#
+  v1 = v1,#
+  type = "betabinomial",#
+  beta_init = beta_init,#
+  sigma_init = 1,#
+  epsilon  = 10^-4,#
+  temperature = NULL,#
+  Z = NULL,#
+  mu = NULL,#
+  Sigma = NULL,#
+  p = 0.5,#
+  a = a,#
+  b = b,#
+  a_v1 = NULL,#
+  b_v1 = NULL,#
+  v1_g = v1_g)
+result1
+head(result1)
+head(result2)
+Testing:#
+library(EMVSpackage)#
+library(mvtnorm)#
+#
+n<-10000#
+p<-500#
+beta<-c(1,2,3,rep(0,p-3))#
+#
+rho<-0.5#
+Sig<-rho^abs(rep(1,p)%o%1:p-(1:p))#
+sigma<-sqrt(3)#
+#
+X<-rmvnorm(n,numeric(p),Sig)#
+Y<-X%*%beta+rnorm(n,0,sd=sigma)#
+#
+v0s<-seq(0.1,1,by=1)#
+v1<-100#
+v1_g<-100#
+a<-1#
+b<-1#
+beta_init<-rep(1,p)#
+#
+###############################################################
+# ********* Beta-binomial prior *****************************##
+#
+# UNIT STARTING VALUES#
+#
+beta_init<-rep(1,p)#
+source("/Users/ville/Desktop/EMVS/EMVS_code2 (2).R")#
+result1<-EMVS2(Y,#
+               X,#
+               v0s=v0s,#
+               v1=v1,#
+               type="betabinomial",#
+               sigma_init=1,#
+               epsilon=10^-4,#
+               p = 0.5,#
+               beta_init = beta_init,#
+               a=a,#
+               b=b,#
+               v1_g=v1_g)
+Testing:#
+library(EMVSpackage)#
+library(mvtnorm)#
+#
+n<-10000#
+p<-500#
+beta<-c(1,2,3,rep(0,p-3))#
+#
+rho<-0.5#
+Sig<-rho^abs(rep(1,p)%o%1:p-(1:p))#
+sigma<-sqrt(3)#
+#
+X<-rmvnorm(n,numeric(p),Sig)#
+Y<-X%*%beta+rnorm(n,0,sd=sigma)#
+#
+v0s<-seq(0.1,1,by=0.01)#
+v1<-100#
+v1_g<-100#
+a<-1#
+b<-1#
+beta_init<-rep(1,p)#
+#
+###############################################################
+# ********* Beta-binomial prior *****************************##
+#
+# UNIT STARTING VALUES#
+#
+beta_init<-rep(1,p)
+system.time(result1<-EMVS2(Y,#
+               X,#
+               v0s=v0s,#
+               v1=v1,#
+               type="betabinomial",#
+               sigma_init=1,#
+               epsilon=10^-4,#
+               p = 0.5,#
+               beta_init = beta_init,#
+               a=a,#
+               b=b,#
+               v1_g=v1_g))
+system.time(#
+result2 <- EMVS(Y=Y[,1],#
+  X=X,#
+  v0s = v0s,#
+  v1 = v1,#
+  type = "betabinomial",#
+  beta_init = beta_init,#
+  sigma_init = 1,#
+  epsilon  = 10^-4,#
+  temperature = NULL,#
+  Z = NULL,#
+  mu = NULL,#
+  Sigma = NULL,#
+  p = 0.5,#
+  a = a,#
+  b = b,#
+  a_v1 = NULL,#
+  b_v1 = NULL,#
+  v1_g = v1_g))
+76.856
+56.469/76.856
+Testing:#
+library(EMVSpackage)#
+library(mvtnorm)#
+#
+n<-10000#
+p<-500#
+beta<-c(1,2,3,rep(0,p-3))#
+#
+rho<-0.5#
+Sig<-rho^abs(rep(1,p)%o%1:p-(1:p))#
+sigma<-sqrt(3)#
+#
+X<-rmvnorm(n,numeric(p),Sig)#
+Y<-X%*%beta+rnorm(n,0,sd=sigma)#
+#
+v0s<-seq(0.1,1,by=0.01)#
+v1<-100#
+v1_g<-100#
+a<-1#
+b<-1#
+beta_init<-rep(1,p)#
+#
+###############################################################
+# ********* Beta-binomial prior *****************************##
+#
+# UNIT STARTING VALUES#
+#
+beta_init<-rep(1,p)
+system.time(#
+result2 <- EMVS(Y=Y[,1],#
+  X=X,#
+  v0s = v0s,#
+  v1 = v1,#
+  type = "betabinomial",#
+  beta_init = beta_init,#
+  sigma_init = 1,#
+  epsilon  = 10^-4,#
+  temperature = NULL,#
+  Z = NULL,#
+  mu = NULL,#
+  Sigma = NULL,#
+  p = 0.5,#
+  a = a,#
+  b = b,#
+  a_v1 = NULL,#
+  b_v1 = NULL,#
+  v1_g = v1_g))
+Testing:#
+library(EMVSpackage)#
+library(mvtnorm)#
+#
+n<-10000#
+p<-500#
+beta<-c(1,2,3,rep(0,p-3))#
+#
+rho<-0.5#
+Sig<-rho^abs(rep(1,p)%o%1:p-(1:p))#
+sigma<-sqrt(3)#
+#
+X<-rmvnorm(n,numeric(p),Sig)#
+Y<-X%*%beta+rnorm(n,0,sd=sigma)#
+#
+v0s<-seq(0.1,1,by=0.1)#
+v1<-100#
+v1_g<-100#
+a<-1#
+b<-1#
+beta_init<-rep(1,p)
+result2 = EMVS(Y=Y[,1],#
+  X=X,#
+  v0s = v0s,#
+  v1 = v1,#
+  type = "betabinomial",#
+  beta_init = beta_init,#
+  sigma_init = 1,#
+  epsilon  = 10^-4,#
+  temperature = NULL,#
+  Z = NULL,#
+  mu = NULL,#
+  Sigma = NULL,#
+  p = 0.5,#
+  a = a,#
+  b = b,#
+  a_v1 = NULL,#
+  b_v1 = NULL,#
+  v1_g = v1_g)
+v0s<-seq(0.1,1,by=1)
+Testing:#
+library(EMVSpackage)#
+library(mvtnorm)#
+#
+n<-10000#
+p<-500#
+beta<-c(1,2,3,rep(0,p-3))#
+#
+rho<-0.5#
+Sig<-rho^abs(rep(1,p)%o%1:p-(1:p))#
+sigma<-sqrt(3)#
+#
+X<-rmvnorm(n,numeric(p),Sig)#
+Y<-X%*%beta+rnorm(n,0,sd=sigma)#
+#
+v0s<-seq(0.1,1,by=1)#
+v1<-100#
+v1_g<-100#
+a<-1#
+b<-1#
+beta_init<-rep(1,p)
+system.time(#
+result2 <- EMVS(Y=Y[,1],#
+  X=X,#
+  v0s = v0s,#
+  v1 = v1,#
+  type = "betabinomial",#
+  beta_init = beta_init,#
+  sigma_init = 1,#
+  epsilon  = 10^-4,#
+  temperature = NULL,#
+  Z = NULL,#
+  mu = NULL,#
+  Sigma = NULL,#
+  p = 0.5,#
+  a = a,#
+  b = b,#
+  a_v1 = NULL,#
+  b_v1 = NULL,#
+  v1_g = v1_g))
+Testing:#
+library(EMVSpackage)#
+library(mvtnorm)#
+#
+n<-10000#
+p<-500#
+beta<-c(1,2,3,rep(0,p-3))#
+#
+rho<-0.5#
+Sig<-rho^abs(rep(1,p)%o%1:p-(1:p))#
+sigma<-sqrt(3)#
+#
+X<-rmvnorm(n,numeric(p),Sig)#
+Y<-X%*%beta+rnorm(n,0,sd=sigma)#
+#
+v0s<-seq(0.1,1,by=1)#
+v1<-100#
+v1_g<-100#
+a<-1#
+b<-1#
+beta_init<-rep(1,p)
+system.time(#
+result2 <- EMVS(Y=Y[,1],#
+  X=X,#
+  v0s = v0s,#
+  v1 = v1,#
+  type = "betabinomial",#
+  beta_init = beta_init,#
+  sigma_init = 1,#
+  epsilon  = 10^-4,#
+  temperature = NULL,#
+  Z = NULL,#
+  mu = NULL,#
+  Sigma = NULL,#
+  p = 0.5,#
+  a = a,#
+  b = b,#
+  a_v1 = NULL,#
+  b_v1 = NULL,#
+  v1_g = v1_g))
+Testing:#
+library(EMVSpackage)#
+library(mvtnorm)#
+#
+n<-10000#
+p<-500#
+beta<-c(1,2,3,rep(0,p-3))#
+#
+rho<-0.5#
+Sig<-rho^abs(rep(1,p)%o%1:p-(1:p))#
+sigma<-sqrt(3)#
+#
+X<-rmvnorm(n,numeric(p),Sig)#
+Y<-X%*%beta+rnorm(n,0,sd=sigma)#
+#
+v0s<-seq(0.1,1,by=1)#
+v1<-100#
+v1_g<-100#
+a<-1#
+b<-1#
+beta_init<-rep(1,p)#
+system.time(#
+result2 <- EMVS(Y=Y[,1],#
+  X=X,#
+  v0s = v0s,#
+  v1 = v1,#
+  type = "betabinomial",#
+  beta_init = beta_init,#
+  sigma_init = 1,#
+  epsilon  = 10^-4,#
+  temperature = NULL,#
+  Z = NULL,#
+  mu = NULL,#
+  Sigma = NULL,#
+  p = 0.5,#
+  a = a,#
+  b = b,#
+  a_v1 = NULL,#
+  b_v1 = NULL,#
+  v1_g = v1_g))
+system.time(#
+result2 <- EMVS(Y=Y[,1],#
+  X=X,#
+  v0s = v0s,#
+  v1 = v1,#
+  type = "betabinomial",#
+  beta_init = beta_init,#
+  sigma_init = 1,#
+  epsilon  = 10^-4,#
+  temperature = NULL,#
+  Z = NULL,#
+  mu = NULL,#
+  Sigma = NULL,#
+  p = 0.5,#
+  a = a,#
+  b = b,#
+  a_v1 = NULL,#
+  b_v1 = NULL,#
+  v1_g = v1_g))
+Testing:#
+library(EMVSpackage)#
+library(mvtnorm)#
+#
+n<-10000#
+p<-500#
+beta<-c(1,2,3,rep(0,p-3))#
+#
+rho<-0.5#
+Sig<-rho^abs(rep(1,p)%o%1:p-(1:p))#
+sigma<-sqrt(3)#
+#
+X<-rmvnorm(n,numeric(p),Sig)#
+Y<-X%*%beta+rnorm(n,0,sd=sigma)#
+#
+v0s<-seq(0.1,1,by=1)#
+v1<-100#
+v1_g<-100#
+a<-1#
+b<-1#
+beta_init<-rep(1,p)#
+system.time(#
+result2 <- EMVS(Y=Y[,1],#
+  X=X,#
+  v0s = v0s,#
+  v1 = v1,#
+  type = "betabinomial",#
+  beta_init = beta_init,#
+  sigma_init = 1,#
+  epsilon  = 10^-4,#
+  temperature = NULL,#
+  Z = NULL,#
+  mu = NULL,#
+  Sigma = NULL,#
+  p = 0.5,#
+  a = a,#
+  b = b,#
+  a_v1 = NULL,#
+  b_v1 = NULL,#
+  v1_g = v1_g))
+z = t(X) %*% Y
+z = t(X) %*% X
+system.time(z = t(X) %*% X)
+system.time(z <- t(X) %*% X)
+Testing:#
+library(EMVSpackage)#
+library(mvtnorm)#
+#
+n<-10000#
+p<-500#
+beta<-c(1,2,3,rep(0,p-3))#
+#
+rho<-0.5#
+Sig<-rho^abs(rep(1,p)%o%1:p-(1:p))#
+sigma<-sqrt(3)#
+#
+X<-rmvnorm(n,numeric(p),Sig)#
+Y<-X%*%beta+rnorm(n,0,sd=sigma)#
+#
+v0s<-seq(0.1,1,by=1)#
+v1<-100#
+v1_g<-100#
+a<-1#
+b<-1#
+beta_init<-rep(1,p)#
+system.time(#
+result2 <- EMVS(Y=Y[,1],#
+  X=X,#
+  v0s = v0s,#
+  v1 = v1,#
+  type = "betabinomial",#
+  beta_init = beta_init,#
+  sigma_init = 1,#
+  epsilon  = 10^-4,#
+  temperature = NULL,#
+  Z = NULL,#
+  mu = NULL,#
+  Sigma = NULL,#
+  p = 0.5,#
+  a = a,#
+  b = b,#
+  a_v1 = NULL,#
+  b_v1 = NULL,#
+  v1_g = v1_g))
+library(EMVSpackage)#
+library(mvtnorm)#
+#
+n<-10000#
+p<-500#
+beta<-c(1,2,3,rep(0,p-3))#
+#
+rho<-0.5#
+Sig<-rho^abs(rep(1,p)%o%1:p-(1:p))#
+sigma<-sqrt(3)#
+#
+X<-rmvnorm(n,numeric(p),Sig)#
+Y<-X%*%beta+rnorm(n,0,sd=sigma)#
+#
+v0s<-seq(0.1,1,by=0.1)#
+v1<-100#
+v1_g<-100#
+a<-1#
+b<-1#
+beta_init<-rep(1,p)#
+system.time(#
+result2 <- EMVS(Y=Y[,1],#
+  X=X,#
+  v0s = v0s,#
+  v1 = v1,#
+  type = "betabinomial",#
+  beta_init = beta_init,#
+  sigma_init = 1,#
+  epsilon  = 10^-4,#
+  temperature = NULL,#
+  Z = NULL,#
+  mu = NULL,#
+  Sigma = NULL,#
+  p = 0.5,#
+  a = a,#
+  b = b,#
+  a_v1 = NULL,#
+  b_v1 = NULL,#
+  v1_g = v1_g))
+beta_init<-rep(1,p)#
+source("/Users/ville/Desktop/EMVS/EMVS_code2 (2).R")
+system.time(result1<-EMVS2(Y,#
+               X,#
+               v0s=v0s,#
+               v1=v1,#
+               type="betabinomial",#
+               sigma_init=1,#
+               epsilon=10^-4,#
+               p = 0.5,#
+               beta_init = beta_init,#
+               a=a,#
+               b=b,#
+               v1_g=v1_g))
+result1
+head(result1)
+head(result1$beta_k)
+names(result1)
+names(result1)head
+head(result1$betas)
+head(result1$betas[,1:5])
+head(result2$betas[,1:5])
+Testing:#
+library(EMVSpackage)#
+library(mvtnorm)#
+#
+n<-10000#
+p<-500#
+beta<-c(1,2,3,rep(0,p-3))#
+#
+rho<-0.5#
+Sig<-rho^abs(rep(1,p)%o%1:p-(1:p))#
+sigma<-sqrt(3)#
+#
+X<-rmvnorm(n,numeric(p),Sig)#
+Y<-X%*%beta+rnorm(n,0,sd=sigma)#
+#
+v0s<-seq(0.1,1,by=0.1)#
+v1<-100#
+v1_g<-100#
+a<-1#
+b<-1#
+beta_init<-rep(1,p)
+?EWMS
+Testing:#
+library(EMVSpackage)
+?EMVS
+library(EMVSpackage)
+?EMVS
+library(EMVSpackage)
+?EMVS
+Testing:#
+library(EMVSpackage)#
+library(mvtnorm)#
+#
+n<-10000#
+p<-500#
+beta<-c(1,2,3,rep(0,p-3))#
+#
+rho<-0.5#
+Sig<-rho^abs(rep(1,p)%o%1:p-(1:p))#
+sigma<-sqrt(3)#
+#
+X<-rmvnorm(n,numeric(p),Sig)#
+Y<-X%*%beta+rnorm(n,0,sd=sigma)#
+#
+v0s<-seq(0.1,1,by=0.1)#
+v1<-100#
+v1_g<-100#
+a<-1#
+b<-1#
+beta_init<-rep(1,p)#
+system.time(#
+result2 <- EMVS(Y=Y[,1],#
+  X=X,#
+  v0s = v0s,#
+  v1 = v1,#
+  type = "betabinomial",#
+  beta_init = beta_init,#
+  sigma_init = 1,#
+  epsilon  = 10^-4,#
+  temperature = NULL,#
+  Z = NULL,#
+  mu = NULL,#
+  Sigma = NULL,#
+  p = 0.5,#
+  a = a,#
+  b = b,#
+  a_v1 = NULL,#
+  b_v1 = NULL,#
+  v1_g = v1_g))
+Testing:#
+library(EMVSpackage)#
+library(mvtnorm)#
+#
+n<-10000#
+p<-500#
+beta<-c(1,2,3,rep(0,p-3))#
+#
+rho<-0.5#
+Sig<-rho^abs(rep(1,p)%o%1:p-(1:p))#
+sigma<-sqrt(3)#
+#
+X<-rmvnorm(n,numeric(p),Sig)#
+Y<-X%*%beta+rnorm(n,0,sd=sigma)#
+#
+v0s<-seq(0.1,1,by=0.1)#
+v1<-100#
+v1_g<-100#
+a<-1#
+b<-1#
+beta_init<-rep(1,p)
+library(EMVSpackage)
+system.time(#
+result2 <- EMVS(Y=Y[,1],#
+  X=X,#
+  v0s = v0s,#
+  v1 = v1,#
+  type = "betabinomial",#
+  beta_init = beta_init,#
+  sigma_init = 1,#
+  epsilon  = 10^-4,#
+  temperature = NULL,#
+  Z = NULL,#
+  mu = NULL,#
+  Sigma = NULL,#
+  p = 0.5,#
+  a = a,#
+  b = b,#
+  a_v1 = NULL,#
+  b_v1 = NULL,#
+  v1_g = v1_g))
+Testing:#
+library(mvtnorm)#
+#
+n<-10000#
+p<-500#
+beta<-c(1,2,3,rep(0,p-3))#
+#
+rho<-0.5#
+Sig<-rho^abs(rep(1,p)%o%1:p-(1:p))#
+sigma<-sqrt(3)#
+#
+X<-rmvnorm(n,numeric(p),Sig)#
+Y<-X%*%beta+rnorm(n,0,sd=sigma)#
+#
+v0s<-seq(0.1,1,by=0.1)#
+v1<-100#
+v1_g<-100#
+a<-1#
+b<-1#
+beta_init<-rep(1,p)
+system.time(#
+result2 <- EMVS(Y=Y[,1],#
+  X=X,#
+  v0s = v0s,#
+  v1 = v1,#
+  type = "betabinomial",#
+  beta_init = beta_init,#
+  sigma_init = 1,#
+  epsilon  = 10^-4,#
+  temperature = NULL,#
+  Z = NULL,#
+  mu = NULL,#
+  Sigma = NULL,#
+  p = 0.5,#
+  a = a,#
+  b = b,#
+  a_v1 = NULL,#
+  b_v1 = NULL,#
+  v1_g = v1_g))
+library(EMVSpackage)#
+#
+system.time(#
+result2 <- EMVS(Y=Y[,1],#
+  X=X,#
+  v0s = v0s,#
+  v1 = v1,#
+  type = "betabinomial",#
+  beta_init = beta_init,#
+  sigma_init = 1,#
+  epsilon  = 10^-4,#
+  temperature = NULL,#
+  Z = NULL,#
+  mu = NULL,#
+  Sigma = NULL,#
+  p = 0.5,#
+  a = a,#
+  b = b,#
+  a_v1 = NULL,#
+  b_v1 = NULL,#
+  v1_g = v1_g))
+system.time(result1<-EMVS2(Y,#
+               X,#
+               v0s=v0s,#
+               v1=v1,#
+               type="betabinomial",#
+               sigma_init=1,#
+               epsilon=10^-4,#
+               p = 0.5,#
+               beta_init = beta_init,#
+               a=a,#
+               b=b,#
+               v1_g=v1_g))
+source("/Users/ville/Desktop/EMVS/EMVS_code2 (2).R")
+system.time(result1<-EMVS2(Y,#
+               X,#
+               v0s=v0s,#
+               v1=v1,#
+               type="betabinomial",#
+               sigma_init=1,#
+               epsilon=10^-4,#
+               p = 0.5,#
+               beta_init = beta_init,#
+               a=a,#
+               b=b,#
+               v1_g=v1_g))
+n<-10000#
+p<-500#
+beta<-c(1,2,3,rep(0,p-3))#
+#
+rho<-0.5#
+Sig<-rho^abs(rep(1,p)%o%1:p-(1:p))#
+sigma<-sqrt(3)#
+#
+X<-rmvnorm(n,numeric(p),Sig)#
+Y<-X%*%beta+rnorm(n,0,sd=sigma)#
+#
+v0s<-seq(0.1,1,by=0.1)#
+v1<-100#
+v1_g<-100#
+a<-1#
+b<-1#
+beta_init<-rep(1,p)
+Testing:#
+library(mvtnorm)#
+#
+n<-10000#
+p<-500#
+beta<-c(1,2,3,rep(0,p-3))#
+#
+rho<-0.5#
+Sig<-rho^abs(rep(1,p)%o%1:p-(1:p))#
+sigma<-sqrt(3)#
+#
+X<-rmvnorm(n,numeric(p),Sig)#
+Y<-X%*%beta+rnorm(n,0,sd=sigma)#
+#
+v0s<-seq(0.1,1,by=0.1)#
+v1<-100#
+v1_g<-100#
+a<-1#
+b<-1#
+beta_init<-rep(1,p)
+library(EMVSpackage)
+system.time(#
+result2 <- EMVS(Y=Y[,1],#
+  X=X,#
+  v0s = v0s,#
+  v1 = v1,#
+  type = "betabinomial",#
+  beta_init = beta_init,#
+  sigma_init = 1,#
+  epsilon  = 10^-4,#
+  temperature = NULL,#
+  Z = NULL,#
+  mu = NULL,#
+  Sigma = NULL,#
+  p = 0.5,#
+  a = a,#
+  b = b,#
+  a_v1 = NULL,#
+  b_v1 = NULL,#
+  v1_g = v1_g))
+source("/Users/ville/Desktop/EMVS/EMVS_code2 (2).R")
+system.time(result1<-EMVS2(Y,#
+               X,#
+               v0s=v0s,#
+               v1=v1,#
+               type="betabinomial",#
+               sigma_init=1,#
+               epsilon=10^-4,#
+               p = 0.5,#
+               beta_init = beta_init,#
+               a=a,#
+               b=b,#
+               v1_g=v1_g))
+names(result1)
+head(result1$betas[,1:5])
+head(result2$betas[,1:5])
+head(result2$log_post[1:5])
+head(result1$log_post[1:5])
+dim(result2$betas)
+EMVS
+?EMVS
+v0s<-seq(0.1,1,by=0.5)#
+v1<-100#
+v1_g<-100#
+a<-1#
+b<-1#
+beta_init<-rep(1,p)
+v0s
+v0s<-seq(0.1,1,by=0.05)#
+v1<-100#
+v1_g<-100#
+a<-1#
+b<-1#
+beta_init<-rep(1,p)
+v0s
+system.time(#
+result2 <- EMVS(Y=Y[,1],#
+  X=X,#
+  v0s = v0s,#
+  v1 = v1,#
+  type = "betabinomial",#
+  beta_init = beta_init,#
+  sigma_init = 1,#
+  epsilon  = 10^-4,#
+  temperature = NULL,#
+  Z = NULL,#
+  mu = NULL,#
+  Sigma = NULL,#
+  p = 0.5,#
+  a = a,#
+  b = b,#
+  a_v1 = NULL,#
+  b_v1 = NULL,#
+  v1_g = v1_g))
+system.time(result1<-EMVS2(Y,#
+               X,#
+               v0s=v0s,#
+               v1=v1,#
+               type="betabinomial",#
+               sigma_init=1,#
+               epsilon=10^-4,#
+               p = 0.5,#
+               beta_init = beta_init,#
+               a=a,#
+               b=b,#
+               v1_g=v1_g))
+Testing:#
+library(mvtnorm)#
+#
+n<-10000#
+p<-500#
+beta<-c(1,2,3,rep(0,p-3))#
+#
+rho<-0.5#
+Sig<-rho^abs(rep(1,p)%o%1:p-(1:p))#
+sigma<-sqrt(3)#
+#
+X<-rmvnorm(n,numeric(p),Sig)#
+Y<-X%*%beta+rnorm(n,0,sd=sigma)#
+#
+v0s<-seq(0.1,1,by=1)#
+v1<-100#
+v1_g<-100#
+a<-1#
+b<-1#
+beta_init<-rep(1,p)#
+#
+library(EMVSpackage)#
+#
+system.time(#
+result2 <- EMVS(Y=Y[,1],#
+  X=X,#
+  v0s = v0s,#
+  v1 = v1,#
+  type = "betabinomial",#
+  beta_init = beta_init,#
+  sigma_init = 1,#
+  epsilon  = 10^-4,#
+  temperature = NULL,#
+  Z = NULL,#
+  mu = NULL,#
+  Sigma = NULL,#
+  p = 0.5,#
+  a = a,#
+  b = b,#
+  a_v1 = NULL,#
+  b_v1 = NULL,#
+  v1_g = v1_g))
+head(X)
+head(Y)
+Testing:#
+library(mvtnorm)#
+#
+n<-10000#
+p<-500#
+beta<-c(1,2,3,rep(0,p-3))#
+#
+rho<-0.5#
+Sig<-rho^abs(rep(1,p)%o%1:p-(1:p))#
+sigma<-sqrt(3)#
+#
+X<-rmvnorm(n,numeric(p),Sig)#
+Y<-X%*%beta+rnorm(n,0,sd=sigma)#
+#
+v0s<-seq(0.1,1,by=1)#
+v1<-100#
+v1_g<-100#
+a<-1#
+b<-1#
+beta_init<-rep(1,p)#
+#
+library(EMVSpackage)#
+#
+system.time(#
+result2 <- EMVS(Y=Y[,1],#
+  X=X,#
+  v0s = v0s,#
+  v1 = v1,#
+  type = "betabinomial",#
+  beta_init = beta_init,#
+  sigma_init = 1,#
+  epsilon  = 10^-4,#
+  temperature = NULL,#
+  Z = NULL,#
+  mu = NULL,#
+  Sigma = NULL,#
+  p = 0.5,#
+  a = a,#
+  b = b,#
+  a_v1 = NULL,#
+  b_v1 = NULL,#
+  v1_g = v1_g))
+Testing:#
+library(mvtnorm)#
+#
+n<-10000#
+p<-500#
+beta<-c(1,2,3,rep(0,p-3))#
+#
+rho<-0.5#
+Sig<-rho^abs(rep(1,p)%o%1:p-(1:p))#
+sigma<-sqrt(3)#
+#
+X<-rmvnorm(n,numeric(p),Sig)#
+Y<-X%*%beta+rnorm(n,0,sd=sigma)#
+#
+v0s<-seq(0.1,1,by=0.1)#
+v1<-100#
+v1_g<-100#
+a<-1#
+b<-1#
+beta_init<-rep(1,p)#
+#
+library(EMVSpackage)#
+#
+system.time(#
+result2 <- EMVS(Y=Y[,1],#
+  X=X,#
+  v0s = v0s,#
+  v1 = v1,#
+  type = "betabinomial",#
+  beta_init = beta_init,#
+  sigma_init = 1,#
+  epsilon  = 10^-4,#
+  temperature = NULL,#
+  Z = NULL,#
+  mu = NULL,#
+  Sigma = NULL,#
+  p = 0.5,#
+  a = a,#
+  b = b,#
+  a_v1 = NULL,#
+  b_v1 = NULL,#
+  v1_g = v1_g))
+result1
+result1
+result2
+source("/Users/ville/Desktop/EMVS/EMVS_code2 (2).R")#
+result1<-EMVS2(Y,#
+               X,#
+               v0s=v0s,#
+               v1=v1,#
+               type="betabinomial",#
+               sigma_init=1,#
+               epsilon=10^-4,#
+               p = 0.5,#
+               beta_init = beta_init,#
+               a=a,#
+               b=b,#
+               v1_g=v1_g)
+system.time(result1<-EMVS2(Y,#
+               X,#
+               v0s=v0s,#
+               v1=v1,#
+               type="betabinomial",#
+               sigma_init=1,#
+               epsilon=10^-4,#
+               p = 0.5,#
+               beta_init = beta_init,#
+               a=a,#
+               b=b,#
+               v1_g=v1_g))
+system.time(#
+result2 <- EMVS(Y=Y[,1],#
+  X=X,#
+  v0s = v0s,#
+  v1 = v1,#
+  type = "betabinomial",#
+  beta_init = beta_init,#
+  sigma_init = 1,#
+  epsilon  = 10^-4,#
+  temperature = NULL,#
+  Z = NULL,#
+  mu = NULL,#
+  Sigma = NULL,#
+  p = 0.5,#
+  a = a,#
+  b = b,#
+  a_v1 = NULL,#
+  b_v1 = NULL,#
+  v1_g = v1_g))
+system.time(#
+result2 <- EMVS(Y=Y[,1],#
+  X=X,#
+  v0s = v0s,#
+  v1 = v1,#
+  type = "betabinomial",#
+  beta_init = beta_init,#
+  sigma_init = 1,#
+  epsilon  = 10^-4,#
+  temperature = NULL,#
+  Z = NULL,#
+  mu = NULL,#
+  Sigma = NULL,#
+  p = 0.5,#
+  a = a,#
+  b = b,#
+  a_v1 = NULL,#
+  b_v1 = NULL,#
+  v1_g = v1_g))
+0.54208/0.933
+system.time(#
+result2 <- EMVS(Y=Y[,1],#
+  X=X,#
+  v0s = v0s,#
+  v1 = v1,#
+  type = "betabinomial",#
+  beta_init = beta_init,#
+  sigma_init = 1,#
+  epsilon  = 10^-4,#
+  temperature = NULL,#
+  Z = NULL,#
+  mu = NULL,#
+  Sigma = NULL,#
+  p = 0.5,#
+  a = a,#
+  b = b,#
+  a_v1 = NULL,#
+  b_v1 = NULL,#
+  v1_g = v1_g))
+system.time(#
+result2 <- EMVS(Y=Y[,1],#
+  X=X,#
+  v0s = v0s,#
+  v1 = v1,#
+  type = "betabinomial",#
+  beta_init = beta_init,#
+  sigma_init = 1,#
+  epsilon  = 10^-4,#
+  temperature = NULL,#
+  Z = NULL,#
+  mu = NULL,#
+  Sigma = NULL,#
+  p = 0.5,#
+  a = a,#
+  b = b,#
+  a_v1 = NULL,#
+  b_v1 = NULL,#
+  v1_g = v1_g))
+system.time(#
+result2 <- EMVS(Y=Y[,1],#
+  X=X,#
+  v0s = v0s,#
+  v1 = v1,#
+  type = "betabinomial",#
+  beta_init = beta_init,#
+  sigma_init = 1,#
+  epsilon  = 10^-4,#
+  temperature = NULL,#
+  Z = NULL,#
+  mu = NULL,#
+  Sigma = NULL,#
+  p = 0.5,#
+  a = a,#
+  b = b,#
+  a_v1 = NULL,#
+  b_v1 = NULL,#
+  v1_g = v1_g))
+system.time(#
+result2 <- EMVS(Y=Y[,1],#
+  X=X,#
+  v0s = v0s,#
+  v1 = v1,#
+  type = "betabinomial",#
+  beta_init = beta_init,#
+  sigma_init = 1,#
+  epsilon  = 10^-4,#
+  temperature = NULL,#
+  Z = NULL,#
+  mu = NULL,#
+  Sigma = NULL,#
+  p = 0.5,#
+  a = a,#
+  b = b,#
+  a_v1 = NULL,#
+  b_v1 = NULL,#
+  v1_g = v1_g))
+system.time(#
+result2 <- EMVS(Y=Y[,1],#
+  X=X,#
+  v0s = v0s,#
+  v1 = v1,#
+  type = "betabinomial",#
+  beta_init = beta_init,#
+  sigma_init = 1,#
+  epsilon  = 10^-4,#
+  temperature = NULL,#
+  Z = NULL,#
+  mu = NULL,#
+  Sigma = NULL,#
+  p = 0.5,#
+  a = a,#
+  b = b,#
+  a_v1 = NULL,#
+  b_v1 = NULL,#
+  v1_g = v1_g))
+system.time(#
+result2 <- EMVS(Y=Y[,1],#
+  X=X,#
+  v0s = v0s,#
+  v1 = v1,#
+  type = "betabinomial",#
+  beta_init = beta_init,#
+  sigma_init = 1,#
+  epsilon  = 10^-4,#
+  temperature = NULL,#
+  Z = NULL,#
+  mu = NULL,#
+  Sigma = NULL,#
+  p = 0.5,#
+  a = a,#
+  b = b,#
+  a_v1 = NULL,#
+  b_v1 = NULL,#
+  v1_g = v1_g))
+system.time(#
+result2 <- EMVS(Y=Y[,1],#
+  X=X,#
+  v0s = v0s,#
+  v1 = v1,#
+  type = "betabinomial",#
+  beta_init = beta_init,#
+  sigma_init = 1,#
+  epsilon  = 10^-4,#
+  temperature = NULL,#
+  Z = NULL,#
+  mu = NULL,#
+  Sigma = NULL,#
+  p = 0.5,#
+  a = a,#
+  b = b,#
+  a_v1 = NULL,#
+  b_v1 = NULL,#
+  v1_g = v1_g))
+system.time(#
+result2 <- EMVS(Y=Y[,1],#
+  X=X,#
+  v0s = v0s,#
+  v1 = v1,#
+  type = "betabinomial",#
+  beta_init = beta_init,#
+  sigma_init = 1,#
+  epsilon  = 10^-4,#
+  temperature = NULL,#
+  Z = NULL,#
+  mu = NULL,#
+  Sigma = NULL,#
+  p = 0.5,#
+  a = a,#
+  b = b,#
+  a_v1 = NULL,#
+  b_v1 = NULL,#
+  v1_g = v1_g))
+system.time(#
+result2 <- EMVS(Y=Y[,1],#
+  X=X,#
+  v0s = v0s,#
+  v1 = v1,#
+  type = "betabinomial",#
+  beta_init = beta_init,#
+  sigma_init = 1,#
+  epsilon  = 10^-4,#
+  temperature = NULL,#
+  Z = NULL,#
+  mu = NULL,#
+  Sigma = NULL,#
+  p = 0.5,#
+  a = a,#
+  b = b,#
+  a_v1 = NULL,#
+  b_v1 = NULL,#
+  v1_g = v1_g))
+system.time(#
+result2 <- EMVS(Y=Y[,1],#
+  X=X,#
+  v0s = v0s,#
+  v1 = v1,#
+  type = "betabinomial",#
+  beta_init = beta_init,#
+  sigma_init = 1,#
+  epsilon  = 10^-4,#
+  temperature = NULL,#
+  Z = NULL,#
+  mu = NULL,#
+  Sigma = NULL,#
+  p = 0.5,#
+  a = a,#
+  b = b,#
+  a_v1 = NULL,#
+  b_v1 = NULL,#
+  v1_g = v1_g))
+system.time(#
+result2 <- EMVS(Y=Y[,1],#
+  X=X,#
+  v0s = v0s,#
+  v1 = v1,#
+  type = "betabinomial",#
+  beta_init = beta_init,#
+  sigma_init = 1,#
+  epsilon  = 10^-4,#
+  temperature = NULL,#
+  Z = NULL,#
+  mu = NULL,#
+  Sigma = NULL,#
+  p = 0.5,#
+  a = a,#
+  b = b,#
+  a_v1 = NULL,#
+  b_v1 = NULL,#
+  v1_g = v1_g))
+system.time(#
+result2 <- EMVS(Y=Y[,1],#
+  X=X,#
+  v0s = v0s,#
+  v1 = v1,#
+  type = "betabinomial",#
+  beta_init = beta_init,#
+  sigma_init = 1,#
+  epsilon  = 10^-4,#
+  temperature = NULL,#
+  Z = NULL,#
+  mu = NULL,#
+  Sigma = NULL,#
+  p = 0.5,#
+  a = a,#
+  b = b,#
+  a_v1 = NULL,#
+  b_v1 = NULL,#
+  v1_g = v1_g))
+system.time(#
+result2 <- EMVS(Y=Y[,1],#
+  X=X,#
+  v0s = v0s,#
+  v1 = v1,#
+  type = "betabinomial",#
+  beta_init = beta_init,#
+  sigma_init = 1,#
+  epsilon  = 10^-4,#
+  temperature = NULL,#
+  Z = NULL,#
+  mu = NULL,#
+  Sigma = NULL,#
+  p = 0.5,#
+  a = a,#
+  b = b,#
+  a_v1 = NULL,#
+  b_v1 = NULL,#
+  v1_g = v1_g))
+Testing:#
+library(mvtnorm)#
+#
+n<-10000#
+p<-500#
+beta<-c(1,2,3,rep(0,p-3))#
+#
+rho<-0.5#
+Sig<-rho^abs(rep(1,p)%o%1:p-(1:p))#
+sigma<-sqrt(3)#
+#
+X<-rmvnorm(n,numeric(p),Sig)#
+Y<-X%*%beta+rnorm(n,0,sd=sigma)#
+#
+v0s<-seq(0.1,1,by=0.01)#
+v1<-100#
+v1_g<-100#
+a<-1#
+b<-1#
+beta_init<-rep(1,p)#
+#
+library(EMVSpackage)#
+#
+system.time(#
+result2 <- EMVS(Y=Y[,1],#
+  X=X,#
+  v0s = v0s,#
+  v1 = v1,#
+  type = "betabinomial",#
+  beta_init = beta_init,#
+  sigma_init = 1,#
+  epsilon  = 10^-4,#
+  temperature = NULL,#
+  Z = NULL,#
+  mu = NULL,#
+  Sigma = NULL,#
+  p = 0.5,#
+  a = a,#
+  b = b,#
+  a_v1 = NULL,#
+  b_v1 = NULL,#
+  v1_g = v1_g))
+system.time(result1<-EMVS2(Y,#
+               X,#
+               v0s=v0s,#
+               v1=v1,#
+               type="betabinomial",#
+               sigma_init=1,#
+               epsilon=10^-4,#
+               p = 0.5,#
+               beta_init = beta_init,#
+               a=a,#
+               b=b,#
+               v1_g=v1_g))
+19/6.441
+cd /Library/Frameworks/R.framework/Resources/lib#
+# for vecLib use#
+##ln -sf libRblas.vecLib.dylib libRblas.dylib#
+# for R reference BLAS use#
+## ln -sf libRblas.0.dylib libRblas.dylib#
+#
+## Testing:#
+library(mvtnorm)#
+#
+n<-10000#
+p<-500#
+beta<-c(1,2,3,rep(0,p-3))#
+#
+rho<-0.5#
+Sig<-rho^abs(rep(1,p)%o%1:p-(1:p))#
+sigma<-sqrt(3)#
+#
+X<-rmvnorm(n,numeric(p),Sig)#
+Y<-X%*%beta+rnorm(n,0,sd=sigma)#
+#
+v0s<-seq(0.1,1,by=0.1)#
+v1<-100#
+v1_g<-100#
+a<-1#
+b<-1#
+beta_init<-rep(1,p)#
+#
+library(EMVSpackage)#
+#
+system.time(#
+result2 <- EMVS(Y=Y[,1],#
+  X=X,#
+  v0s = v0s,#
+  v1 = v1,#
+  type = "betabinomial",#
+  beta_init = beta_init,#
+  sigma_init = 1,#
+  epsilon  = 10^-4,#
+  temperature = NULL,#
+  Z = NULL,#
+  mu = NULL,#
+  Sigma = NULL,#
+  p = 0.5,#
+  a = a,#
+  b = b,#
+  a_v1 = NULL,#
+  b_v1 = NULL,#
+  v1_g = v1_g))
+T = 100#
+Ks = c(20, 40, 60, 80, 100) ## Number of problems#
+betas = c(0.5, 0.75, 1, 1/0.75, 1/0.5) ## Expected bias mean: same effect around 1.0#
+sigma2s = c(0.5, 1.0, 1.5, 2.0, 2.5)#
+load("/Users/ville/Desktop/Dynamic_Logit_Model/ExpertAnalysis/X.losses.RData")#
+load("/Users/ville/Desktop/Dynamic_Logit_Model/ExpertAnalysis/b.losses.RData")#
+#
+#load("/Users/ville/Desktop/Dynamic_Logit_Model/ExpertAnalysis/X.log.losses.RData")#
+#load("/Users/ville/Desktop/Dynamic_Logit_Model/ExpertAnalysis/b.log.losses.RData")#
+#X.losses = X.log.losses#
+#b.losses = b.log.losses#
+#
+######## XXXXXXXXX#
+#
+#betas.x = sapply(betas, function(x) exp(mean(log(x*c(0.5, 0.75, 1, 1/0.75, 1/0.5)))) )#
+#betas.x = sapply(betas, function(x) mean(x*c(0.5, 0.75, 1, 1/0.75, 1/0.5)) )#
+#betas.x = sapply(betas, function(x) sd(x*c(0.5, 0.75, 1, 1/0.75, 1/0.5)) )#
+#betas.x = sapply(betas, function(x) mean(abs(x*c(0.5, 0.75, 1, 1/0.75, 1/0.5)-1)) )#
+betas.x = betas#
+wsize = 2#
+hsize = 1.8#
+font = 8#
+#
+setwd("/Users/ville/probability_aggregation/Figures/")#
+#CairoPDF(file = "SyntheticSigma2.pdf", width = size, height = size, onefile = TRUE, family = "Times", pointsize = font)#
+pdf("SyntheticSigma2.pdf", width = wsize, height = hsize, family = "Times", pointsize = font)#
+par(mgp = c(1.5,.5,0), mar=c(2.4,2.8,0.8,0.2))#
+BRI = apply(X.losses[[1]], 1, mean)#
+LOG = apply(X.losses[[2]], 1, mean)#
+#EWMLA = apply(X.losses[[3]], 1, mean)#
+EWMA = apply(X.losses[[4]], 1, mean)#
+#FULL = apply(X.losses[[3]], 1, mean)#
+plot(BRI~sigma2s, type = "l", col = 1, lwd = 2, ylim = range(BRI, LOG, EWMA), xlab = expression(paste(sigma^2)), ylab = "Quadratic Loss", axes = FALSE)#
+box()#
+axis(1, at = round(sigma2s,1))#
+axis(2)#
+#axis(2, at = signif(seq(min(BRI,LOG), max(BRI,LOG), length = 5)[2:4], 2))#
+lines(LOG~sigma2s, lty = 2, lwd = 2)#
+#lines(EWMLA~sigma2s, lty = 2, lwd = 2, col = 2)#
+lines(EWMA~sigma2s, lty = 3, lwd = 2)#
+#lines(FULL~sigma2s, col = 3, lwd = 2)#
+dev.off()#
+#
+setwd("/Users/ville/probability_aggregation/Figures/")#
+#CairoPDF(file = "SyntheticBeta.pdf", width = size, height = size, onefile = TRUE, family = "Times", pointsize = font)#
+pdf(file = "SyntheticBeta.pdf", width = wsize, height = hsize, onefile = TRUE, family = "Times", pointsize = font)#
+par(mgp = c(1.5,.5,0), mar=c(2.4,2.8,0.8,0.2))#
+BRI = apply(X.losses[[1]], 2, mean)#
+LOG = apply(X.losses[[2]], 2, mean)#
+#EWMLA = apply(X.losses[[3]], 2, mean)#
+EWMA = apply(X.losses[[4]], 2, mean)#
+#FULL = apply(X.losses[[3]], 2, mean)#
+plot(BRI~betas.x, type = "l", col = 1, lwd = 2, ylim =range(BRI, LOG, EWMA), xlab = expression(paste(beta)), ylab = "Quadratic Loss", axes = FALSE)#
+box()#
+axis(1, at = round(betas.x,1))#
+#axis(2, at = signif(seq(min(BRI,LOG), max(BRI,LOG), length = 5)[2:4], 2))#
+axis(2)#
+lines(LOG~betas.x, lty = 2, lwd = 2)#
+#lines(EWMLA~betas.x, lty = 2, lwd = 2, col = 2)#
+lines(EWMA~betas.x, lty = 3, lwd = 2)#
+#lines(FULL~betas, col = 3, lwd = 2)#
+dev.off()#
+#
+setwd("/Users/ville/probability_aggregation/Figures/")#
+#CairoPDF(file = "SyntheticK.pdf", width = size, height = size, onefile = TRUE, family = "Times", pointsize = font)#
+pdf(file = "SyntheticK.pdf", width = wsize, height = hsize, onefile = TRUE, family = "Times", pointsize = font)#
+par(mgp = c(1.5,.5,0), mar=c(2.4,2.8,0.8,0.2))#
+BRI = apply(X.losses[[1]], 3, mean)#
+LOG = apply(X.losses[[2]], 3, mean)#
+#EWMLA = apply(X.losses[[3]], 3, mean)#
+EWMA = apply(X.losses[[4]], 3, mean)#
+#FULL = apply(X.losses[[3]], 3, mean)#
+plot(BRI~Ks, type = "l", col = 1, lwd = 2, ylim = range(BRI, LOG, EWMA), xlab = "K", ylab = "Quadratic Loss", axes = FALSE)#
+box()#
+axis(1, at = round(Ks, 1))#
+axis(2)#
+#axis(2, at = signif(seq(min(BRI,LOG), max(BRI,LOG), length = 5)[2:4], 2))#
+lines(LOG~Ks, lwd = 2, lty = 2)#
+#lines(EWMLA~Ks, lty = 2, lwd = 2, col = 2)#
+lines(EWMA~Ks, lty = 3, lwd = 2)#
+#lines(FULL~Ks, col = 3, lwd = 2)#
+dev.off()#
+######## BBBBBBBBBBBB#
+setwd("/Users/ville/probability_aggregation/Figures/")#
+pdf("SyntheticSigma2bias.pdf", width = wsize, height = hsize, onefile = TRUE, family = "Times", pointsize = font)#
+par(mgp = c(1.5,.5,0), mar=c(2.4,2.8,0.8,0.2))#
+BRI = apply(b.losses[[1]], 1, mean)#
+LOG = apply(b.losses[[2]], 1, mean)#
+#FULL = apply(b.losses[[3]], 1, mean)#
+plot(BRI~sigma2s, type = "l", col = 1, lwd = 2, ylim = range(BRI, LOG), xlab = expression(paste(sigma^2)), ylab = "Quadratic Loss", axes = FALSE)#
+box()#
+axis(1, at = round(sigma2s, 1))#
+#axis(2, at = signif(seq(min(BRI,LOG), max(BRI,LOG), length = 5)[2:4], 2))#
+axis(2)#
+lines(LOG~sigma2s, lwd = 2, lty = 2)#
+#lines(FULL~sigma2s, col = 3, lwd = 2)#
+dev.off()#
+#
+setwd("/Users/ville/probability_aggregation/Figures/")#
+pdf("SyntheticBetabias.pdf", width = wsize, height = hsize, onefile = TRUE, family = "Times", pointsize = font)#
+par(mgp = c(1.5,.5,0), mar=c(2.4,2.8,0.8,0.2))#
+BRI = apply(b.losses[[1]], 2, mean)#
+LOG = apply(b.losses[[2]], 2, mean)#
+#FULL = apply(b.losses[[3]], 2, mean)#
+plot(BRI~betas.x, type = "l", col = 1, lwd = 2, ylim = range(BRI, LOG), xlab = expression(paste(beta)), ylab = "Quadratic Loss", axes = FALSE)#
+box()#
+axis(1, at = round(betas.x, 1))#
+axis(2)#
+#axis(2, at = signif(seq(min(BRI,LOG), max(BRI,LOG), length = 5)[2:4], 2))#
+lines(LOG~betas.x, lwd = 2, lty = 2)#
+#lines(FULL~betas, col = 3, lwd = 2)#
+dev.off()#
+#
+setwd("/Users/ville/probability_aggregation/Figures/")#
+pdf("SyntheticKbias.pdf", width = wsize, height = hsize, onefile = TRUE, family = "Times", pointsize = font)#
+par(mgp = c(1.5,.5,0), mar=c(2.4,2.8,0.8,0.2))#
+BRI = apply(b.losses[[1]], 3, mean)#
+LOG = apply(b.losses[[2]], 3, mean)#
+#FULL = apply(b.losses[[3]], 3, mean)#
+plot(BRI~Ks, type = "l", col = 1, lwd = 2, ylim = range(BRI, LOG), xlab = "K", ylab = "Quadratic Loss", axes = FALSE)#
+box()#
+axis(1, at = round(Ks, 1))#
+axis(2)#
+#axis(2, at = signif(seq(min(BRI,LOG), max(BRI,LOG), length = 5)[2:4], 2))#
+lines(LOG~Ks,  lwd = 2, lty = 2)#
+#lines(FULL~Ks, col = 3, lwd = 2)#
+dev.off()
+T = 100#
+Ks = c(20, 40, 60, 80, 100) ## Number of problems#
+betas = c(0.5, 0.75, 1, 1/0.75, 1/0.5) ## Expected bias mean: same effect around 1.0#
+sigma2s = c(0.5, 1.0, 1.5, 2.0, 2.5)#
+load("/Users/ville/Desktop/Dynamic_Logit_Model/ExpertAnalysis/X.losses.RData")#
+load("/Users/ville/Desktop/Dynamic_Logit_Model/ExpertAnalysis/b.losses.RData")#
+#
+#load("/Users/ville/Desktop/Dynamic_Logit_Model/ExpertAnalysis/X.log.losses.RData")#
+#load("/Users/ville/Desktop/Dynamic_Logit_Model/ExpertAnalysis/b.log.losses.RData")#
+#X.losses = X.log.losses#
+#b.losses = b.log.losses#
+#
+######## XXXXXXXXX#
+#
+#betas.x = sapply(betas, function(x) exp(mean(log(x*c(0.5, 0.75, 1, 1/0.75, 1/0.5)))) )#
+#betas.x = sapply(betas, function(x) mean(x*c(0.5, 0.75, 1, 1/0.75, 1/0.5)) )#
+#betas.x = sapply(betas, function(x) sd(x*c(0.5, 0.75, 1, 1/0.75, 1/0.5)) )#
+#betas.x = sapply(betas, function(x) mean(abs(x*c(0.5, 0.75, 1, 1/0.75, 1/0.5)-1)) )#
+betas.x = betas#
+wsize = 2#
+hsize = 1.8#
+font = 8#
+#
+setwd("/Users/ville/probability_aggregation/Figures/")#
+#CairoPDF(file = "SyntheticSigma2.pdf", width = size, height = size, onefile = TRUE, family = "Times", pointsize = font)#
+pdf("SyntheticSigma2.pdf", width = wsize, height = hsize, family = "Times", pointsize = font)#
+par(mgp = c(1.5,.5,0), mar=c(2.4,2.8,0.8,0.2))#
+BRI = apply(X.losses[[1]], 1, mean)#
+LOG = apply(X.losses[[2]], 1, mean)#
+#EWMLA = apply(X.losses[[3]], 1, mean)#
+EWMA = apply(X.losses[[4]], 1, mean)#
+#FULL = apply(X.losses[[3]], 1, mean)#
+plot(BRI~sigma2s, type = "l", col = 1, lwd = 2, ylim = range(BRI, LOG, EWMA), xlab = expression(paste(sigma^2)), ylab = "Quadratic Loss", axes = FALSE)#
+box()#
+axis(1, at = round(sigma2s,1))#
+axis(2)#
+#axis(2, at = signif(seq(min(BRI,LOG), max(BRI,LOG), length = 5)[2:4], 2))#
+lines(LOG~sigma2s, lty = 2, lwd = 2)#
+#lines(EWMLA~sigma2s, lty = 2, lwd = 2, col = 2)#
+lines(EWMA~sigma2s, lty = 3, lwd = 2)#
+#lines(FULL~sigma2s, col = 3, lwd = 2)#
+dev.off()#
+#
+setwd("/Users/ville/probability_aggregation/Figures/")#
+#CairoPDF(file = "SyntheticBeta.pdf", width = size, height = size, onefile = TRUE, family = "Times", pointsize = font)#
+pdf(file = "SyntheticBeta.pdf", width = wsize, height = hsize, onefile = TRUE, family = "Times", pointsize = font)#
+par(mgp = c(1.5,.5,0), mar=c(2.4,2.8,0.8,0.2))#
+BRI = apply(X.losses[[1]], 2, mean)#
+LOG = apply(X.losses[[2]], 2, mean)#
+#EWMLA = apply(X.losses[[3]], 2, mean)#
+EWMA = apply(X.losses[[4]], 2, mean)#
+#FULL = apply(X.losses[[3]], 2, mean)#
+plot(BRI~betas.x, type = "l", col = 1, lwd = 2, ylim =range(BRI, LOG, EWMA), xlab = expression(paste(beta)), ylab = "Quadratic Loss", axes = FALSE)#
+box()#
+axis(1, at = round(betas.x,1))#
+#axis(2, at = signif(seq(min(BRI,LOG), max(BRI,LOG), length = 5)[2:4], 2))#
+axis(2)#
+lines(LOG~betas.x, lty = 2, lwd = 2)#
+#lines(EWMLA~betas.x, lty = 2, lwd = 2, col = 2)#
+lines(EWMA~betas.x, lty = 3, lwd = 2)#
+#lines(FULL~betas, col = 3, lwd = 2)#
+dev.off()#
+#
+setwd("/Users/ville/probability_aggregation/Figures/")#
+#CairoPDF(file = "SyntheticK.pdf", width = size, height = size, onefile = TRUE, family = "Times", pointsize = font)#
+pdf(file = "SyntheticK.pdf", width = wsize, height = hsize, onefile = TRUE, family = "Times", pointsize = font)#
+par(mgp = c(1.5,.5,0), mar=c(2.4,2.8,0.8,0.2))#
+BRI = apply(X.losses[[1]], 3, mean)#
+LOG = apply(X.losses[[2]], 3, mean)#
+#EWMLA = apply(X.losses[[3]], 3, mean)#
+EWMA = apply(X.losses[[4]], 3, mean)#
+#FULL = apply(X.losses[[3]], 3, mean)#
+plot(BRI~Ks, type = "l", col = 1, lwd = 2, ylim = range(BRI, LOG, EWMA), xlab = "K", ylab = "Quadratic Loss", axes = FALSE)#
+box()#
+axis(1, at = round(Ks, 1))#
+axis(2)#
+#axis(2, at = signif(seq(min(BRI,LOG), max(BRI,LOG), length = 5)[2:4], 2))#
+lines(LOG~Ks, lwd = 2, lty = 2)#
+#lines(EWMLA~Ks, lty = 2, lwd = 2, col = 2)#
+lines(EWMA~Ks, lty = 3, lwd = 2)#
+#lines(FULL~Ks, col = 3, lwd = 2)#
+dev.off()#
+######## BBBBBBBBBBBB#
+setwd("/Users/ville/probability_aggregation/Figures/")#
+pdf("SyntheticSigma2bias.pdf", width = wsize, height = hsize, onefile = TRUE, family = "Times", pointsize = font)#
+par(mgp = c(1.5,.5,0), mar=c(2.4,2.8,0.8,0.2))#
+BRI = apply(b.losses[[1]], 1, mean)#
+LOG = apply(b.losses[[2]], 1, mean)#
+#FULL = apply(b.losses[[3]], 1, mean)#
+plot(BRI~sigma2s, type = "l", col = 1, lwd = 2, ylim = range(BRI, LOG), xlab = expression(paste(sigma^2)), ylab = "Quadratic Loss", axes = FALSE)#
+box()#
+axis(1, at = round(sigma2s, 1))#
+#axis(2, at = signif(seq(min(BRI,LOG), max(BRI,LOG), length = 5)[2:4], 2))#
+axis(2)#
+lines(LOG~sigma2s, lwd = 2, lty = 2)#
+#lines(FULL~sigma2s, col = 3, lwd = 2)#
+dev.off()#
+#
+setwd("/Users/ville/probability_aggregation/Figures/")#
+pdf("SyntheticBetabias.pdf", width = wsize, height = hsize, onefile = TRUE, family = "Times", pointsize = font)#
+par(mgp = c(1.5,.5,0), mar=c(2.4,2.8,0.8,0.2))#
+BRI = apply(b.losses[[1]], 2, mean)#
+LOG = apply(b.losses[[2]], 2, mean)#
+#FULL = apply(b.losses[[3]], 2, mean)#
+plot(BRI~betas.x, type = "l", col = 1, lwd = 2, ylim = range(BRI, LOG), xlab = expression(paste(beta)), ylab = "Quadratic Loss", axes = FALSE)#
+box()#
+axis(1, at = round(betas.x, 1))#
+axis(2)#
+#axis(2, at = signif(seq(min(BRI,LOG), max(BRI,LOG), length = 5)[2:4], 2))#
+lines(LOG~betas.x, lwd = 2, lty = 2)#
+#lines(FULL~betas, col = 3, lwd = 2)#
+dev.off()#
+#
+setwd("/Users/ville/probability_aggregation/Figures/")#
+pdf("SyntheticKbias.pdf", width = wsize, height = hsize, onefile = TRUE, family = "Times", pointsize = font)#
+par(mgp = c(1.5,.5,0), mar=c(2.4,2.8,0.8,0.2))#
+BRI = apply(b.losses[[1]], 3, mean)#
+LOG = apply(b.losses[[2]], 3, mean)#
+#FULL = apply(b.losses[[3]], 3, mean)#
+plot(BRI~Ks, type = "l", col = 1, lwd = 2, ylim = range(BRI, LOG), xlab = "K", ylab = "Quadratic Loss", axes = FALSE)#
+box()#
+axis(1, at = round(Ks, 1))#
+axis(2)#
+#axis(2, at = signif(seq(min(BRI,LOG), max(BRI,LOG), length = 5)[2:4], 2))#
+lines(LOG~Ks,  lwd = 2, lty = 2)#
+#lines(FULL~Ks, col = 3, lwd = 2)#
+dev.off()
+?optim
+?INSTALL
+T = 100#
+Ks = c(20, 40, 60, 80, 100) ## Number of problems#
+betas = c(0.5, 0.75, 1, 1/0.75, 1/0.5) ## Expected bias mean: same effect around 1.0#
+sigma2s = c(0.5, 1.0, 1.5, 2.0, 2.5)#
+load("/Users/ville/Desktop/Dynamic_Logit_Model/ExpertAnalysis/X.losses.RData")#
+load("/Users/ville/Desktop/Dynamic_Logit_Model/ExpertAnalysis/b.losses.RData")#
+#
+#load("/Users/ville/Desktop/Dynamic_Logit_Model/ExpertAnalysis/X.log.losses.RData")#
+#load("/Users/ville/Desktop/Dynamic_Logit_Model/ExpertAnalysis/b.log.losses.RData")#
+#X.losses = X.log.losses#
+#b.losses = b.log.losses#
+#
+######## XXXXXXXXX#
+#
+#betas.x = sapply(betas, function(x) exp(mean(log(x*c(0.5, 0.75, 1, 1/0.75, 1/0.5)))) )#
+#betas.x = sapply(betas, function(x) mean(x*c(0.5, 0.75, 1, 1/0.75, 1/0.5)) )#
+#betas.x = sapply(betas, function(x) sd(x*c(0.5, 0.75, 1, 1/0.75, 1/0.5)) )#
+#betas.x = sapply(betas, function(x) mean(abs(x*c(0.5, 0.75, 1, 1/0.75, 1/0.5)-1)) )#
+betas.x = betas#
+wsize = 2#
+hsize = 1.8#
+font = 8#
+#
+setwd("/Users/ville/probability_aggregation/Figures/")#
+#CairoPDF(file = "SyntheticSigma2.pdf", width = size, height = size, onefile = TRUE, family = "Times", pointsize = font)#
+pdf("SyntheticSigma2.pdf", width = wsize, height = hsize, family = "Times", pointsize = font)#
+par(mgp = c(1.5,.5,0), mar=c(2.4,2.8,0.8,0.2))#
+BRI = apply(X.losses[[1]], 1, mean)#
+LOG = apply(X.losses[[2]], 1, mean)#
+#EWMLA = apply(X.losses[[3]], 1, mean)#
+EWMA = apply(X.losses[[4]], 1, mean)#
+#FULL = apply(X.losses[[3]], 1, mean)#
+plot(BRI~sigma2s, type = "l", col = 1, lwd = 2, ylim = range(BRI, LOG, EWMA), xlab = expression(paste(sigma^2)), ylab = "Quadratic Loss", axes = FALSE)#
+box()#
+axis(1, at = round(sigma2s,1))#
+axis(2)#
+#axis(2, at = signif(seq(min(BRI,LOG), max(BRI,LOG), length = 5)[2:4], 2))#
+lines(LOG~sigma2s, lty = 2, lwd = 2)#
+#lines(EWMLA~sigma2s, lty = 2, lwd = 2, col = 2)#
+lines(EWMA~sigma2s, lty = 3, lwd = 2)#
+#lines(FULL~sigma2s, col = 3, lwd = 2)#
+dev.off()#
+#
+setwd("/Users/ville/probability_aggregation/Figures/")#
+#CairoPDF(file = "SyntheticBeta.pdf", width = size, height = size, onefile = TRUE, family = "Times", pointsize = font)#
+pdf(file = "SyntheticBeta.pdf", width = wsize, height = hsize, onefile = TRUE, family = "Times", pointsize = font)#
+par(mgp = c(1.5,.5,0), mar=c(2.4,2.8,0.8,0.2))#
+BRI = apply(X.losses[[1]], 2, mean)#
+LOG = apply(X.losses[[2]], 2, mean)#
+#EWMLA = apply(X.losses[[3]], 2, mean)#
+EWMA = apply(X.losses[[4]], 2, mean)#
+#FULL = apply(X.losses[[3]], 2, mean)#
+plot(BRI~betas.x, type = "l", col = 1, lwd = 2, ylim =range(BRI, LOG, EWMA), xlab = expression(paste(beta)), ylab = "Quadratic Loss", axes = FALSE)#
+box()#
+axis(1, at = round(betas.x,1))#
+#axis(2, at = signif(seq(min(BRI,LOG), max(BRI,LOG), length = 5)[2:4], 2))#
+axis(2)#
+lines(LOG~betas.x, lty = 2, lwd = 2)#
+#lines(EWMLA~betas.x, lty = 2, lwd = 2, col = 2)#
+lines(EWMA~betas.x, lty = 3, lwd = 2)#
+#lines(FULL~betas, col = 3, lwd = 2)#
+dev.off()#
+#
+setwd("/Users/ville/probability_aggregation/Figures/")#
+#CairoPDF(file = "SyntheticK.pdf", width = size, height = size, onefile = TRUE, family = "Times", pointsize = font)#
+pdf(file = "SyntheticK.pdf", width = wsize, height = hsize, onefile = TRUE, family = "Times", pointsize = font)#
+par(mgp = c(1.5,.5,0), mar=c(2.4,2.8,0.8,0.2))#
+BRI = apply(X.losses[[1]], 3, mean)#
+LOG = apply(X.losses[[2]], 3, mean)#
+#EWMLA = apply(X.losses[[3]], 3, mean)#
+EWMA = apply(X.losses[[4]], 3, mean)#
+#FULL = apply(X.losses[[3]], 3, mean)#
+plot(BRI~Ks, type = "l", col = 1, lwd = 2, ylim = range(BRI, LOG, EWMA), xlab = "K", ylab = "Quadratic Loss", axes = FALSE)#
+box()#
+axis(1, at = round(Ks, 1))#
+axis(2)#
+#axis(2, at = signif(seq(min(BRI,LOG), max(BRI,LOG), length = 5)[2:4], 2))#
+lines(LOG~Ks, lwd = 2, lty = 2)#
+#lines(EWMLA~Ks, lty = 2, lwd = 2, col = 2)#
+lines(EWMA~Ks, lty = 3, lwd = 2)#
+#lines(FULL~Ks, col = 3, lwd = 2)#
+dev.off()#
+######## BBBBBBBBBBBB#
+setwd("/Users/ville/probability_aggregation/Figures/")#
+pdf("SyntheticSigma2bias.pdf", width = wsize, height = hsize, onefile = TRUE, family = "Times", pointsize = font)#
+par(mgp = c(1.5,.5,0), mar=c(2.4,2.8,0.8,0.2))#
+BRI = apply(b.losses[[1]], 1, mean)#
+LOG = apply(b.losses[[2]], 1, mean)#
+#FULL = apply(b.losses[[3]], 1, mean)#
+plot(BRI~sigma2s, type = "l", col = 1, lwd = 2, ylim = range(BRI, LOG), xlab = expression(paste(sigma^2)), ylab = "Quadratic Loss", axes = FALSE)#
+box()#
+axis(1, at = round(sigma2s, 1))#
+#axis(2, at = signif(seq(min(BRI,LOG), max(BRI,LOG), length = 5)[2:4], 2))#
+axis(2)#
+lines(LOG~sigma2s, lwd = 2, lty = 2)#
+#lines(FULL~sigma2s, col = 3, lwd = 2)#
+dev.off()#
+#
+setwd("/Users/ville/probability_aggregation/Figures/")#
+pdf("SyntheticBetabias.pdf", width = wsize, height = hsize, onefile = TRUE, family = "Times", pointsize = font)#
+par(mgp = c(1.5,.5,0), mar=c(2.4,2.8,0.8,0.2))#
+BRI = apply(b.losses[[1]], 2, mean)#
+LOG = apply(b.losses[[2]], 2, mean)#
+#FULL = apply(b.losses[[3]], 2, mean)#
+plot(BRI~betas.x, type = "l", col = 1, lwd = 2, ylim = range(BRI, LOG), xlab = expression(paste(beta)), ylab = "Quadratic Loss", axes = FALSE)#
+box()#
+axis(1, at = round(betas.x, 1))#
+axis(2)#
+#axis(2, at = signif(seq(min(BRI,LOG), max(BRI,LOG), length = 5)[2:4], 2))#
+lines(LOG~betas.x, lwd = 2, lty = 2)#
+#lines(FULL~betas, col = 3, lwd = 2)#
+dev.off()#
+#
+setwd("/Users/ville/probability_aggregation/Figures/")#
+pdf("SyntheticKbias.pdf", width = wsize, height = hsize, onefile = TRUE, family = "Times", pointsize = font)#
+par(mgp = c(1.5,.5,0), mar=c(2.4,2.8,0.8,0.2))#
+BRI = apply(b.losses[[1]], 3, mean)#
+LOG = apply(b.losses[[2]], 3, mean)#
+#FULL = apply(b.losses[[3]], 3, mean)#
+plot(BRI~Ks, type = "l", col = 1, lwd = 2, ylim = range(BRI, LOG), xlab = "K", ylab = "Quadratic Loss", axes = FALSE)#
+box()#
+axis(1, at = round(Ks, 1))#
+axis(2)#
+#axis(2, at = signif(seq(min(BRI,LOG), max(BRI,LOG), length = 5)[2:4], 2))#
+lines(LOG~Ks,  lwd = 2, lty = 2)#
+#lines(FULL~Ks, col = 3, lwd = 2)#
+dev.off()
+setwd("/Users/ville/probability_aggregation/Figures/")#
+#CairoPDF(file = "SyntheticK.pdf", width = size, height = size, onefile = TRUE, family = "Times", pointsize = font)#
+pdf(file = "SyntheticK.pdf", width = wsize, height = hsize, onefile = TRUE, family = "Times", pointsize = font)#
+par(mgp = c(1.5,.5,0), mar=c(2.4,2.8,0.8,0.2))#
+BRI = apply(X.losses[[1]], 3, mean)#
+LOG = apply(X.losses[[2]], 3, mean)#
+#EWMLA = apply(X.losses[[3]], 3, mean)#
+EWMA = apply(X.losses[[4]], 3, mean)#
+#FULL = apply(X.losses[[3]], 3, mean)
+BRI
+smooth.spline(BRI~Ks)
+names(smooth.spline(BRI~Ks))
+smooth.spline(BRI~Ks)$y
+plot(smooth.spline(BRI~Ks)$y~Ks)
+dev.off()
+dev.off()
+plot(smooth.spline(BRI~Ks)$y~Ks)
+setwd("/Users/ville/probability_aggregation/Figures/")#
+#CairoPDF(file = "SyntheticK.pdf", width = size, height = size, onefile = TRUE, family = "Times", pointsize = font)#
+pdf(file = "SyntheticK.pdf", width = wsize, height = hsize, onefile = TRUE, family = "Times", pointsize = font)#
+par(mgp = c(1.5,.5,0), mar=c(2.4,2.8,0.8,0.2))#
+BRI = apply(X.losses[[1]], 3, mean)#
+LOG = apply(X.losses[[2]], 3, mean)#
+#EWMLA = apply(X.losses[[3]], 3, mean)#
+EWMA = apply(X.losses[[4]], 3, mean)#
+#FULL = apply(X.losses[[3]], 3, mean)#
+plot(smooth.spline(BRI~Ks)$y~Ks, type = "l", col = 1, lwd = 2, ylim = range(BRI, LOG, EWMA), xlab = "K", ylab = "Quadratic Loss", axes = FALSE)#
+box()#
+axis(1, at = round(Ks, 1))#
+axis(2)#
+#axis(2, at = signif(seq(min(BRI,LOG), max(BRI,LOG), length = 5)[2:4], 2))#
+lines(smooth.spline(LOG~Ks)$y~Ks, lwd = 2, lty = 2)#
+#lines(EWMLA~Ks, lty = 2, lwd = 2, col = 2)#
+lines(EWMA~Ks, lty = 3, lwd = 2)#
+#lines(FULL~Ks, col = 3, lwd = 2)#
+dev.off()
+setwd("/Users/ville/probability_aggregation/Figures/")#
+#CairoPDF(file = "SyntheticK.pdf", width = size, height = size, onefile = TRUE, family = "Times", pointsize = font)#
+pdf(file = "SyntheticK.pdf", width = wsize, height = hsize, onefile = TRUE, family = "Times", pointsize = font)#
+par(mgp = c(1.5,.5,0), mar=c(2.4,2.8,0.8,0.2))#
+BRI = apply(X.losses[[1]], 3, mean)#
+LOG = apply(X.losses[[2]], 3, mean)#
+#EWMLA = apply(X.losses[[3]], 3, mean)#
+EWMA = apply(X.losses[[4]], 3, mean)#
+#FULL = apply(X.losses[[3]], 3, mean)#
+plot(smooth.spline(BRI~Ks)$y~Ks, type = "l", col = 1, lwd = 2, ylim = range(BRI, LOG, EWMA), xlab = "K", ylab = "Quadratic Loss", axes = FALSE)#
+box()#
+axis(1, at = round(Ks, 1))#
+axis(2)#
+#axis(2, at = signif(seq(min(BRI,LOG), max(BRI,LOG), length = 5)[2:4], 2))#
+lines(smooth.spline(LOG~Ks)$y~Ks, lwd = 2, lty = 2)#
+#lines(EWMLA~Ks, lty = 2, lwd = 2, col = 2)#
+lines(smooth.spline(EWMA~Ks)$y~Ks, lty = 3, lwd = 2)#
+#lines(FULL~Ks, col = 3, lwd = 2)#
+dev.off()
+setwd("/Users/ville/probability_aggregation/Figures/")#
+pdf("SyntheticKbias.pdf", width = wsize, height = hsize, onefile = TRUE, family = "Times", pointsize = font)#
+par(mgp = c(1.5,.5,0), mar=c(2.4,2.8,0.8,0.2))#
+BRI = apply(b.losses[[1]], 3, mean)#
+LOG = apply(b.losses[[2]], 3, mean)#
+#FULL = apply(b.losses[[3]], 3, mean)#
+plot(smooth.spline(BRI~Ks)$y~Ks, type = "l", col = 1, lwd = 2, ylim = range(BRI, LOG), xlab = "K", ylab = "Quadratic Loss", axes = FALSE)#
+box()#
+axis(1, at = round(Ks, 1))#
+axis(2)#
+#axis(2, at = signif(seq(min(BRI,LOG), max(BRI,LOG), length = 5)[2:4], 2))#
+lines(smooth.spline(LOG~Ks)$y~Ks,  lwd = 2, lty = 2)#
+#lines(FULL~Ks, col = 3, lwd = 2)#
+dev.off()
+setwd("/Users/ville/probability_aggregation/Figures/")#
+pdf("SyntheticKbias.pdf", width = wsize, height = hsize, onefile = TRUE, family = "Times", pointsize = font)#
+par(mgp = c(1.5,.5,0), mar=c(2.4,2.8,0.8,0.2))#
+BRI = apply(b.losses[[1]], 3, mean)#
+BRI = smooth.spline(BRI~Ks)$y#
+LOG = apply(b.losses[[2]], 3, mean)#
+LOG = smooth.spline(LOG~Ks)$y#
+                                        #FULL = apply(b.losses[[3]], 3, mean)#
+plot(BRI~Ks, type = "l", col = 1, lwd = 2, ylim = range(BRI, LOG), xlab = "K", ylab = "Quadratic Loss", axes = FALSE)#
+box()#
+axis(1, at = round(Ks, 1))#
+axis(2)#
+#axis(2, at = signif(seq(min(BRI,LOG), max(BRI,LOG), length = 5)[2:4], 2))#
+lines(LOG~Ks,  lwd = 2, lty = 2)#
+#lines(FULL~Ks, col = 3, lwd = 2)#
+dev.off()
+setwd("/Users/ville/probability_aggregation/Figures/")#
+#CairoPDF(file = "SyntheticK.pdf", width = size, height = size, onefile = TRUE, family = "Times", pointsize = font)#
+pdf(file = "SyntheticK.pdf", width = wsize, height = hsize, onefile = TRUE, family = "Times", pointsize = font)#
+par(mgp = c(1.5,.5,0), mar=c(2.4,2.8,0.8,0.2))#
+BRI = apply(X.losses[[1]], 3, mean)#
+LOG = apply(X.losses[[2]], 3, mean)#
+BRI = smooth.spline(BRI~Ks)$y#
+LOG = smooth.spline(LOG~Ks)$y#
+#EWMLA = apply(X.losses[[3]], 3, mean)#
+EWMA = apply(X.losses[[4]], 3, mean)#
+#FULL = apply(X.losses[[3]], 3, mean)#
+plot(BRI~Ks, type = "l", col = 1, lwd = 2, ylim = range(BRI, LOG, EWMA), xlab = "K", ylab = "Quadratic Loss", axes = FALSE)#
+box()#
+axis(1, at = round(Ks, 1))#
+axis(2)#
+#axis(2, at = signif(seq(min(BRI,LOG), max(BRI,LOG), length = 5)[2:4], 2))#
+lines(LOG~Ks, lwd = 2, lty = 2)#
+#lines(EWMLA~Ks, lty = 2, lwd = 2, col = 2)#
+lines(smooth.spline(EWMA~Ks)$y~Ks, lty = 3, lwd = 2)#
+#lines(FULL~Ks, col = 3, lwd = 2)#
+dev.off()
+3200 - 750
+3200 - 750-700
+?optim

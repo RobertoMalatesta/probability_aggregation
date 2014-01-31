@@ -1,0 +1,58 @@
+This is BibTeX, Version 0.99d (TeX Live 2011)
+Capacity: max_strings=35307, hash_size=35307, hash_prime=30011
+The top-level auxiliary file: supplementary.aux
+The style file: imsart-nameyear.bst
+Reallocated glb_str_ptr (elt_size=4) to 20 items from 10.
+Reallocated global_strs (elt_size=5001) to 20 items from 10.
+Reallocated glb_str_end (elt_size=4) to 20 items from 10.
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Reallocated wiz_functions (elt_size=4) to 6000 items from 3000.
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Database file #1: biblio.bib
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+You've used 4 entries,
+            5202 wiz_defined-function locations,
+            871 strings with 6249 characters,
+and the built_in function-call counts, 20697 in all, are:
+= -- 3411
+> -- 62
+< -- 6
++ -- 1270
+- -- 20
+* -- 1129
+:= -- 3270
+add.period$ -- 11
+call.type$ -- 4
+change.case$ -- 22
+chr.to.int$ -- 4
+cite$ -- 4
+duplicate$ -- 139
+empty$ -- 907
+format.name$ -- 86
+if$ -- 5039
+int.to.chr$ -- 1
+int.to.str$ -- 1
+missing$ -- 0
+newline$ -- 48
+num.names$ -- 18
+pop$ -- 94
+preamble$ -- 1
+purify$ -- 14
+quote$ -- 0
+skip$ -- 2012
+stack$ -- 0
+substring$ -- 2790
+swap$ -- 51
+text.length$ -- 36
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 98
+warning$ -- 0
+while$ -- 54
+width$ -- 0
+write$ -- 95
